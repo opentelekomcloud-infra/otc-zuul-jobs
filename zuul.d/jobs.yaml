@@ -1,0 +1,21 @@
+- job:
+    name: openstack-tox
+    abstract: true
+    parent: tox
+    description: |
+      Base job to run tox jobs with OpenStack project specific updates.
+      Processing upper-constraints files from openstack/requirements.
+
+- job:
+    name: otc-tox-functional
+    parent: openstack-tox
+    description: |
+      Run tox-based functional tests for an OpenStack Python project.
+      Uses tox with the ``functional`` environment.
+    irrelevant-files:
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+    vars:
+      tox_envlist: functional
