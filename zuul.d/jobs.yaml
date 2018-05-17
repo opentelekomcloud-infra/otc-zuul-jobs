@@ -22,7 +22,7 @@
 
 - job:
     name: shade-ansible-functional
-    parent: opentack-tox
+    parent: openstack-tox
     description: |
       Run Shade ansible tests
     vars:
