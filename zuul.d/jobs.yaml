@@ -35,6 +35,5 @@
     Run Shade Ansible tests against OTC
   required-projects:
     - github.com/openstack-infra/shade
-      override_checkout: master
   vars:
     tox_extra_args: '-c otc auth network'
