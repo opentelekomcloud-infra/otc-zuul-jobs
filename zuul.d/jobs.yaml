@@ -19,3 +19,22 @@
       - ^releasenotes/.*$
     vars:
       tox_envlist: functional
+
+- job:
+  name: shade-ansible-functional
+  parent: opentack-tox
+  description: |
+    Run Shade ansible tests
+  vars:
+    tox_envlist: ansible
+
+- job:
+  name: shade-ansible-functional-otc
+  parent: shade-ansible-functional
+  description: |
+    Run Shade Ansible tests against OTC
+  required-projects:
+    - github.com/openstack-infra/shade
+      override_checkout: master
+  vars:
+    tox_extra_args: '-c otc auth network'
