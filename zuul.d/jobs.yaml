@@ -36,4 +36,4 @@
     required-projects:
       - github.com/openstack-infra/shade
     vars:
-      tox_extra_args: '-c otc auth network'
+      tox_extra_args: '-- -c otc auth network'
