@@ -14,13 +14,13 @@
               - ^lib/ansible/utils/module_docs_fragments/openstack.py
     periodic:
       jobs:
-        - shade-ansible-functional-otc:
+        - shade-ansible-functional-otc
 
 - project:
     name: openstack-infra/shade
     third-party-check:
       jobs:
-        - shade-ansible-functional-otc:
+        - shade-ansible-functional-otc
     periodic:
       jobs:
-        - shade-ansible-functional-otc:
+        - shade-ansible-functional-otc
