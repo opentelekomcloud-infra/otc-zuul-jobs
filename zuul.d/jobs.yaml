@@ -33,7 +33,12 @@
     parent: shade-ansible-functional
     description: |
       Run Shade Ansible tests against OTC
+    branches: ^(devel|master)$
     required-projects:
-      - github.com/openstack-infra/shade
+      - name: github.com/ansible/ansible
+        override-checkout: devel
+      - name: openstack-infra/shade
+        override-checkout: master
     vars:
+      test_matrix_branch: master
       tox_extra_args: '-- -c otc auth client_config image keypair network object security_group volume'
