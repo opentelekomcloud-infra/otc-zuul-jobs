@@ -23,7 +23,7 @@
         body_format: json
         body:
           environment: "{{ item.env | default('Production') }}"
-          severity: "{{ item.severity | default('major')"
+          severity: "{{ item.severity | default('major') }}"
           event: "{{ item.event }}"
           origin: "Zuul"
           resource: "{{ item.resource }}"
