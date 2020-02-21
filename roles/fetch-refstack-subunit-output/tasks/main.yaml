@@ -33,7 +33,7 @@
     - name: Generale list of failed tests
       shell:
         cmd: >
-          "{{ testr_command.stdout_lines[0] }} last --subunit | {{ testr_command.stdout_lines[0] | dirname }}/subunit-ls | sed 's/^\(.*\)$/warning,production,zuul_refstack,refstack_test,failure,\"/\1\"/' >> {{ zuul_work_dir }}/alerts.csv"
+          "{{ testr_command.stdout_lines[0] }} last --subunit | {{ testr_command.stdout_lines[0] | dirname }}/subunit-ls | sed 's/^\(.*\)$/warning,production,zuul_refstack,refstack_test,failure,\"/\1\"/'"
         chdir: "{{ item }}"
       loop: "{{ all_subunit_dirs }}"
       failed_when: false
