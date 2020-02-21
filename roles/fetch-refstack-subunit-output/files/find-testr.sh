@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -x
 
 # Copyright (c) 2018 Red Hat, Inc.
 #
@@ -50,7 +50,7 @@ if [[ -d .tox ]] ; then
     done
 fi
 if [[ -d .venv ]] ; then
-    for tox_bindir in $(find .venv -mindepth 2 -maxdepth 2 -name 'bin') ; do
+    for tox_bindir in $(find .venv -mindepth 1 -maxdepth 1 -name 'bin') ; do
         PATH=$(pwd)/$tox_bindir:$PATH
     done
 fi
