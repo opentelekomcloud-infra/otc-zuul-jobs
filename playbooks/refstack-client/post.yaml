@@ -2,6 +2,6 @@
   roles:
     - role: fetch-refstack-subunit-output
       vars:
-        zuul_work_dir: "{{ ansible_user }}/{{ zuul.projet.src_dir }}/.tempest"
+        zuul_work_dir: "{{ ansible_user }}/{{ zuul.project.src_dir }}/.tempest"
         #        fetch_subunit_output_additional_dirs:
         #  - "{{ zuul.project.src_dir }}/.tempest"
