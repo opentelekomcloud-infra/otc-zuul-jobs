@@ -14,6 +14,7 @@
     patterns:
       - testr_results.html
       - testrepository.subunit
+      - failed_tests.txt
   register: subunit_files
 
 - name: Collect test-results

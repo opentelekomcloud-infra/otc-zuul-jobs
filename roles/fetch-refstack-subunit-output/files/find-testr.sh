@@ -26,7 +26,7 @@ zuul_work_dir=$1
 # The script can ensure it starts from the home dir and then change into the
 # directory, which should work for both relative and absolute paths.
 cd $HOME
-cd $zuul_work_dir/.tempest
+cd $zuul_work_dir
 
 commands=""
 if [[ -d .testrepository ]] ; then
