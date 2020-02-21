@@ -16,7 +16,7 @@
 
     - name: Send alert
       uri:
-        url: "{{ alerta.url }}"
+        url: "{{ alerta.url }}/alert"
         headers:
           Authorization: "Key {{ alerta.token }}"
         method: POST
