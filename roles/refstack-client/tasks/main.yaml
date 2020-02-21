@@ -1,0 +1,28 @@
+- name: Generate accounts.yaml
+  template:
+    src: accounts.yaml.j2
+    dest: "{{ tempest_accounts_file }}"
+
+- name: Generate tempest.conf
+  vars:
+    tempest_lock_path: "{{ zuul_work_dir }}/{{ tempest_lock_folder_name }}"
+  template:
+    src: tempest.conf.j2
+    dest: "{{ zuul_work_dir }}/tempest.conf"
+
+- name: Generate tests list
+  copy:
+    content: "{{ tempest_tests }}"
+    dest: "{{ zuul_work_dir }}/tests"
+  when: tempest_tests is defined and (tempest_tests|length>0)
+
+- name: Create run.sh
+  copy:
+    src: run.sh
+    dest: "{{ zuul_work_dir }}/run.sh"
+    mode: 0755
+
+- name: Invoke refstack-run
+  command: "./run.sh"
+  args:
+    chdir: "{{ zuul_work_dir }}"

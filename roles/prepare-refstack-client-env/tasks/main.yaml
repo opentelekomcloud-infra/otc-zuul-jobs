@@ -1,0 +1,23 @@
+# invoke refstack-client setup-env
+- name: Find setup_env
+  stat:
+    path: "{{ zuul_work_dir }}/setup_env"
+  register: p
+
+- name: Add pyenv arg
+  set_fact:
+    refstack_pyver_arg: " -p {{ refstack_python_env }}"
+  when: refstack_python_env is defined and (refstack_python_env|string|length > 0)
+
+- name: Add tempest tag arg
+  set_fact:
+    refstack_tempest_arg: " -t {{ refstack_tempest_tag ]}}"
+  when: refstack_tempest_tag is defined and (refstack_tempest_tag|string|length > 0)
+
+- name: Run setup_env
+  command: "./setup_env {{ refstack_pyver_arg }} {{ refstack_tempest_arg }}"
+  args:
+    chdir: "{{ zuul_work_dir }}"
+  when:
+    - p.stat.exists
+    - p.stat.executable

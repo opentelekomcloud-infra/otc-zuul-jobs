@@ -1,0 +1,103 @@
+[DEFAULT]
+#debug = false
+
+default_log_levels = amqp=WARN,amqplib=WARN,boto=WARN,qpid=WARN,sqlalchemy=WARN,suds=INFO,oslo.messaging=INFO,oslo_messaging=INFO,iso8601=WARN,requests.packages.urllib3.connectionpool=WARN,urllib3.connectionpool=WARN,websocket=WARN,requests.packages.urllib3.util.retry=WARN,urllib3.util.retry=WARN,keystonemiddleware=WARN,routes.middleware=WARN,stevedore=WARN,taskflow=WARN,keystoneauth=WARN,oslo.cache=INFO,dogpile.core.dogpile=INFO,tempest={{ tempest_log_level }},tempest.lib.common.utils.misc=ERROR,paramiko.transport=WARN
+
+[auth]
+test_accounts_file = {{ tempest_accounts_file }}
+use_dynamic_credentials = false
+
+[compute]
+image_ref = {{ tempest_image_ref }}
+image_ref_alt = {{ tempest_image_ref_alt }}
+flavor_ref = {{ tempest_flavor_ref }}
+flavor_ref_alt = {{ tempest_flavor_ref_alt }}
+build_timeout = 600
+ready_wait = 90
+fixed_network_name = {{ tempest_network_name }}
+volume_device_name = vdb
+min_microversion = 2.1
+max_microversion = latest
+
+[compute-feature-enabled]
+resize = true
+
+[debug]
+
+[identity]
+uri_v3 = {{ tempest_identity_url_v3 }}
+auth_version = v3
+v3_endpoint_type = publicURL
+
+[identity-feature-enabled]
+api_v2 = false
+api_v3 = true
+
+[image]
+
+[image-feature-enabled]
+
+[network]
+project_network_cidr=10.10.0.0/16
+project_network_mask_bits=24
+public_network_id = 0a2228f2-7f8a-45f1-8e09-9039e1d09975
+floating_network_name = admin_external_net
+
+[network-feature-enabled]
+api_extensions = security-group,allowed-address-pairs,extra_dhcp_opt,router,external-net,subnet_allocation,extraroute
+
+[object-storage]
+operator_role = power_user
+reseller_admin_role = reselleradmin
+
+[object-storage-feature-enabled]
+discoverability = true
+
+
+[orchestration]
+instance_type = s2.medium.1
+
+[oslo_concurrency]
+lock_path = {{ tempest_lock_path }}
+
+[scenario]
+
+[service-clients]
+
+
+[service_available]
+# Whether or not cinder is expected to be available (boolean value)
+#cinder = true
+
+# Whether or not neutron is expected to be available (boolean value)
+neutron = true
+
+# Whether or not glance is expected to be available (boolean value)
+#glance = true
+
+# Whether or not swift is expected to be available (boolean value)
+#swift = true
+swift = true
+
+# Whether or not nova is expected to be available (boolean value)
+#nova = true
+
+# Whether or not Heat is expected to be available (boolean value)
+#heat = false
+heat = true
+
+ceilometer = false
+ironic = false
+
+[validation]
+run_validation = true
+image_ssh_user = linux
+
+[volume]
+build_timeout = 600
+catalog_type = volumev3
+disk_format = vhd
+
+[volume-feature-enabled]
+api_v2 = false
+api_v3 = true

@@ -1,0 +1,37 @@
+- name: Find subunit2html
+  include: find-subunit-html.yaml
+
+- name: Generate testr_results.html file
+  command: "{{ subunit_html_command }} ./testrepository.subunit testr_results.html"
+  args:
+    chdir: "{{ zuul_work_dir }}"
+  when: subunit_html_command is defined
+
+- name: Find subunit files
+  find:
+    paths:
+      - "{{ zuul_work_dir }}"
+    patterns:
+      - testr_results.html
+      - testrepository.subunit
+  register: subunit_files
+
+- name: Collect test-results
+  synchronize:
+    dest: "{{ zuul.executor.log_root }}"
+    mode: pull
+    src: "{{ item.path }}"
+    verify_host: true
+  with_items: "{{ subunit_files.files }}"
+
+- name: Return artifact to Zuul
+  zuul_return:
+    data:
+      zuul:
+        artifacts:
+          - name: "Unit Test Report"
+            url: "testr_results.html"
+            metadata:
+              type: unit_test_report
+  when: "'testr_results.html' in item.path"
+  with_items: "{{ subunit_files.files }}"

@@ -1,0 +1,6 @@
+- hosts: all
+  roles:
+    - role: fetch-restack-subunit-output
+      vars:
+        fetch_subunit_output_additional_dirs:
+          - .tempest

@@ -1,0 +1,6 @@
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+refstack_pyver_arg: ""
+refstack_tempest_arg: ""
+refstack_verbose_arg: ""
+refstack_python_env: 3.7
+refstack_tempest_tag: ""

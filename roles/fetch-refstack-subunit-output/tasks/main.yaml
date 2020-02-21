@@ -1,0 +1,45 @@
+# We're not using with_first_found because the files are remote, not local.
+# We want to use stestr if it exists or fallback to testr - and we want to
+# prefer files found in tox envs.
+- name: Find stestr or testr executable
+  script: "find-testr.sh {{ zuul_work_dir }}"
+  register: testr_command
+
+- when:
+    - testr_command.rc == 0
+    - testr_command.stdout_lines
+  block:
+    - name: Get the list of directories with subunit files
+      set_fact:
+        all_subunit_dirs: "{{ [ zuul_work_dir ] + fetch_subunit_output_additional_dirs }}"
+
+    # The usage an independent target file instead of sending the output
+    # to zuul_work_dir prevents issues related to zuul_work_dir being
+    # a relative path, which may happen despite what the documentation
+    # of this role claims.
+    - name: Create a temporary file to store the subunit stream
+      tempfile:
+        state: file
+        prefix: subunit.
+      register: temp_subunit_file
+
+    - name: Generate subunit file
+      shell:
+        cmd: "{{ testr_command.stdout_lines[0] }} last --subunit >>{{ temp_subunit_file.path }}"
+        chdir: "{{ item }}"
+      loop: "{{ all_subunit_dirs }}"
+
+    - name: Copy the combined subunit file to the zuul work directory
+      copy:
+        src: "{{ temp_subunit_file.path }}"
+        dest: "{{ zuul_work_dir }}/testrepository.subunit"
+        remote_src: yes
+
+    - name: Remove the temporary file
+      file:
+        name: "{{ temp_subunit_file.path }}"
+        state: absent
+      ignore_errors: true
+
+    - name: Process and fetch subunit results
+      include: process.yaml
