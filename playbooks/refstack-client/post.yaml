@@ -3,5 +3,7 @@
     - role: fetch-refstack-subunit-output
       vars:
         zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/.tempest"
-        #        fetch_subunit_output_additional_dirs:
-        #  - "{{ zuul.project.src_dir }}/.tempest"
+    - role: publish-alerts
+      vars:
+        zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/.tempest"
+        alerta: "{{ alerta_data }}"

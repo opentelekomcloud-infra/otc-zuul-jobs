@@ -1,0 +1,34 @@
+- name: Find alerts
+  stat:
+    path: "{{ zuul_work_dir }}/alerts.csv"
+  register: p
+
+- when:
+  - p.stat.exists
+  - alerta is defined
+  block:
+    - name: Read alerts from alerts.csv
+      read_csv:
+        path: "{{ p.stat.path }}"
+        fieldnames: severity,env,service,resource,event,value
+        delimiter: ';'
+      register: alerts
+
+    - name: Send alert
+      uri:
+        url: "{{ alerta.url }}"
+        headers:
+          Authorization: "{{ alerta.token }}"
+        method: POST
+        body_format: json
+        body:
+          environment: "{{ item.env | default('Production') }}"
+          severity: "{{ item.severity | default('major')"
+          event: "{{ item.event }}"
+          origin: "Zuul"
+          resource: "{{ item.resource }}"
+          value: "{{ item.value | default(omit) }}"
+          #resource: "{{ item.resource.split('_') }}"
+          resource: "test"
+      loop: alerts
+      failed_when: false
