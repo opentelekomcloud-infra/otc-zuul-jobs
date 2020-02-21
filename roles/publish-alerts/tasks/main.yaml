@@ -16,7 +16,7 @@
 
     - name: Send alert
       uri:
-        url: "{{ alerta.url }}/alert"
+        url: "{{ alerta.url }}/api/alert"
         headers:
           Authorization: "Key {{ alerta.token }}"
         method: POST
@@ -28,7 +28,7 @@
           origin: "Zuul"
           resource: "{{ item.resource }}"
           value: "{{ item.value | default(omit) }}"
-          #service: "{{ item.resource.split('_') }}"
-          service: "test"
+          service: "{{ item.resource.split('_') }}"
+          #service: "test"
       loop: "{{ alerts.list }}"
       failed_when: false
