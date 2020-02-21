@@ -30,5 +30,5 @@
           value: "{{ item.value | default(omit) }}"
           #resource: "{{ item.resource.split('_') }}"
           resource: "test"
-      loop: "{{ alerts }}"
+      loop: "{{ alerts.list }}"
       failed_when: false
