@@ -40,7 +40,7 @@
     - name: Build Alert csv Severity,Env,Service,Resource,Event,Value
       replace:
         path: "{{ zuul_work_dir }}/alerts.scv"
-        regex: "^(.*)$"
+        regexp: "^(.*)$"
         replace: 'warning,production,zuul_refstack,"\1",failure,1'
 
     - name: Temp display of failed tests
