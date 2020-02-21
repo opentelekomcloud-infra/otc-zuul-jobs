@@ -32,13 +32,14 @@
 
     - name: Generale list of failed tests
       shell:
-        cmd: "{{ testr_command.stdout_lines[0] }} last --subunit | {{ testr_command.stdout_lines[0] | dirname }}/subunit-ls >> {{ zuul_work_dir }}/failed_tests.txt"
+        cmd: >
+          "{{ testr_command.stdout_lines[0] }} last --subunit | {{ testr_command.stdout_lines[0] | dirname }}/subunit-ls | awk '{print ""warning,production,zuul_refstack,refstack_test,failure,\""""" $0 ""\"""}' >> {{ zuul_work_dir }}/alerts.csv"
         chdir: "{{ item }}"
       loop: "{{ all_subunit_dirs }}"
       failed_when: false
 
     - name: Temp display of failed tests
-      command: "cat {{ zuul_work_dir }}/failed_tests.txt"
+      command: "cat {{ zuul_work_dir }}/alerts.csv"
       failed_when: false
 
     - name: Copy the combined subunit file to the zuul work directory
