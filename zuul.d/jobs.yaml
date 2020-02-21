@@ -72,9 +72,9 @@
     attempts: 1
     required-projects:
       - opendev.org/openstack/refstack-client
-    pre-run: playbooks/refstack-pre.yaml
-    run: playbooks/refstack-run.yaml
-    post-run: playbooks/refstack-post.yaml
+    pre-run: playbooks/refstack-client/pre.yaml
+    run: playbooks/refstack-client/run.yaml
+    post-run: playbooks/refstack-client/post.yaml
     nodeset:
       nodes:
         - name: refstack
