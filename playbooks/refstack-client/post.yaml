@@ -3,4 +3,4 @@
     - role: fetch-refstack-subunit-output
       vars:
         fetch_subunit_output_additional_dirs:
-          - .tempest
+          - "{{ zuul.project.src_dir }}/.tempest"
