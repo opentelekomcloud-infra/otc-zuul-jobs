@@ -28,7 +28,6 @@
           origin: "Zuul"
           resource: "{{ item.resource }}"
           value: "{{ item.value | default(omit) }}"
-          service: "{{ item.resource.split('_') }}"
-          #service: "test"
+          service: "{{ item.service.split('_') }}"
       loop: "{{ alerts.list }}"
       failed_when: false
