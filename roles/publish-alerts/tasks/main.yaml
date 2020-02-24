@@ -29,5 +29,8 @@
           resource: "{{ item.resource }}"
           value: "{{ item.value | default(omit) }}"
           service: "{{ item.service.split('_') }}"
+          attributes:
+            logUrl: "{{ alerta.logUrl_host }}/t/{{ zuul.tenant }}/build/{{ zuul.build }}"
       loop: "{{ alerts.list }}"
+      no_log: true
       failed_when: false
