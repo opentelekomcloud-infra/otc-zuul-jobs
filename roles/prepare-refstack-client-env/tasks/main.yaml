@@ -11,7 +11,7 @@
 
 - name: Add tempest tag arg
   set_fact:
-    refstack_tempest_arg: " -t {{ refstack_tempest_tag ]}}"
+    refstack_tempest_arg: " -t {{ refstack_tempest_tag }}"
   when: refstack_tempest_tag is defined and (refstack_tempest_tag|string|length > 0)
 
 - name: Run setup_env
