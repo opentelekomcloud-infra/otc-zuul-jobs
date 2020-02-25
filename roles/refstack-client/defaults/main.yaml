@@ -7,7 +7,8 @@ tempest_image_ref: "df6b9384-e9ed-45e7-a9f3-103ee160def3"
 tempest_image_ref_alt: "{{ tempest_image_ref }}"
 tempest_flavor_ref: "s2.medium.1"
 tempest_flavor_ref_alt: "s2.medium.2"
-tempest_network_name: "refstack_test_net"
+#tempest_network_name: "refstack_test_net"
+tempest_network_name: "defcore-test-net"
 tempest_identity_url_v3: "https://iam.eu-de.otc.t-systems.com:443/v3"
 
 tempest_tests: |
