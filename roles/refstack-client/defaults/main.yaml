@@ -13,3 +13,4 @@ tempest_identity_url_v3: "https://iam.eu-de.otc.t-systems.com:443/v3"
 tempest_tests: |
   tempest.api.object_storage.test_account_quotas_negative.AccountQuotasNegativeTest.test_user_modify_quota
   tempest.api.identity.v3.test_tokens.TokensV3Test.test_token_auth_creation_existence_deletion
+tempest_tests_url: ""

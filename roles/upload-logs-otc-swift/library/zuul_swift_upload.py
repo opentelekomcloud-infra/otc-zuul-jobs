@@ -767,7 +767,7 @@ class Uploader():
                                  data=data,
                                  **headers)
         obj.set_metadata(
-            self.cloud,
+            self.cloud.object_store,
             metadata={
                 'delete-after': str(self.delete_after),
                 'content_type': file_detail.mimetype
