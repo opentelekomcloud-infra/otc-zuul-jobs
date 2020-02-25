@@ -79,7 +79,7 @@
       nodes:
         - name: refstack
           label: debian-buster
-    timeout: 7200
+    timeout: 10800
     vars:
       tempest_tests_url: https://refstack.openstack.org/api/v1/guidelines/2019.11/tests?target=platform&type=required&alias=true&flag=false
     secrets:

@@ -8,4 +8,4 @@ if [ -f "tests" ]; then
 fi
 
 # Currently there is bug in refstack-client, which fails in non-verbose mode
-refstack-client test -c tempest.conf ${TEST_LIST} -v -- --concurrent 4
+refstack-client test -c tempest.conf ${TEST_LIST} -p -v -- --concurrent 4
