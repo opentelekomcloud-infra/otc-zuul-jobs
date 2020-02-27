@@ -3,3 +3,4 @@
   os_auth_revoke:
     cloud: "{{ cloud }}"
     revoke_token: "{{ token }}"
+  no_log: true
