@@ -689,6 +689,7 @@ class Uploader():
             if ('job-output.json' not in f.full_path
                 and 'zuul-info' not in f.full_path
                 and 'alerts.csv' not in f.full_path
+                and 'testrepository.subunit' not in f.full_path
                ):
                 queue.put(f)
 
