@@ -686,7 +686,11 @@ class Uploader():
         queue = queuelib.Queue()
         # add items to queue
         for f in file_list:
-            queue.put(f)
+            if ('job-output.json' not in f
+                and 'zuul-info' not in f
+                and 'alerts.csv' not in f
+               ):
+                queue.put(f)
 
         for x in range(num_threads):
             t = threading.Thread(target=self.post_thread, args=(queue,))
