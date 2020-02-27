@@ -686,9 +686,9 @@ class Uploader():
         queue = queuelib.Queue()
         # add items to queue
         for f in file_list:
-            if ('job-output.json' not in f
-                and 'zuul-info' not in f
-                and 'alerts.csv' not in f
+            if ('job-output.json' not in f.full_path
+                and 'zuul-info' not in f.full_path
+                and 'alerts.csv' not in f.full_path
                ):
                 queue.put(f)
 
