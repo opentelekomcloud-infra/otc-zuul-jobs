@@ -4,3 +4,4 @@
     cloud: "{{ cloud }}"
     revoke_token: "{{ token }}"
   no_log: true
+  failed_when: true
