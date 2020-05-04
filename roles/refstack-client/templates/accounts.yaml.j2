@@ -1,26 +1,20 @@
-- username: '{{ refstack_credentials.test_poweruser1_user_name }}'
-  user_id: '{{ refstack_credentials.test_poweruser1_user_id }}'
-  project_id: '{{ refstack_credentials.test_project1_id }}'
-  password: '{{ refstack_credentials.test_poweruser1_user_password }}'
-  domain_name: {{ refstack_credentials.test_domain_name }}
-  user_domain_name: {{ refstack_credentials.test_user_domain_name }} 
-  roles:
-    - 'power_user'
-
-- username: '{{ refstack_credentials.test_poweruser2_user_name }}'
-  user_id: '{{ refstack_credentials.test_poweruser2_user_id }}'
-  project_id: '{{ refstack_credentials.test_project2_id }}'
-  password: '{{ refstack_credentials.test_poweruser2_user_password }}'
-  domain_name: {{ refstack_credentials.test_domain_name }}
-  user_domain_name: {{ refstack_credentials.test_user_domain_name }} 
-  roles:
-    - 'power_user'
-
 - username: '{{ refstack_credentials.test_adminuser1_user_name }}'
   user_id: '{{ refstack_credentials.test_adminuser1_user_id }}'
-  project_id: '{{ refstack_credentials.test_project2_id }}'
+  project_id: '{{ refstack_credentials.test_adminuser1_project_id }}'
   password: '{{ refstack_credentials.test_adminuser1_user_password }}'
   domain_name: {{ refstack_credentials.test_domain_name }}
   user_domain_name: {{ refstack_credentials.test_user_domain_name }} 
   roles:
     - 'reselleradmin'
+
+{% for num in range(tempest_count_users) %}
+- username: '{{ refstack_credentials['test_poweruser' + (num + 1)|string + '_user_name'] }}'
+  user_id: '{{ refstack_credentials['test_poweruser' + (num + 1)|string + '_user_id'] }}'
+  project_id: '{{ refstack_credentials['test_project' + (num + 1)|string + '_id'] }}'
+  password: '{{ refstack_credentials['test_poweruser' + (num + 1)|string + '_user_password'] }}'
+  domain_name: {{ refstack_credentials.test_domain_name }}
+  user_domain_name: {{ refstack_credentials.test_user_domain_name }} 
+  roles:
+    - 'power_user'
+
+{% endfor %}

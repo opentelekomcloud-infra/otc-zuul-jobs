@@ -18,3 +18,27 @@
     secrets:
       - refstack_credentials
       - alerta_data
+
+- job:
+    name: refstack-client-run-preprod
+    parent: unittests
+    attempts: 1
+    required-projects:
+      - opendev.org/openstack/refstack-client
+    pre-run: playbooks/refstack-client/pre.yaml
+    run: playbooks/refstack-client/run.yaml
+    post-run: playbooks/refstack-client/post.yaml
+    nodeset:
+      nodes:
+        - name: refstack
+          label: debian-buster
+    timeout: 10800
+    vars:
+      tempest_tests_url: https://refstack.openstack.org/api/v1/guidelines/2019.11/tests?target=platform&type=required&alias=true&flag=false
+      refstack_tempest_tag: tags/23.0.0
+      refstack_credentials: "{{ refstack_credentials_preprod }}"
+      tempest_count_users: 8
+      tempest_identity_url_v3: "{{ refstack_credentials_preprod.tempest_identity_url }}"
+    secrets:
+      - refstack_credentials_preprod
+      - alerta_data

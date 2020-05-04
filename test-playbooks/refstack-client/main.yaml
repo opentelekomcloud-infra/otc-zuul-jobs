@@ -1,0 +1,49 @@
+---
+- hosts: all
+  pre_tasks:
+    - name: create temporary build directory
+      tempfile:
+        state: directory
+        suffix: build
+      register: tempdir
+
+    - name: create temporary file
+      tempfile:
+        state: directory
+        suffix: temp
+      register: tempfile_1
+
+    - set_fact:
+        zuul_work_dir: "{{ tempdir.path }}"
+
+  vars:
+    tempest_count_users: 4
+    #    zuul_work_dir: "{{ playbook_dir }}"
+    ansible_user_dir: "/"
+    refstack_credentials:
+      test_domain_name: tdn
+      test_user_domain_name: tudn
+      test_project1_id: tp1id
+      test_project2_id: tp2id
+      test_project3_id: tp3id
+      test_project4_id: tp4id
+      test_adminuser1_user_name: tau1_un
+      test_adminuser1_user_id: tau1_uid
+      test_adminuser1_user_password: tau1_up
+      test_poweruser1_user_name: tpu1_un
+      test_poweruser1_user_id: tpu1_uid
+      test_poweruser1_user_password: tpu1_up
+      test_poweruser2_user_name: tpu2_un
+      test_poweruser2_user_id: tpu2_uid
+      test_poweruser2_user_password: tpu2_up
+      test_poweruser3_user_name: tpu3_un
+      test_poweruser3_user_id: tpu3_uid
+      test_poweruser3_user_password: tpu3_up
+      test_poweruser4_user_name: tpu4_un
+      test_poweruser4_user_id: tpu4_uid
+      test_poweruser4_user_password: tpu4_up
+
+    skip_execution: true
+  tasks:
+    - import_role:
+        name: refstack-client

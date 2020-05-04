@@ -28,8 +28,8 @@
     - tempest_tests_url|length > 0
 
 - name: Create run.sh
-  copy:
-    src: run.sh
+  template:
+    src: run.sh.j2
     dest: "{{ zuul_work_dir }}/run.sh"
     mode: 0755
 
@@ -37,3 +37,4 @@
   command: "./run.sh"
   args:
     chdir: "{{ zuul_work_dir }}"
+  when: not skip_execution

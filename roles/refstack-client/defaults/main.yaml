@@ -15,3 +15,7 @@ tempest_tests: |
   tempest.api.object_storage.test_account_quotas_negative.AccountQuotasNegativeTest.test_user_modify_quota
   tempest.api.identity.v3.test_tokens.TokensV3Test.test_token_auth_creation_existence_deletion
 tempest_tests_url: ""
+
+tempest_count_users: 2
+
+skip_execution: false
