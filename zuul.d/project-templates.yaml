@@ -9,9 +9,6 @@
     gate:
       jobs:
         - test-release
-    pre-release:
-      jobs:
-        - release-python
     release:
       jobs:
-        - release-openstack-python
+        - release-python
