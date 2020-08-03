@@ -1,6 +1,5 @@
 - project-template:
     name: publish-to-pypi
-    branches: master
     description: |
       Publish a Python package to PyPI, then send release announcement
       emails and propose updates to upper-constraints as needed.
