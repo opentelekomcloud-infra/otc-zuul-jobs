@@ -3,7 +3,7 @@
     parent: unittests
     attempts: 1
     required-projects:
-      - opendev.org/osf/refstack-client
+      - opendev.org/openstack/refstack-client
     pre-run: playbooks/refstack-client/pre.yaml
     run: playbooks/refstack-client/run.yaml
     post-run: playbooks/refstack-client/post.yaml
@@ -24,7 +24,7 @@
     parent: unittests
     attempts: 1
     required-projects:
-      - opendev.org/osf/refstack-client
+      - opendev.org/openstack/refstack-client
     pre-run: playbooks/refstack-client/pre.yaml
     run: playbooks/refstack-client/run.yaml
     post-run: playbooks/refstack-client/post.yaml
