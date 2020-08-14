@@ -23,6 +23,8 @@
     mode: pull
     src: "{{ item.path }}"
     verify_host: true
+    group: no
+    owner: no
   with_items: "{{ subunit_files.files }}"
 
 - name: Return artifact to Zuul
