@@ -5,6 +5,10 @@ quiet: false
 skip_list:
   - '106'  # Role name does not match ``^[a-z][a-z0-9_]+$`` pattern
   - '204'  # Lines should be no longer than 160 chars
+           # TODO(AJaeger): E208 gives false positives currently, we
+           # should enable it once all issues in zuul-jobs and
+           # ansible-lint are fixed.
+  - '208'  # File permissions not mentioned
   - '301'  # Commands should not change things if nothing needs doing
 rulesdir:
   - ./.rules/

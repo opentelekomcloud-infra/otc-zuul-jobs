@@ -26,18 +26,23 @@
     - name: Generate subunit file
       shell:
         cmd: "{{ testr_command.stdout_lines[0] }} last --subunit >>{{ temp_subunit_file.path }}"
-        chdir: "{{ item }}"
+        chdir: "{{ zj_sibling }}"
       loop: "{{ all_subunit_dirs }}"
+      loop_control:
+        loop_var: zj_sibling
       failed_when: false
 
-    - set_fact:
+    - name: Get path
+      set_fact:
         testr_command_dir: "{{ testr_command.stdout_lines[0] | dirname }}"
 
     - name: Generale list of failed tests
       shell:
         cmd: "{{ testr_command.stdout_lines[0] }} last --subunit | {{ testr_command_dir }}/subunit-filter --no-success | {{ testr_command_dir }}/subunit-ls > alerts.csv"
-        chdir: "{{ item }}"
+        chdir: "{{ zj_sibling }}"
       loop: "{{ all_subunit_dirs }}"
+      loop_control:
+        loop_var: zj_sibling
       failed_when: false
 
     - name: Build Alert csv Severity,Env,Service,Resource,Event,Value
