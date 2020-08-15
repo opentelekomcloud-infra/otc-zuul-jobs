@@ -3,12 +3,10 @@
     parent: tox-linters
     description: Lint Ansible playbooks and roles
     required-projects:
-      - github/project-config
       - zuul/zuul-jobs
-      - zuul/zuul
     vars:
       tox_environment:
-        ANSIBLE_ROLES_PATH: ~/src/opendev.org/opendev/base-jobs/roles:~/src/opendev.org/zuul/zuul-jobs/roles
+        ANSIBLE_ROLES_PATH: ~/src/opendev.org/zuul/zuul-jobs/roles
 
 - project:
     check:
