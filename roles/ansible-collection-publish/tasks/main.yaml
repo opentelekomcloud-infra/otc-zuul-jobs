@@ -1,0 +1,48 @@
+---
+- name: Publish content to Ansible Galaxy
+  block:
+    - name: Create ansible.cfg configuration file tempfile
+      tempfile:
+        state: file
+        suffix: .cfg
+      register: _ansiblecfg_tmp
+
+    - name: Create ansible.cfg configuration file
+      template:
+        dest: "{{ _ansiblecfg_tmp.path }}"
+        mode: 0600
+        src: ansible.cfg.j2
+
+    - name: Set fact for list of predefined tarball
+      set_fact:
+        ansible_collection_publish_collections:
+          - "{{ ansible_collection_publish_collection_tarball }}"
+      when:
+        - ansible_collection_publish_collection_tarball is defined
+        - ansible_collection_publish_collection_tarball
+
+    - name: Find tarballs to upload
+      find:
+        paths: "{{ ansible_collection_publish_galaxy_collection_path }}"
+        patterns: "*.tar.gz"
+      register: found_tarballs
+      when:
+        - ansible_collection_publish_collection_tarball is not defined or not ansible_collection_publish_collection_tarball
+
+    - name: Set fact for list of tarballs
+      set_fact:
+        ansible_collection_publish_collections: "{{ found_tarballs.files }}"
+      when:
+        - ansible_collection_publish_collection_tarball is not defined or not ansible_collection_publish_collection_tarball
+
+    - name: Publish collection to Ansible Galaxy
+      environment:
+        ANSIBLE_CONFIG: "{{ _ansiblecfg_tmp.path }}"
+      command: "{{ ansible_collection_publish_galaxy_executable }} collection publish {{ zj_collection.path }}"
+      loop: "{{ ansible_collection_publish_collections }}"
+      loop_control:
+        loop_var: zj_collection
+
+  always:
+    - name: Shred ansible-galaxy credentials
+      command: "shred {{ _ansiblecfg_tmp.path }}"

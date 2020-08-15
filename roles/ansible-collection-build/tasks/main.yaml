@@ -1,0 +1,65 @@
+---
+- name: Install dependencies
+  pip:
+    name: "{{ ansible_collection_build_pip_dependencies }}"
+    virtualenv: "{{ ansible_collection_build_pip_virtualenv|default(omit, true) }}"
+    extra_args: "{{ ansible_collection_build_pip_extra_args|default(omit, true) }}"
+
+- name: Discover if galaxy.yml.in exists
+  stat:
+    path: "{{ ansible_collection_build_collection_dir }}/galaxy.yml.in"
+  register: galaxy_in
+
+- name: Generate version number for ansible collection
+  args:
+    chdir: "{{ ansible_collection_build_collection_dir }}"
+    executable: "{{ ansible_collection_build_pip_virtualenv |
+      ternary(ansible_collection_build_pip_virtualenv + '/bin/python3', 'python3') }}"
+  script: build.py
+  when:
+    - ansible_collection_build_generate_version|bool
+    - galaxy_in.stat.exists
+
+- name: Ensure galaxy.yml exists
+  stat:
+    path: "{{ ansible_collection_build_collection_dir }}/galaxy.yml"
+  register: galaxy
+
+- name: Fail if no galaxy.yml
+  fail:
+    msg: "Nothing to build, there is no {{ ansible_collection_build_collection_dir }}/galaxy.yml"
+  when: not galaxy.stat.exists
+
+- name: Build an ansible collection
+  args:
+    chdir: "{{ ansible_collection_build_collection_dir }}"
+  command: >-
+    {{ ansible_collection_build_galaxy_executable }}
+    collection build --force --output-path {{ ansible_collection_build_galaxy_output_path }} .
+
+- name: Find tarballs in folder
+  find:
+    file_type: file
+    paths: "{{ ansible_collection_build_galaxy_output_path }}"
+    patterns: "*.tar.gz"
+  register: result
+
+- name: Set fact for the tarball
+  set_fact:
+    ansible_collection_build_collection_tarball: "{{ result.files.0.path }}"
+
+- name: Copy script validate-collection
+  template:
+    src: validate-collection.sh.j2
+    dest: /tmp/validate-collection.sh
+    mode: a+rwx
+
+- name: Confirm collection can be imported into galaxy
+  command: /tmp/validate-collection.sh {{ ansible_collection_build_collection_tarball }}
+  args:
+    executable: /bin/bash
+  when:
+    - ansible_collection_build_collection_verify|bool
+
+- include: save_artifact.yml
+  when: ansible_collection_build_save_artifact|bool

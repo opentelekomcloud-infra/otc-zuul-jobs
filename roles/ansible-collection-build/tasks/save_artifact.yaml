@@ -1,0 +1,25 @@
+- name: Ensure artifacts directory exists
+  file:
+    path: "{{ zuul.executor.log_root }}/artifacts"
+    state: directory
+  delegate_to: localhost
+
+- name: Collect tarball artifacts
+  synchronize:
+    dest: "{{ zuul.executor.log_root }}/artifacts/"
+    mode: pull
+    src: "{{ ansible_collection_build_collection_tarball }}"
+    verify_host: true
+    owner: false
+    group: false
+
+- name: Return collection artifacts to Zuul
+  zuul_return:
+    data:
+      zuul:
+        artifacts:
+          - name: "{% set x = ansible_collection_tarball | basename | replace('.tar.gz', '') %}{{ x.split('-')[0] }}.{{ x.split('-')[1] }}"
+            url: "artifacts/{{ ansible_collection_build_collection_tarball | basename }}"
+            metadata:
+              type: ansible_collection
+              version: "{% set x = item.path | basename | replace('.tar.gz', '') %}{{ x.split('-')[2:] | join('-') }}"
