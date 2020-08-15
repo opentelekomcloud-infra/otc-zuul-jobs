@@ -8,7 +8,7 @@
     - find_subunit2html_output.rc == 0
     - find_subunit2html_output.stdout_lines
   set_fact:
-   subunit_html_command: "{{ find_subunit2html_output.stdout_lines[0] }}"
+    subunit_html_command: "{{ find_subunit2html_output.stdout_lines[0] }}"
 
 - name: Emit a debug line so we can search logstash for fallback hits
   debug:

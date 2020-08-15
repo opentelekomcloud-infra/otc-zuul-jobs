@@ -769,9 +769,9 @@ class Uploader():
             if relative_path == '':
                 relative_path = '/'
         obj = self.cloud.create_object(self.container,
-                                 name=relative_path,
-                                 data=data,
-                                 **headers)
+                                       name=relative_path,
+                                       data=data,
+                                       **headers)
         obj.set_metadata(
             self.cloud.object_store,
             metadata={
