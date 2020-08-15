@@ -1,0 +1,6 @@
+- include: "{{ zj_item }}.yaml"
+  with_list:
+    - 1
+    - 2
+  loop_control:
+    loop_var: zj_item

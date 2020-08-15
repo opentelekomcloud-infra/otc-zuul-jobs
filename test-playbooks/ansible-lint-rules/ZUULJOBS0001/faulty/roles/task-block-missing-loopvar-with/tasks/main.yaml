@@ -1,0 +1,6 @@
+- block:
+    - debug:
+        var: item
+      with_items:
+        - 1
+        - 2

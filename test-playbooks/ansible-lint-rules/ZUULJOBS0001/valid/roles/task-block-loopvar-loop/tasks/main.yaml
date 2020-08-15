@@ -1,0 +1,8 @@
+- block:
+    - debug:
+        msg: zj_item
+      loop:
+        - 1
+        - 2
+      loop_control:
+        loop_var: zj_item

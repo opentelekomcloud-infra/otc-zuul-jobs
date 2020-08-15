@@ -1,0 +1,5 @@
+- unarchive:
+    src: "{{ file }}.zip"
+    dest: dummy
+    extra_opts:
+      - '-X'

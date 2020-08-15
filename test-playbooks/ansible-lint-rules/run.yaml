@@ -1,0 +1,61 @@
+- hosts: all
+  roles:
+    - ensure-pip
+    - ensure-virtualenv
+  tasks:
+    - name: Create tempdir for ansible-lint venv
+      tempfile:
+        state: directory
+      register: ansible_lint_tempdir
+
+    - name: Install linters-requirements.txt
+      pip:
+        requirements: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/linters-requirements.txt"
+        virtualenv: "{{ ansible_lint_tempdir.path }}"
+
+    - name: Make sure ansible-lint is installed
+      command: "{{ ansible_lint_tempdir.path }}/bin/ansible-lint --version"
+
+    - name: Get faulty playbooks and roles
+      command: >-
+        find test-playbooks/ansible-lint-rules/
+        -mindepth 4
+        -maxdepth 4
+        -wholename '*ZUULJOBS*/faulty/*/*'
+      args:
+        chdir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
+      register: faulty_ansible_items
+
+    - name: Get valid playbooks and roles
+      command: >-
+        find test-playbooks/ansible-lint-rules/
+        -mindepth 4
+        -maxdepth 4
+        -wholename '*ZUULJOBS*/valid/roles/*'
+      args:
+        chdir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
+      register: valid_ansible_items
+
+    - name: Make sure faulty roles fail linting
+      command: >-
+        {{ ansible_lint_tempdir.path }}/bin/ansible-lint
+        -c test-playbooks/ansible-lint-rules/ansible-lint.yaml
+        -t {{ item | regex_replace('.*/(ZUULJOBS.*?)/.*', '\1') }}
+        {{ item }}
+      args:
+        chdir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
+      register: ansible_lint
+      failed_when: ansible_lint.rc == 0
+      loop: "{{ faulty_ansible_items.stdout_lines }}"
+
+    - name: Make sure valid roles pass linting
+      command: >-
+        {{ ansible_lint_tempdir.path }}/bin/ansible-lint
+        -c test-playbooks/ansible-lint-rules/ansible-lint.yaml
+        -t {{ item | regex_replace('.*/(ZUULJOBS.*?)/.*', '\1') }}
+        {{ item }}
+      args:
+        chdir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
+      register: ansible_lint
+      failed_when: ansible_lint.rc != 0
+      loop: "{{ valid_ansible_items.stdout_lines }}"

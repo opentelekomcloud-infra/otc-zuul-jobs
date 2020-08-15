@@ -1,0 +1,16 @@
+- job:
+    name: zuul-jobs-test-ansible-lint-rules
+    description: |
+      Test custom ansible-lint rules in zuul-jobs
+    run: test-playbooks/ansible-lint-rules/run.yaml
+    files:
+      - ^\.rules/.*
+      - ^test-playbooks/ansible-lint-rules/.*
+      - ^\.ansible-lint
+
+- project:
+    check:
+      jobs: &id001
+        - zuul-jobs-test-ansible-lint-rules
+    gate:
+      jobs: *id001
