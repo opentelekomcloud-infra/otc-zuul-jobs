@@ -9,6 +9,7 @@
         ANSIBLE_ROLES_PATH: ~/src/opendev.org/zuul/zuul-jobs/roles:~/src/github.com/opentelekomcloud-infra/otc-zuul-jobs/roles
 
 - project:
+    merge-mode: squash-merge
     check:
       jobs: &id001
         - zuul-jobs-tox-linters
