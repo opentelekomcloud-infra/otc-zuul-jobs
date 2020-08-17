@@ -9,6 +9,7 @@
       - ^\.ansible-lint
 
 - project:
+    merge-mode: squash-merge
     check:
       jobs: &id001
         - zuul-jobs-test-ansible-lint-rules
