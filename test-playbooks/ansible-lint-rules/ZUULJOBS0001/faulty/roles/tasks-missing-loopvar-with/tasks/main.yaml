@@ -1,0 +1,5 @@
+- debug:
+    msg: "I should error: {{ item }} "
+  with_list:
+    - 1
+    - 2

@@ -1,0 +1,5 @@
+# linters have different requirements than test ones, some would
+# conflict, like ansible version required by ansible-lint.
+flake8
+yamllint>=1.23.0
+ansible-lint>=4.3.0a1,<5

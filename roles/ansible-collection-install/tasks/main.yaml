@@ -1,0 +1,28 @@
+- when:
+    - ansible_collection_install_galaxy_tarballs_path is defined
+    - ansible_collection_install_galaxy_tarballs_path|length > 0
+  block:
+
+    - name: Find tarballs to install
+      find:
+        paths: "{{ ansible_collection_install_galaxy_tarballs_path }}"
+        patterns: "*.tar.gz"
+      register: found_tarballs
+
+    - name: Set fact for list of tarballs
+      set_fact:
+        ansible_collection_install_galaxy_collections_set: "{{ found_tarballs.files | map(attribute='path') | list }}"
+
+- name: Install an ansible collection
+  command: >-
+    {{ ansible_collection_install_galaxy_executable }} collection install
+    {{ ansible_collection_install_galaxy_force_install | ternary('--force', '') }}
+    {{ ansible_collection_install_galaxy_ignore_errors | ternary('--ignore-errors', '') }}
+    {{ ansible_collection_install_galaxy_ignore_certs | ternary('--ignore-certs', '') }}
+    {{ ansible_collection_install_galaxy_server | ternary('--server ' + ansible_collection_install_galaxy_server, '') }}
+    {{ ansible_collection_install_galaxy_no_deps | ternary('--no-deps', '') }}
+    {{ ansible_collection_install_galaxy_force_deps | ternary('--force-with-deps', '') }}
+    {{ ansible_collection_install_galaxy_requirements | ternary('--requirements-file ' + ansible_collection_install_galaxy_requirements, '') }}
+    {{ ansible_collection_install_galaxy_collections_dir_path | ternary('--collections-path ' + ansible_collection_install_galaxy_collections_dir_path, '') }}
+    {{ ansible_collection_install_galaxy_collections_set | ternary(ansible_collection_install_galaxy_collections_set | join(' '), '') }}
+    {{ ansible_collection_install_galaxy_collection_name | ternary(ansible_collection_install_galaxy_collection_name, '') }}

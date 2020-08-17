@@ -1,0 +1,3 @@
+- unarchive:
+     src: "{{ file }}"
+     dest: "dummy"

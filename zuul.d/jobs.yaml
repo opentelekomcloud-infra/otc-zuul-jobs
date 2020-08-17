@@ -1,3 +1,4 @@
+---
 - job:
     name: refstack-client-run
     parent: unittests
@@ -13,7 +14,9 @@
           label: debian-buster
     timeout: 10800
     vars:
-      tempest_tests_url: https://refstack.openstack.org/api/v1/guidelines/2019.11/tests?target=platform&type=required&alias=true&flag=false
+      tempest_tests_url: >-
+        https://refstack.openstack.org/api/v1/guidelines/2019.11/tests
+        ?target=platform&type=required&alias=true&flag=false
       refstack_tempest_tag: tags/23.0.0
     secrets:
       - refstack_credentials
@@ -34,11 +37,14 @@
           label: debian-buster
     timeout: 10800
     vars:
-      tempest_tests_url: https://refstack.openstack.org/api/v1/guidelines/2019.11/tests?target=platform&type=required&alias=true&flag=false
+      tempest_tests_url: >-
+        https://refstack.openstack.org/api/v1/guidelines/2019.11/tests
+        ?target=platform&type=required&alias=true&flag=false
       refstack_tempest_tag: tags/23.0.0
       refstack_credentials: "{{ refstack_credentials_preprod }}"
       tempest_count_users: 8
-      tempest_identity_url_v3: "{{ refstack_credentials_preprod.tempest_identity_url }}"
+      tempest_identity_url_v3: >-
+        "{{ refstack_credentials_preprod.tempest_identity_url }}"
       tempest_image_ref: 3fab204d-2371-477e-9149-4a6146c3a771
       tempest_image_ref_alt: e49199fd-9934-40b3-986b-dc06023a5f5c
     secrets:

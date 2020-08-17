@@ -4,8 +4,8 @@
   register: p
 
 - when:
-  - p.stat.exists
-  - alerta is defined
+    - p.stat.exists
+    - alerta is defined
   block:
     - name: Read alerts from alerts.csv
       read_csv:
@@ -22,15 +22,18 @@
         method: POST
         body_format: json
         body:
-          environment: "{{ item.env | default('Production') }}"
-          severity: "{{ item.severity | default('major') }}"
-          event: "{{ item.event }}"
+          environment: "{{ zj_alert_item.env | default('Production') }}"
+          severity: "{{ zj_alert_item.severity | default('major') }}"
+          event: "{{ zj_alert_item.event }}"
           origin: "Zuul"
-          resource: "{{ item.resource }}"
-          value: "{{ item.value | default(omit) }}"
-          service: "{{ item.service.split('_') }}"
+          resource: "{{ zj_alert_item.resource }}"
+          value: "{{ zj_alert_item.value | default(omit) }}"
+          service: "{{ zj_alert_item.service.split('_') }}"
           attributes:
-            logUrl: "{{ alerta.logUrl_host }}/t/{{ zuul.tenant }}/build/{{ zuul.build }}"
+            logUrl: >-
+              "{{ alerta.logUrl_host }}/t/{{ zuul.tenant }}/build/{{ zuul.build }}"
       loop: "{{ alerts.list }}"
+      loop_control:
+        loop_var: zj_alert_item
       no_log: true
       failed_when: false

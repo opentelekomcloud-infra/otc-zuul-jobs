@@ -1,0 +1,12 @@
+ansible_collection_install_galaxy_collections_dir_path: ''  # custom path for installing collections to
+ansible_collection_install_galaxy_tarballs_path: ''  # "{{ zuul.executor.log_root }}/artifacts"
+ansible_collection_install_galaxy_executable: ansible-galaxy
+ansible_collection_install_galaxy_server: ''
+ansible_collection_install_galaxy_force_deps: false
+ansible_collection_install_galaxy_force_install: false
+ansible_collection_install_galaxy_ignore_errors: false
+ansible_collection_install_galaxy_no_deps: false
+ansible_collection_install_galaxy_requirements: ''
+ansible_collection_install_galaxy_collections_set: []
+ansible_collection_install_galaxy_collection_name: ''  # openstack.cloud
+ansible_collection_install_galaxy_ignore_certs: false

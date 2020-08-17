@@ -1,9 +1,6 @@
 # The order of packages is significant, because pip processes them in the order
 # of appearance. Changing the order has an impact on the overall integration
 # process, which may cause wedges in the gate later.
-flake8
-GitPython>=2.1.8,<2.1.12
-zuul
 
 # We need to pin the ansible version directly here; per the
 # deprecation policy it should trail the version used by Zuul by 4
@@ -12,13 +9,14 @@ zuul
 # here to pull in ansible anyway; pip doesn't actually have a
 # dependency solver and the uncapped ansible requirement from
 # ansible-lint pull in the latest version.
-ansible>=2.5.1,<2.6 # https://review.openstack.org/567007
-# Don't automatically switch to ansible-lint 5 when it becomes
-# available, so that it can be evaluated for an orderly transition.
-ansible-lint>=4.1.1a0,<5
-bashate>=0.2
-stestr>=1.0.0 # Apache-2.0
+ansible>=2.7,<2.8 # https://review.opendev.org/#/c/727157/
+stestr>=1.0.0,<3.0.0;python_version<'3.5' # Apache-2.0
+stestr>=1.0.0;python_version>='3.5' # Apache-2.0
 # For upload-logs-swift:
 openstacksdk>=0.17.1
 requests
 requestsexceptions
+bs4
+
+# unittest.mock compatibility package for Python < 3.3
+mock;python_version<'3.3'
