@@ -13,3 +13,22 @@
     release:
       jobs:
         - release-python
+
+- project-template:
+    name: ansible-collection
+    description: |
+      Perform multiple required tests on any ansible-collection project
+    check:
+      jobs:
+        - tox-pep8
+        - tox-linters-ansible-devel
+        - tox-linters-ansible-2.9
+        - tox-linters-ansible-2.10
+        - ansible-collection-build
+    gate:
+      jobs:
+        - tox-pep8
+        - tox-linters-ansible-devel
+        - tox-linters-ansible-2.9
+        - tox-linters-ansible-2.10
+        - ansible-collection-build
