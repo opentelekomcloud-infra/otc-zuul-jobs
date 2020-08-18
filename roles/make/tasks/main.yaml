@@ -1,0 +1,8 @@
+---
+- name: Run make command
+  command: >-
+    make {{ make_command }}
+  args:
+    chdir: "{{ zuul_work_dir }}"
+  environment:
+    "{{ make_env | default(omit) }}"
