@@ -4,6 +4,7 @@
     description: |
       Build ansible collection
     parent: unittests
+    pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/build.yaml
 
 - job:
