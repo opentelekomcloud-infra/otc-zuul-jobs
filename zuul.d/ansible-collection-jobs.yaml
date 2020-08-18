@@ -3,14 +3,14 @@
     name: ansible-collection-build
     description: |
       Build ansible collection
-    parent: unittest
+    parent: unittests
     run: playbooks/ansible-collection/build.yaml
 
 - job:
     name: ansible-collection-install
     description: |
       Install ansible collection
-    parent: unittest
+    parent: unittests
     run: playbooks/ansible-collection/install.yaml
 
 # Linters
