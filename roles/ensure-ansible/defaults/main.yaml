@@ -1,7 +1,7 @@
 ensure_ansible_version: latest
 ensure_ansible_state:
 ensure_ansible_pip_extra_args:
-ensure_ansible_venv_path:
+ensure_ansible_venv_path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/.local/venv"
 ensure_ansible_virtualenv_command:
 ensure_ansible_virtualenv_python:
 ensure_ansible_virtualenv_site_packages:
