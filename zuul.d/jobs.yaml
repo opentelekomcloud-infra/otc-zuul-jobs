@@ -84,3 +84,11 @@
         override-checkout: stable-2.9
     vars:
       tox_envlist: linters-2.9
+
+- job:
+    name: golang-make
+    parent: golang-go
+    description: |
+      Run golang commands under make
+    pre-run: playbooks/golang/make-pre.yaml
+    run: playbooks/golang/make-run.yaml
