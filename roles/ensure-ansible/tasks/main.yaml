@@ -5,7 +5,7 @@
 
 - name: Install Ansible
   pip:
-    name: ansible-base
+    name: ansible-base1
     version: "{{ ensure_ansible_version|default('latest', true) }}"
     state: "{{ ensure_ansible_state|default('present', true) }}"
     virtualenv: "{{ ensure_ansible_venv_path|default(omit, true) }}"
@@ -15,7 +15,9 @@
     virtualenv_site_packages: "{{ ensure_ansible_virtualenv_site_packages|default(omit, true) }}"
   register: result
 
-- name: Set ensure_ansible_ansible_executable and ensure_ansible_galaxy_executable
+- name: >-
+    Set ensure_ansible_ansible_executable and
+    ensure_ansible_galaxy_executable
   set_fact:
     ensure_ansible_ansible_executable: "{{ result.virtualenv }}/bin/ansible"
     ensure_ansible_galaxy_executable: "{{ result.virtualenv }}/bin/ansible-galaxy"
