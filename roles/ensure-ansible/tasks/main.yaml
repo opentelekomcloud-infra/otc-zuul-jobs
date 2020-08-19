@@ -13,3 +13,9 @@
     virtualenv_command: "{{ ensure_ansible_virtualenv_command|default(ensure_pip_virtualenv_command, true) | default(omit) }}"
     virtualenv_python: "{{ ensure_ansible_virtualenv_python|default(omit, true) }}"
     virtualenv_site_packages: "{{ ensure_ansible_virtualenv_site_packages|default(omit, true) }}"
+  register: result
+
+- name: Set ensure_ansible_ansible_executable and ensure_ansible_galaxy_executable
+  set_fact:
+    ensure_ansible_ansible_executable: "{{ result.virtualenv }}/bin/ansible"
+    ensure_ansible_galaxy_executable: "{{ result.virtualenv }}/bin/ansible-galaxy"

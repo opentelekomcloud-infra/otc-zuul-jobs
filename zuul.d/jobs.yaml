@@ -14,9 +14,7 @@
           label: debian-buster
     timeout: 10800
     vars:
-      tempest_tests_url: >-
-        https://refstack.openstack.org/api/v1/guidelines/2019.11/tests
-        ?target=platform&type=required&alias=true&flag=false
+      tempest_tests_url: https://refstack.openstack.org/api/v1/guidelines/2019.11/tests?target=platform&type=required&alias=true&flag=false
       refstack_tempest_tag: tags/23.0.0
     secrets:
       - refstack_credentials
@@ -37,9 +35,7 @@
           label: debian-buster
     timeout: 10800
     vars:
-      tempest_tests_url: >-
-        https://refstack.openstack.org/api/v1/guidelines/2019.11/tests
-        ?target=platform&type=required&alias=true&flag=false
+      tempest_tests_url: https://refstack.openstack.org/api/v1/guidelines/2019.11/tests?target=platform&type=required&alias=true&flag=false
       refstack_tempest_tag: tags/23.0.0
       refstack_credentials: "{{ refstack_credentials_preprod }}"
       tempest_count_users: 8
@@ -50,40 +46,6 @@
     secrets:
       - refstack_credentials_preprod
       - alerta_data
-
-# Linters
-- job:
-    name: tox-linters-ansible-devel
-    parent: tox-linters
-    description: |
-      Run openstack collections linter tests using the devel branch of ansible
-    # non-voting because we can't prevent ansible devel from breaking us
-    voting: false
-    required-projects:
-      - name: ansible/ansible
-        override-checkout: devel
-
-- job:
-    name: tox-linters-ansible-2.10
-    parent: tox-linters
-    description: |
-      Run openstack collections linter tests using the 2.10 branch of ansible
-    voting: true
-    required-projects:
-      - name: ansible/ansible
-        override-checkout: stable-2.10
-
-- job:
-    name: tox-linters-ansible-2.9
-    parent: tox-linters
-    description: |
-      Run openstack collections linter tests using the 2.9 branch of ansible
-    voting: true
-    required-projects:
-      - name: ansible/ansible
-        override-checkout: stable-2.9
-    vars:
-      tox_envlist: linters-2.9
 
 - job:
     name: golang-make
