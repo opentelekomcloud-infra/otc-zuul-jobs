@@ -1,5 +1,5 @@
 ansible_collection_publish_galaxy_collection_path: "{{ zuul.executor.log_root }}/artifacts"
-ansible_collection_publish_galaxy_executable: "{{ ensure_ansible_galaxy_executable | default('ansible-galaxy', true }}"
+ansible_collection_publish_galaxy_executable: "{{ ensure_ansible_galaxy_executable | default('ansible-galaxy', true ) }}"
 ansible_collection_publish_collection_tarball:
 ansible_collection_publish_galaxy_info:
   url: https://galaxy.ansible.com
