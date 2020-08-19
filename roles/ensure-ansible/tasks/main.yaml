@@ -1,11 +1,15 @@
 ---
+- name: Install pip
+  include_role:
+    name: ensure-pip
+
 - name: Install Ansible
   pip:
-    name: ansible
+    name: ansible-base
     version: "{{ ensure_ansible_version|default('latest', true) }}"
     state: "{{ ensure_ansible_state|default('present', true) }}"
     virtualenv: "{{ ensure_ansible_venv_path|default(omit, true) }}"
     extra_args: "{{ ensure_ansible_pip_extra_args|default(omit, true) }}"
-    virtualenv_command: "{{ ensure_ansible_virtualenv_command|default(omit, true) }}"
+    virtualenv_command: "{{ ensure_ansible_virtualenv_command|default(ensure_pip_virtualenv_command, true) | default(omit) }}"
     virtualenv_python: "{{ ensure_ansible_virtualenv_python|default(omit, true) }}"
     virtualenv_site_packages: "{{ ensure_ansible_virtualenv_site_packages|default(omit, true) }}"

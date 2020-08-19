@@ -1,6 +1,7 @@
-ansible_collection_build_galaxy_executable: ansible-galaxy
-ansible_collection_build_collection_dir: "{{ zuul.project.src_dir }}"
+ansible_collection_build_galaxy_executable: "{{ ansible_collection_build_pip_virtualenv }}/bin/ansible-galaxy"
+ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
 ansible_collection_build_galaxy_output_path: "{{ ansible_user_dir }}/build_artifacts"
+ansible_collection_build_artifact_path: "{{ zuul.executor.log_root }}/artifacts/"
 ansible_collection_build_collection_verify: true
 ansible_collection_build_generate_version: true
 ansible_collection_build_save_artifact: true
@@ -8,5 +9,5 @@ ansible_collection_build_pip_dependencies:
   - galaxy_importer
   - ruamel.yaml
   - pbr
-ansible_collection_build_pip_virtualenv:
+ansible_collection_build_pip_virtualenv: "{{ ansible_user_dir }}/.local/venv"
 ansible_collection_build_pip_extra_args:

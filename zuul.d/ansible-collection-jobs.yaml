@@ -1,0 +1,49 @@
+---
+- job:
+    name: ansible-collection-build
+    description: |
+      Build ansible collection
+    parent: unittests
+    pre-run: playbooks/ansible-collection/pre.yaml
+    run: playbooks/ansible-collection/build.yaml
+
+- job:
+    name: ansible-collection-install
+    description: |
+      Install ansible collection
+    parent: unittests
+    run: playbooks/ansible-collection/install.yaml
+
+# Linters
+- job:
+    name: tox-linters-ansible-devel
+    parent: tox-linters
+    description: |
+      Run openstack collections linter tests using the devel branch of ansible
+    # non-voting because we can't prevent ansible devel from breaking us
+    voting: false
+    required-projects:
+      - name: ansible/ansible
+        override-checkout: devel
+
+- job:
+    name: tox-linters-ansible-2.10
+    parent: tox-linters
+    description: |
+      Run openstack collections linter tests using the 2.10 branch of ansible
+    voting: true
+    required-projects:
+      - name: ansible/ansible
+        override-checkout: stable-2.10
+
+- job:
+    name: tox-linters-ansible-2.9
+    parent: tox-linters
+    description: |
+      Run openstack collections linter tests using the 2.9 branch of ansible
+    voting: true
+    required-projects:
+      - name: ansible/ansible
+        override-checkout: stable-2.9
+    vars:
+      tox_envlist: linters-2.9

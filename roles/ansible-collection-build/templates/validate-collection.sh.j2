@@ -22,7 +22,8 @@ if [[ -n "{{ ansible_collection_build_pip_virtualenv }}" ]]; then
 fi
 # galaxy_importer.main does not return non-zero error code on error
 PY_EXE=$(command -v python3 || command -v python)
-output=$($PY_EXE -m galaxy_importer.main $ARTIFACT_PATH)
+output=$($PY_EXE -m galaxy_importer.main $ARTIFACT_PATH) || true
 if echo $output | grep ERROR: ; then
+    echo $output
     exit 1
 fi
