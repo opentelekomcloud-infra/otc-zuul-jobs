@@ -1,12 +1,12 @@
 - name: Ensure artifacts directory exists
   file:
-    path: "{{ zuul.executor.log_root }}/artifacts"
+    path: "{{ ansible_collection_build_artifact_path }}"
     state: directory
   delegate_to: localhost
 
 - name: Collect tarball artifacts
   synchronize:
-    dest: "{{ zuul.executor.log_root }}/artifacts/"
+    dest: "{{ ansible_collection_build_artifact_path }}"
     mode: pull
     src: "{{ ansible_collection_build_collection_tarball }}"
     verify_host: true

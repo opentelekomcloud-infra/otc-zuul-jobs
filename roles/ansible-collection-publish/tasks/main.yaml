@@ -35,13 +35,13 @@
       when:
         - ansible_collection_publish_collection_tarball is not defined or not ansible_collection_publish_collection_tarball
 
-    - name: Publish collection to Ansible Galaxy
-      environment:
-        ANSIBLE_CONFIG: "{{ _ansiblecfg_tmp.path }}"
-      command: "{{ ansible_collection_publish_galaxy_executable }} collection publish {{ zj_collection.path }}"
-      loop: "{{ ansible_collection_publish_collections }}"
-      loop_control:
-        loop_var: zj_collection
+          #    - name: Publish collection to Ansible Galaxy
+          #      environment:
+          #        ANSIBLE_CONFIG: "{{ _ansiblecfg_tmp.path }}"
+          #      command: "{{ ansible_collection_publish_galaxy_executable }} collection publish {{ zj_collection.path }}"
+          #      loop: "{{ ansible_collection_publish_collections }}"
+          #      loop_control:
+          #        loop_var: zj_collection
 
   always:
     - name: Shred ansible-galaxy credentials

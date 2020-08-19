@@ -14,6 +14,15 @@
     parent: unittests
     run: playbooks/ansible-collection/install.yaml
 
+- job:
+    name: ansible-collection-publish
+    description: |
+      Publish ansible collection
+    parent: unittests
+    pre-run: playbooks/ansible-collection/pre.yaml
+    run: playbooks/ansible-collection/build.yaml
+    post-run: playbooks/ansible-collection/publish.yaml
+
 # Linters
 - job:
     name: tox-linters-ansible-devel

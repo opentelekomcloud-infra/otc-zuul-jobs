@@ -1,4 +1,8 @@
 ---
-- hosts: all
+#- hosts: all
+#  roles:
+#    - ansible_collection-build
+
+- hosts: localhost
   roles:
     - ansible-collection-publish

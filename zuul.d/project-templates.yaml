@@ -24,7 +24,8 @@
         #- tox-linters-ansible-devel
         #- tox-linters-ansible-2.9
         #- tox-linters-ansible-2.10
-        - ansible-collection-build
+        #        - ansible-collection-build
+        - ansible-collection-publish
     gate:
       jobs:
         - tox-pep8
