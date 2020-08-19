@@ -20,11 +20,11 @@
       Perform multiple required tests on any ansible-collection project
     check:
       jobs:
-        - tox-pep8
-        - tox-linters-ansible-devel
-        - tox-linters-ansible-2.9
-        - tox-linters-ansible-2.10
-        - ansible-collection-build
+        #        - tox-pep8
+        #        - tox-linters-ansible-devel
+        #        - tox-linters-ansible-2.9
+        #        - tox-linters-ansible-2.10
+        #        - ansible-collection-build
         - release-ansible-collection
     gate:
       jobs:
