@@ -22,14 +22,12 @@
       jobs:
         - tox-pep8
         - tox-linters-ansible-devel
-        - tox-linters-ansible-2.9
         - tox-linters-ansible-2.10
         - ansible-collection-build
     gate:
       jobs:
         - tox-pep8
         - tox-linters-ansible-devel
-        - tox-linters-ansible-2.9
         - tox-linters-ansible-2.10
         - ansible-collection-build
     release:
