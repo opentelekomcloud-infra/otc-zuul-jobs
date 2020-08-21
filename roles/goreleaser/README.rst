@@ -15,6 +15,6 @@ Invoke goreleaser with different options optionally also importing gpg key for a
    Whether gpg import for signing should be enabled or not
 
 .. zuul:rolevar:: gpg_key
-   :defalt: none
+   :default: none
 
    GPG key to import for artefacts signing
