@@ -1,5 +1,0 @@
----
-- hosts: all
-  tasks:
-    - name: Trigger goreleaser
-      command: "{{ zuul.project.src_dir }}/bin/goreleaser"

@@ -1,0 +1,5 @@
+---
+goreleaser_sign: false
+gpg_key:
+  private:
+goreleaser_args: "--snaptshot --rm-dist"

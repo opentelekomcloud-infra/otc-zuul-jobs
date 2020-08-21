@@ -12,8 +12,10 @@
       make_command: vet
 
 - job:
-    name: goreleaser
-    parent: unittests
+    name: goreleaser-build
+    description: |
+      Build golang binaries with goreleaser.
     pre-run: playbooks/golang/goreleaser-pre.yaml
-    run: playbooks/golang/goreleaser-run.yaml
-
+    run: playbooks/golang/goreleaser-build.yaml
+    vars:
+      go_version: "1.15"
