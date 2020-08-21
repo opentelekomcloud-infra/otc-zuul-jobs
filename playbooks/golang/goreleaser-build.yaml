@@ -1,0 +1,8 @@
+---
+- hosts: all
+  tasks:
+    - name: Trigger goreleaser build
+      command: "bin/goreleaser --snapshot --rm-dist"
+      args:
+        chdir: "{{ zuul.project.src_dir }}"
+
