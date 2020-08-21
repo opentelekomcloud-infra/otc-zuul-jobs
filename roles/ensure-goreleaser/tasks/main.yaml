@@ -14,4 +14,4 @@
 - name: Invoke goreleaser fetcher
   command: "{{ tempdir.path }}/goreleaser.sh"
   environment:
-    BINDIR: "{{ zuul.project.src_dir }}"
+    BINDIR: "{{ zuul.project.src_dir }}/bin"
