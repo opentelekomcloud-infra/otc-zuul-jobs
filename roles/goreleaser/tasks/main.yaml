@@ -1,0 +1,33 @@
+---
+
+- name: Create GPG private key tempfile
+  tempfile:
+    state: file
+  register: gpg_private_key_tmp
+  when: goreleaser_sign
+
+- name: Create GPG private key
+  copy:
+    content: "{{ gpg_key.private }}"
+    dest: "{{ gpg_private_key_tmp.path }}"
+    mode: 0400
+  when: goreleaser_sign
+
+- name: Import GPG private key
+  command: "gpg --allow-secret-key-import --import {{ gpg_pre_key_tmp.path }}"
+  when: goreleaser_sign
+
+- name: Delete GPG private key
+  file:
+    path: "{{ gpg_private_key_tmp.path }}"
+    state: absent
+  when: goreleaser_sign
+
+- name: Trigger goreleaser
+  command: "bin/goreleaser {{ goreleaser_args }}"
+  args:
+    chdir: "{{ zuul.project.src_dir }}"
+  environment:
+    GITHUB_TOKEN: "{{ goreleaser_github_token.token | default(omit) }}"
+    PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
+
