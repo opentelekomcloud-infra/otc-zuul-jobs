@@ -1,0 +1,17 @@
+---
+- name: make tempdir
+  tempfile:
+    state: directory
+    suffix: build
+  register: tempdir
+
+- name: Fetch goreleaser fetcher
+  get_url:
+    url: "https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh"
+    dest: "{{ tempdir.path }}/goreleaser.sh"
+    mode: 0775
+
+- name: Invoke goreleaser fetcher
+  command: "{{ tempdir.path }}/goreleaser.sh"
+  environment:
+    BINDIR: "{{ zuul.project.src_dir }}/bin"
