@@ -11,9 +11,3 @@
     vars:
       make_command: vet
 
-- job:
-    name: goreleaser
-    parent: unittests
-    pre-run: playbooks/golang/goreleaser-pre.yaml
-    run: playbooks/golang/goreleaser-run.yaml
-
