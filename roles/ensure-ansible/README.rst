@@ -2,6 +2,11 @@ Install Ansible
 
 **Role Variables**
 
+.. zuul:rolevar:: ensure_ansible_package_name
+   :default: ansible-base
+
+   Name of the pypi package with Ansible to install, (ansible or ansible-base).
+
 .. zuul:rolevar:: ensure_ansible_version
    :default: latest
 
@@ -18,7 +23,7 @@ Install Ansible
    Extra arguments to pass to pip, like "--user" or "--update".
 
 .. zuul:rolevar:: ensure_ansible_venv_path
-   :default: ''
+   :default: '~/.local/venv'
 
    Path to directory of Virtualenv
 
@@ -37,3 +42,17 @@ Install Ansible
 
    Whether the virtual environment will inherit packages from the global
    site-packages directory.
+
+** Output Variables**
+
+.. zuul:rolevar:: ensure_ansible_ansible_executable
+
+   Path to the installed `ansible` executable.
+
+.. zuul:rolevar:: ensure_ansible_galaxy_executable
+
+   Path to the installed `ansible-galaxy` executable.
+
+.. zuul:rolevar:: ensure_ansible_root_dir
+
+   Path to the root directory (virtual environment) where ansible is installed.

@@ -1,0 +1,6 @@
+- hosts: all
+  tasks:
+    - include_role: ansible-collection-build
+      vars:
+        ansible_collection_build_collection_path: test-playbooks/ansible/collection
+

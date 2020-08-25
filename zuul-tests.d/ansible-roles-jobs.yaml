@@ -1,0 +1,12 @@
+- job:
+    name: zuul-jobs-test-ensure-ansible
+    description: Test ensure-ansible job
+    files:
+      - roles/ensure-ansible
+    run: test-playbooks/ensure-ansible.yaml
+
+- project:
+    check: &id001
+      jobs:
+        - zuul-jobs-test-ensure-ansible
+    gate: *id001

@@ -1,3 +1,4 @@
+ensure_ansible_package_name:
 ensure_ansible_version: latest
 ensure_ansible_state:
 ensure_ansible_pip_extra_args:

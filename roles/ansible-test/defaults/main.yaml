@@ -1,0 +1,23 @@
+---
+ansible_test_collections: true
+# Need to be defined if ansible_test_collections is true
+ansible_test_collection_namespace: ''
+# Need to be defined if ansible_test_collections is true
+ansible_test_collection_name: ''
+ansible_test_integration_targets: ''
+ansible_test_test_command: 'integration'
+ansible_test_continue_on_error: true
+ansible_test_retry_on_error: false
+# ansible_test_skip_tags:
+ansible_test_no_temp_unicode: false
+ansible_test_location: "{{ ~/ansible-test | expanduser }}"
+# Default ansible-test options
+ansible_test_git_branch: 'devel'
+# ansible_test_python: default
+ansible_test_venv_path: ~/venv
+ansible_test_inventory_path: ~/inventory
+ansible_test_collection_dir: ~/.ansible/collections/ansible_collections
+ansible_test_enable_ara: true
+ansible_test_split_in: 1
+ansible_test_do_number: 1
+ansible_test_render_integration_config_location: "{{ zuul.project.src_dir }}/render_integration_config.sh"

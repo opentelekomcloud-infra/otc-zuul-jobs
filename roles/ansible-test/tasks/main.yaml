@@ -1,0 +1,29 @@
+---
+- name: Include branch specific variables.
+  include_vars: "default.yaml"
+
+- name: Prepare ansible-test parameters
+  import_tasks: init_test_options.yaml
+
+- name: Single ansible mode
+  import_tasks: init_single_mode.yaml
+  when: not ansible_test_collections
+
+- name: Ansible with collections
+  import_tasks: init_collection.yaml
+  when: ansible_test_collections
+
+- name: Set the targets
+  set_fact:
+    _integration_targets: "{{ ansible_test_integration_targets }}"
+
+- name: Split targets
+  import_tasks: split_targets.yaml
+  when: ansible_test_split_in > 1
+
+- name: Run the test suite
+  args:
+    chdir: "{{ _test_location }}"
+    executable: /bin/bash
+  environment: "{{ ansible_test_environment | default({}) }}"
+  shell: "source {{ ansible_test_venv_path }}/bin/activate; {{ ansible_test_executable }} {{ ansible_test_test_command }} {{ ansible_test_options }} -vvvv {{ _integration_targets }}"

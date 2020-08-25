@@ -1,0 +1,13 @@
+#!/bin/bash -eu
+
+set -o pipefail
+
+function render()
+{
+  readonly template="$1"; shift
+  readonly content="$(cat "$template")"
+
+  eval "echo \"$content\""
+}
+
+render {{ _test_location }}/tests/integration/integration_config.yml.template > {{ _test_location }}/tests/integration/integration_config.yml

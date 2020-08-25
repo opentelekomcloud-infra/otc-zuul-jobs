@@ -1,0 +1,20 @@
+- hosts: all
+  tasks:
+    - name: build test collection
+      include_role:
+        name: ansible-collection-build
+      vars:
+        ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+
+- hosts: localhost
+  tasks:
+    - name: publish collection
+      include_role:
+        name: ansible-collection-publish
+      register: result
+      ignore_errors: true
+
+    - name: debug result
+      debug:
+        var:
+          result
