@@ -26,6 +26,7 @@
         - tox-linters-ansible-2.10
         - ansible-collection-build
         - ansible-collection-test-sanity
+        - otc-ansible-collection-test-integration
     gate:
       jobs:
         - tox-pep8
@@ -33,6 +34,7 @@
         - tox-linters-ansible-2.10
         - ansible-collection-build
         - ansible-collection-test-sanity
+        - otc-ansible-collection-test-integration
     release:
       jobs:
         - release-ansible-collection
