@@ -6,13 +6,60 @@
     parent: unittests
     pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/build.yaml
+    vars:
+      python_version: 3.6
 
 - job:
     name: ansible-collection-install
     description: |
       Install ansible collection
     parent: unittests
+    pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/install.yaml
+    vars:
+      python_version: 3.6
+
+- job:
+    name: ansible-collection-publish
+    description: |
+      Publish ansible collection
+    parent: unittests
+    pre-run: playbooks/ansible-collection/pre.yaml
+    run: playbooks/ansible-collection/publish.yaml
+    vars:
+      python_version: 3.6
+
+- job:
+    name: ansible-collection-test-base
+    parent: unittests
+    abstract: true
+    description: |
+      Execute ansible-test for the collection
+    pre-run: playbooks/ansible-test-base/pre.yaml
+    run: playbooks/ansible-test-base/run.yaml
+    vars:
+      python_version: 3.6
+      ansible_test_collections: true
+
+- job:
+    name: ansible-collection-test-sanity
+    parent: ansible-collection-test-base
+    description: |
+      Execute ansible-test sanity for the collection
+    vars:
+      ansible_test_test_command: "sanity"
+      ansible_test_skip_tests:
+        - metaclass-boilerplate
+        - future-import-boilerplate
+
+- job:
+    name: ansible-collection-test-integration
+    parent: ansible-collection-test-base
+    description: |
+      Execute ansible-test integration for the collection
+    vars:
+      ansible_test_test_command: "integration"
+      ansible_test_no_temp_unicode: true
 
 # Linters
 - job:
@@ -47,3 +94,27 @@
         override-checkout: stable-2.9
     vars:
       tox_envlist: linters-2.9
+
+# - job:
+#     name: ansible-collection-test-sanity-old
+#     parent: tox
+#     description: |
+#       Run ansible integration tests on the collection under tox
+#     voting: true
+#     required-projects:
+#       - name: ansible/ansible
+#         override-checkout: stable-2.9
+#     vars:
+#       tox_envlist: sanity
+#
+# - job:
+#     name: ansible-collection-test-integration
+#     parent: tox
+#     description: |
+#       Run ansible integration tests on the collection under tox
+#     voting: true
+#     required-projects:
+#       - name: ansible/ansible
+#         override-checkout: stable-2.9
+#     vars:
+#       tox_envlist: integration

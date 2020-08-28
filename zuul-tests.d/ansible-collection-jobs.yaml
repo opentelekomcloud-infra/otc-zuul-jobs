@@ -1,0 +1,57 @@
+- job:
+    name: zuul-jobs-test-ansible-collection-build
+    parent: ansible-collection-build
+    description: Test ansible-collection-build job
+    files:
+      - playbooks/ansible-collection/*
+      - roles/ansible-collection-build/*
+      - zuul.d/ansible-collection-jobs.yaml
+    vars:
+      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+
+- job:
+    name: zuul-jobs-test-ansible-collection-install
+    parent: ansible-collection-install
+    description: Test ansible-collection-build job
+    files:
+      - playbooks/ansible-collection/*
+      - roles/ansible-collection-install/*
+      - zuul.d/ansible-collection-jobs.yaml
+    vars:
+      ansible_collection_build_collection_path: test-playbooks/ansible/collection
+      ansible_collection_install_galaxy_collection_name: "openstack.cloud"
+
+- job:
+    name: zuul-jobs-test-ansible-collection-test-sanity
+    parent: ansible-collection-test-sanity
+    description: Test ansible-collection-test-sanity job
+    files:
+      - roles/ansible-test-base/*
+      - zuul.d/ansible-collection-jobs.yaml
+    vars:
+      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      ansible_collection_name: "collection_name"
+      ansible_collection_namespace: "namespace_name"
+
+- job:
+    name: zuul-jobs-test-ansible-collection-test-integration
+    parent: ansible-collection-test-integration
+    description: Test ansible-collection-test-integration job
+    files:
+      - roles/ansible-test-base/*
+      - zuul.d/ansible-collection-jobs.yaml
+    vars:
+      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      ansible_collection_name: "collection_name"
+      ansible_collection_namespace: "namespace_name"
+      ansible_test_integration_env:
+        fake_env_val: "dummy"
+
+- project:
+    check: &id001
+      jobs:
+        - zuul-jobs-test-ansible-collection-build
+        - zuul-jobs-test-ansible-collection-install
+        - zuul-jobs-test-ansible-collection-test-sanity
+        - zuul-jobs-test-ansible-collection-test-integration
+    gate: *id001

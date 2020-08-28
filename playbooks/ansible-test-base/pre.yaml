@@ -1,0 +1,11 @@
+---
+- hosts: all
+  roles:
+    - ensure-python
+    # - ensure-ansible
+    - ansible-collection-build
+    - role: ansible-collection-install
+      vars:
+        # ansible_collection_install_galaxy_executable: "{{ ensure_ansible_galaxy_executable }}"
+        ansible_collection_install_galaxy_collection_name: "{{ ansible_collection_build_collection_tarball }}"
+        ansible_test_python: "{{ python_version }}"

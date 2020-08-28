@@ -1,0 +1,63 @@
+---
+- name: Setup location of project for integration tests
+  set_fact:
+    _test_location: "{{ ansible_test_collection_dir }}/{{ ansible_test_collection_namespace }}/{{ ansible_test_collection_name }}"
+    _test_cfg_location: "{{ ansible_test_collection_dir }}/{{ ansible_test_collection_namespace }}/{{ ansible_test_collection_name }}/tests/integration/{{ ansible_test_test_command }}.cfg"
+
+- name: Find requements.txt file
+  stat:
+    path: "{{ _test_location }}/requirements.txt"
+  register: requirements_stat
+
+- name: Find test-requements.txt file
+  stat:
+    path: "{{ _test_location }}/test-requirements.txt"
+  register: test_requirements_stat
+
+- name: Install python requirements
+  pip:
+    virtualenv: "{{ ansible_test_venv_path }}"
+    requirements: "{{ _test_location }}/requirements.txt"
+  when: requirements_stat.stat.exists
+
+- name: Install python test-requirements
+  pip:
+    virtualenv: "{{ ansible_test_venv_path }}"
+    requirements: "{{ _test_location }}/test-requirements.txt"
+  when: test_requirements_stat.stat.exists
+
+- name: Copy potential cloud provider configuration for ansible-test in the collection
+  copy:
+    src: "{{ zj_item }}"
+    dest: "{{ _test_location }}/tests/integration/"
+    remote_src: true
+  with_fileglob:
+    - "{{ ansible_test_ansible_path }}/test/integration/cloud-config-*.ini"
+  loop_control:
+    loop_var: zj_item
+  when: ansible_test_test_command == 'integration'
+
+- name: Find integration_config.yml.template
+  stat:
+    path: "{{ _test_location }}/tests/integration/integration_config.yml.template"
+  when: ansible_test_test_command == 'integration'
+  register: _integration_config_template
+
+- name: Create render.sh for generating integration_config
+  template:
+    src: "render.sh.j2"
+    dest: "{{ ansible_test_render_integration_config_location }}"
+    mode: "750"
+  when:
+    - ansible_test_test_command == 'integration'
+    - _integration_config_template.stat.exists
+
+- name: Render integration_config
+  command: "{{ ansible_test_render_integration_config_location }}"
+  args:
+    creates: "{{ _test_location }}/tests/integration/integration_config.yml"
+  environment:
+    "{{ ansible_test_integration_env|default({}) }}"
+  when:
+    - ansible_test_test_command == 'integration'
+    - _integration_config_template.stat.exists

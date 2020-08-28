@@ -1,0 +1,64 @@
+---
+- name: Setup --skip-tags for test_options
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --skip-tags {{ ansible_test_skip_tags }}"
+  when:
+    - ansible_test_skip_tags is defined
+    - ansible_test_skip_tags|length > 0
+    - ansible_test_test_command != 'sanity'
+
+- name: Setup --skip-test for test_options
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --skip-test {{ zj_item }}"
+  loop: "{{ ansible_test_skip_tests|list }}"
+  loop_control:
+    loop_var: zj_item
+  when:
+    - ansible_test_skip_tests is defined
+    - ansible_test_test_command == 'sanity'
+
+- name: Setup --no-temp-unicode for test_options
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --no-temp-unicode"
+  when: ansible_test_no_temp_unicode
+
+- name: Enable --inventory for network-integration
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --inventory {{ ansible_test_inventory_path }}"
+  when:
+    - ansible_test_test_command == 'network-integration'
+
+- name: Enable --retry-on-error
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --retry-on-error"
+  when:
+    - ansible_test_retry_on_error
+    - ansible_test_test_command != 'sanity'
+
+- name: Enable --continue-on-error
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --continue-on-error"
+  when:
+    - ansible_test_continue_on_error
+    - ansible_test_test_command != 'sanity'
+
+- name: Enable --requirements
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --requirements"
+  when: not ansible_test_collections
+
+- name: Enable coverage commands for unit tests
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --coverage"
+  when: ansible_test_test_command == 'units'
+
+- name: Enable coverage commands for unit tests
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --requirements"
+  when:
+    - ansible_test_test_command == 'sanity'
+
+- name: Enable python argument
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --python {{ ansible_test_python }}"
+  when: ansible_test_python is defined

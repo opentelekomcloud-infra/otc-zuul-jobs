@@ -1,4 +1,8 @@
 ---
+- name: Include ensure-ansible role
+  include_role:
+    name: ensure-ansible
+
 - name: Install dependencies
   pip:
     name: "{{ ansible_collection_build_pip_dependencies }}"
@@ -34,7 +38,7 @@
   args:
     chdir: "{{ ansible_collection_build_collection_dir }}"
   command: >-
-    {{ ansible_collection_build_galaxy_executable }}
+    {{ ensure_ansible_galaxy_executable }}
     collection build --force --output-path {{ ansible_collection_build_galaxy_output_path }} .
 
 - name: Find tarballs in folder

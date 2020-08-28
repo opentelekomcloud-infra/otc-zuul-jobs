@@ -1,4 +1,8 @@
 ---
+- name: Include ensure-ansible role
+  include_role:
+    name: ensure-ansible
+
 - name: Publish content to Ansible Galaxy
   block:
     - name: Create ansible.cfg configuration file tempfile
@@ -38,7 +42,7 @@
     - name: Publish collection to Ansible Galaxy
       environment:
         ANSIBLE_CONFIG: "{{ _ansiblecfg_tmp.path }}"
-      command: "{{ ansible_collection_publish_galaxy_executable }} collection publish {{ zj_collection.path }}"
+      command: "{{ ensure_ansible_galaxy_executable }} collection publish {{ zj_collection.path }}"
       loop: "{{ ansible_collection_publish_collections }}"
       loop_control:
         loop_var: zj_collection
