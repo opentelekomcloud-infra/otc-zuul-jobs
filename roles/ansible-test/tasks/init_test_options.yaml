@@ -20,7 +20,9 @@
 - name: Setup --no-temp-unicode for test_options
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --no-temp-unicode"
-  when: ansible_test_no_temp_unicode
+  when:
+    - ansible_test_no_temp_unicode
+    - ansible_test_test_command == 'integration'
 
 - name: Enable --inventory for network-integration
   set_fact:
@@ -33,30 +35,30 @@
     ansible_test_options: "{{ ansible_test_options }} --retry-on-error"
   when:
     - ansible_test_retry_on_error
-    - ansible_test_test_command != 'sanity'
+    - ansible_test_test_command == 'integration'
 
 - name: Enable --continue-on-error
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --continue-on-error"
   when:
     - ansible_test_continue_on_error
-    - ansible_test_test_command != 'sanity'
+    - ansible_test_test_command == 'integration'
 
 - name: Enable --requirements
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --requirements"
-  when: not ansible_test_collections
+#  when: not ansible_test_collections
 
 - name: Enable coverage commands for unit tests
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --coverage"
   when: ansible_test_test_command == 'units'
 
-- name: Enable coverage commands for unit tests
-  set_fact:
-    ansible_test_options: "{{ ansible_test_options }} --requirements"
-  when:
-    - ansible_test_test_command == 'sanity'
+# - name: Enable coverage commands for unit tests
+#   set_fact:
+#     ansible_test_options: "{{ ansible_test_options }} --requirements"
+#   when:
+#     - ansible_test_test_command == 'sanity'
 
 - name: Enable python argument
   set_fact:
