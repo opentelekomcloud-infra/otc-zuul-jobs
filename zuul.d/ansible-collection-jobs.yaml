@@ -53,6 +53,16 @@
         - future-import-boilerplate
 
 - job:
+    name: ansible-collection-test-units
+    parent: ansible-collection-test-base
+    description: |
+      Execute ansible-test units for the collection
+    voting: false
+    vars:
+      ansible_test_test_command: "units"
+      ansible_test_no_temp_unicode: true
+
+- job:
     name: ansible-collection-test-integration
     parent: ansible-collection-test-base
     description: |

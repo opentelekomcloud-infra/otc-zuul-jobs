@@ -34,6 +34,18 @@
       ansible_collection_namespace: "namespace_name"
 
 - job:
+    name: zuul-jobs-test-ansible-collection-test-units
+    parent: ansible-collection-test-units
+    description: Test ansible-collection-test-sanity job
+    files:
+      - roles/ansible-test-base/*
+      - zuul.d/ansible-collection-jobs.yaml
+    vars:
+      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      ansible_collection_name: "collection_name"
+      ansible_collection_namespace: "namespace_name"
+
+- job:
     name: zuul-jobs-test-ansible-collection-test-integration
     parent: ansible-collection-test-integration
     description: Test ansible-collection-test-integration job
@@ -53,5 +65,6 @@
         - zuul-jobs-test-ansible-collection-build
         - zuul-jobs-test-ansible-collection-install
         - zuul-jobs-test-ansible-collection-test-sanity
+        - zuul-jobs-test-ansible-collection-test-units
         - zuul-jobs-test-ansible-collection-test-integration
     gate: *id001
