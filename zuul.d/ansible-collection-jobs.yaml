@@ -25,7 +25,8 @@
       Publish ansible collection
     parent: unittests
     pre-run: playbooks/ansible-collection/pre.yaml
-    run: playbooks/ansible-collection/publish.yaml
+    run: playbooks/ansible-collection/build.yaml
+    post-run: playbooks/ansible-collection/publish.yaml
     vars:
       python_version: 3.6
 
