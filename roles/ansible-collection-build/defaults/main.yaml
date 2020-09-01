@@ -6,6 +6,7 @@ ansible_collection_build_collection_verify: true
 ansible_collection_build_generate_version: true
 ansible_collection_build_save_artifact: true
 ansible_collection_build_pip_dependencies:
+  - ansible-base
   - galaxy_importer
   - ruamel.yaml
   - pbr
