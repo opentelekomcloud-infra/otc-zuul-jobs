@@ -39,7 +39,7 @@
       refstack_tempest_tag: tags/23.0.0
       refstack_credentials: "{{ refstack_credentials_preprod }}"
       tempest_count_users: 8
-      tempest_identity_url_v3: >-
+      tempest_identity_url_v3:
         "{{ refstack_credentials_preprod.tempest_identity_url }}"
       tempest_image_ref: 3fab204d-2371-477e-9149-4a6146c3a771
       tempest_image_ref_alt: e49199fd-9934-40b3-986b-dc06023a5f5c
