@@ -6,6 +6,7 @@
     run: test-playbooks/ensure-ansible.yaml
 
 - project:
+    merge-mode: squash-merge
     check: &id001
       jobs:
         - zuul-jobs-test-ensure-ansible
