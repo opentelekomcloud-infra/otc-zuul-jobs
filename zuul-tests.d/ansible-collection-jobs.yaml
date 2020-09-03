@@ -60,6 +60,7 @@
         fake_env_val: "dummy"
 
 - project:
+    merge-mode: squash-merge
     check: &id001
       jobs:
         - zuul-jobs-test-ansible-collection-build
