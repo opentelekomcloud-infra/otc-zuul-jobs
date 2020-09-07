@@ -30,7 +30,7 @@
           value: "{{ zj_alert_item.value | default(omit) }}"
           service: "{{ zj_alert_item.service.split('_') }}"
           attributes:
-            logUrl: >-
+            logUrl:
               "{{ alerta.logUrl_host }}/t/{{ zuul.tenant }}/build/{{ zuul.build }}"
       loop: "{{ alerts.list }}"
       loop_control:
