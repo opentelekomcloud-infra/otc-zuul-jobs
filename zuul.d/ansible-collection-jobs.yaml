@@ -62,6 +62,8 @@
     vars:
       ansible_test_test_command: "units"
       ansible_test_no_temp_unicode: true
+      ensure_ansible_package_name: ansible-base
+      ensure_ansible_version: 2.10.1rc3
 
 - job:
     name: ansible-collection-test-integration
