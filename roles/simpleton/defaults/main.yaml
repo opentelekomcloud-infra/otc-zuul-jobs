@@ -1,6 +1,6 @@
 simple_source_image: "bash:latest"
 simple_prerun: []
 simple_run: ["bash"]
-simple_env_vars: []
+simple_env:
 simple_container_run_dir: "/var/run/simpleton"
 simple_image_name: "simpleton"

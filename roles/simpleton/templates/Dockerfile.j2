@@ -6,7 +6,7 @@ WORKDIR "${c_run_dir}"
 {% for cmd in simple_prerun %}
 RUN {{ cmd }}
 {% endfor %}
-{%- for var in simple_env_vars %}
-ENV {{ var }}={{ lookup('env', var) }}
-{% endfor -%}
+{% for k, val in simple_env.items() %}
+ENV {{ k }}="{{ val }}"
+{% endfor %}
 CMD {{ run }}
