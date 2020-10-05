@@ -23,6 +23,10 @@
       container_default_behavior: compatibility
       detach: no
       privileged: yes
+    register: container_result
+  - name: Log test output
+    debug:
+      msg: "{{ container_result.container.Output.split('\n') }}"
   always:
   - name: Remove used container
     docker_container:
