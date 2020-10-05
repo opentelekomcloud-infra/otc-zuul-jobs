@@ -1,0 +1,36 @@
+---
+- name: Generate Dockerfile
+  template:
+    src: "Dockerfile.j2"
+    dest: "./Dockerfile"
+
+- name: Prepare test image
+  docker_image:
+    name: "{{ simple_image_name }}"
+    source: build
+    build:
+      path: .
+      pull: yes
+  register: image_build_result
+
+- name: Always cleanup
+  block:
+  - name: Run the image
+    docker_container:
+      name: "simpleton-execution"
+      state: started
+      image: "{{ simple_image_name }}"
+      container_default_behavior: compatibility
+      detach: no
+      privileged: yes
+  always:
+  - name: Remove used container
+    docker_container:
+      name: "simpleton-execution"
+      state: absent
+      container_default_behavior: no_defaults
+
+  - name: Remove used image
+    docker_image:
+      name: "{{ simple_image_name }}"
+      state: absent

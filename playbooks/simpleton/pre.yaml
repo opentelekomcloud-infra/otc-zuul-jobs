@@ -1,0 +1,4 @@
+---
+- host: all
+  roles:
+  - ensure_docker

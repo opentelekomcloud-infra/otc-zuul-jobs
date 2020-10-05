@@ -1,0 +1,1 @@
+run: "{{ simple_run | join(' && ') }}"

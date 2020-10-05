@@ -1,0 +1,12 @@
+FROM {{ simple_source_image }}
+ENV c_run_dir="{{ simple_container_run_dir }}"
+RUN ["mkdir", "-p", "{{ simple_container_run_dir }}"]
+COPY . "${c_run_dir}"
+WORKDIR "${c_run_dir}"
+{% for cmd in simple_prerun %}
+RUN {{ cmd }}
+{% endfor %}
+{%- for var in simple_env_vars %}
+ENV {{ var }}={{ lookup('env', var) }}
+{% endfor -%}
+CMD {{ run }}
