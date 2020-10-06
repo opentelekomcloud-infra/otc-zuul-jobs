@@ -4,6 +4,13 @@
     src: "Dockerfile.j2"
     dest: "./Dockerfile"
 
+- name: List files
+  command: "ls -l"
+  register: ls
+- name: Log current files which will be written to the image
+  debug:
+    var: ls.stdout_lines
+
 - name: Prepare test image
   command: "docker build -qt {{ simple_image_name }} ."
 
