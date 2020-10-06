@@ -1,0 +1,14 @@
+- job:
+    name: simpleton
+    parent: unittests
+    attempts: 1
+    pre-run: simpleton/pre.yaml
+    run: simpleton/run.yaml
+    vars:
+      simple_env:
+        LI: "leeee"
+      simple_source_image: "node:latest"
+      simple_prerun:
+      - yarn init -yp
+      simple_run:
+      - cat package.json
