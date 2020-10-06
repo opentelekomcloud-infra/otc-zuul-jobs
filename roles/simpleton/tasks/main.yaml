@@ -4,14 +4,10 @@
     src: "Dockerfile.j2"
     dest: "{{ zuul_work_dir }}/Dockerfile"
 
-- name: List files
+- name: Files to be written to image
   command: "ls -l"
   args:
     chdir: "{{ zuul_work_dir }}"
-  register: ls
-- name: Log current files which will be written to the image
-  debug:
-    var: ls.stdout_lines
 
 - name: Prepare test image
   command: "docker build -qt {{ simple_image_name }} ."
