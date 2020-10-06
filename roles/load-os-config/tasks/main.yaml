@@ -1,4 +1,4 @@
 ---
 - name: Get list of existing clouds
-  openstack.cloud.config:
+  config:
     clouds: "{{ cloud_names }}"
