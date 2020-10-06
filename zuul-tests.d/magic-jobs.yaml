@@ -1,6 +1,5 @@
 - job:
     name: simpleton
-    parent: unittests
     attempts: 1
     pre-run: playbooks/simpleton/pre.yaml
     run: playbooks/simpleton/run.yaml

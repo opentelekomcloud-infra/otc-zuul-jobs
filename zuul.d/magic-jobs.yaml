@@ -1,6 +1,5 @@
 - job:
     name: simpleton
-    parent: unittests
     description: |
       Run given commands in disposable docker container.
       .. zuul:jobvar:: simple_source_image
