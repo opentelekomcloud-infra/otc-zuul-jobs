@@ -2,10 +2,12 @@
 - name: Generate Dockerfile
   template:
     src: "Dockerfile.j2"
-    dest: "./Dockerfile"
+    dest: "{{ zuul_work_dir }}/Dockerfile"
 
 - name: List files
   command: "ls -l"
+  args:
+    chdir: "{{ zuul_work_dir }}"
   register: ls
 - name: Log current files which will be written to the image
   debug:
@@ -13,11 +15,15 @@
 
 - name: Prepare test image
   command: "docker build -qt {{ simple_image_name }} ."
+  args:
+    chdir: "{{ zuul_work_dir }}"
 
 - name: Run with cleanup
   block:
   - name: Run the image
     command: "docker run --rm --privileged {{ simple_image_name }}"
+    args:
+      chdir: "{{ zuul_work_dir }}"
     register: container_result
   - name: Log test log
     debug:
