@@ -12,3 +12,10 @@
       - yarn init -yp
       simple_run:
       - cat package.json
+
+- project:
+    merge-mode: squash-merge
+    check: &id001
+      jobs:
+      - simpleton
+    gate: *id001
