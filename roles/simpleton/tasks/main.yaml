@@ -5,36 +5,16 @@
     dest: "./Dockerfile"
 
 - name: Prepare test image
-  docker_image:
-    name: "{{ simple_image_name }}"
-    source: build
-    build:
-      path: .
-      pull: yes
-  register: image_build_result
+  command: "docker build -qt {{ simple_image_name }} ."
 
-- name: Always cleanup
+- name: Run with cleanup
   block:
   - name: Run the image
-    docker_container:
-      name: "simpleton-execution"
-      state: started
-      image: "{{ simple_image_name }}"
-      container_default_behavior: compatibility
-      detach: no
-      privileged: yes
+    command: "docker run --rm --privileged {{ simple_image_name }}"
     register: container_result
-  - name: Log test output
+  - name: Log test log
     debug:
-      msg: "{{ container_result.container.Output.split('\n') }}"
+      msg: "{{ container_result.stdout_lines }}"
   always:
-  - name: Remove used container
-    docker_container:
-      name: "simpleton-execution"
-      state: absent
-      container_default_behavior: no_defaults
-
   - name: Remove used image
-    docker_image:
-      name: "{{ simple_image_name }}"
-      state: absent
+    command: "docker rmi {{ simple_image_name }}"
