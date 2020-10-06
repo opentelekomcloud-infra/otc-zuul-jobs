@@ -17,5 +17,5 @@
         This is key:value dictionary of environment variables defined as `ENV` Dockerfile directive
     voting: true
     attempts: 1
-    pre-run: simpleton/pre.yaml
-    run: simpleton/run.yaml
+    pre-run: playbooks/simpleton/pre.yaml
+    run: playbooks/simpleton/run.yaml

@@ -2,8 +2,8 @@
     name: simpleton
     parent: unittests
     attempts: 1
-    pre-run: simpleton/pre.yaml
-    run: simpleton/run.yaml
+    pre-run: playbooks/simpleton/pre.yaml
+    run: playbooks/simpleton/run.yaml
     vars:
       simple_env:
         LI: "leeee"
