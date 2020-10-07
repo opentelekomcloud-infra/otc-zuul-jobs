@@ -1,0 +1,29 @@
+---
+- name: Generate Dockerfile
+  template:
+    src: "Dockerfile.j2"
+    dest: "{{ zuul_work_dir }}/Dockerfile"
+
+- name: Files to be written to image
+  command: "ls -l"
+  args:
+    chdir: "{{ zuul_work_dir }}"
+
+- name: Prepare test image
+  command: "docker build -qt {{ simple_image_name }} ."
+  args:
+    chdir: "{{ zuul_work_dir }}"
+
+- name: Run with cleanup
+  block:
+  - name: Run the image
+    command: "docker run --rm --privileged {{ simple_image_name }}"
+    args:
+      chdir: "{{ zuul_work_dir }}"
+    register: container_result
+  - name: Log test log
+    debug:
+      msg: "{{ container_result.stdout_lines }}"
+  always:
+  - name: Remove used image
+    command: "docker rmi {{ simple_image_name }}"

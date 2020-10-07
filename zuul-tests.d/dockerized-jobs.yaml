@@ -1,0 +1,20 @@
+- job:
+    name: simpleton
+    attempts: 1
+    pre-run: playbooks/simpleton/pre.yaml
+    run: playbooks/simpleton/run.yaml
+    vars:
+      simple_env:
+        LI: "leeee"
+      simple_source_image: "node:latest"
+      simple_prerun:
+      - yarn init -yp
+      simple_run:
+      - cat package.json
+
+- project:
+    merge-mode: squash-merge
+    check: &id001
+      jobs:
+      - simpleton
+    gate: *id001

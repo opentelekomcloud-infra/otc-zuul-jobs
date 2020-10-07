@@ -1,0 +1,20 @@
+- job:
+    name: simpleton
+    description: |
+      Run given commands in disposable docker container.
+      .. zuul:jobvar:: simple_source_image
+        :type: string
+        This is base image to be used for your container.
+      .. zuul:jobvar:: simple_prerun
+        :type: list
+        This is list of commans to be executed during preparation phase (`RUN` Dockerfile directives).
+      .. zuul:jobvar:: simple_run
+        :type: list
+        This is list of commands to be executed (`CMD` Dockerfile directive).
+      .. zuul:jobvar:: simple_env
+        :type: dict
+        This is key:value dictionary of environment variables defined as `ENV` Dockerfile directive
+    voting: true
+    attempts: 1
+    pre-run: playbooks/simpleton/pre.yaml
+    run: playbooks/simpleton/run.yaml

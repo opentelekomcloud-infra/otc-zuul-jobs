@@ -1,0 +1,5 @@
+---
+- name: "Dockerized execution"
+  hosts: all
+  roles:
+  - simpleton
