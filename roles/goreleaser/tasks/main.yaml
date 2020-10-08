@@ -24,7 +24,7 @@
   when: goreleaser_sign
 
 - name: Trigger goreleaser
-  command: "bin/goreleaser {{ goreleaser_args }}"
+  command: "{{ goreleaser_bin }} {{ goreleaser_args }}"
   args:
     chdir: "{{ goreleaser_project_src_dir }}"
   environment:
