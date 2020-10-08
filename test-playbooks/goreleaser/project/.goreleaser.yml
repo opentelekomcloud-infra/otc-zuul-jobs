@@ -1,12 +1,8 @@
-# Visit https://goreleaser.com for documentation on how to customize this
-# behavior.
 project_name: fake
 builds:
   - env:
     flags:
       - -trimpath
-#    ldflags:
-#      - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
     goos:
       - linux
     goarch:
