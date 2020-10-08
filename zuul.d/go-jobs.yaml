@@ -19,3 +19,4 @@
     run: playbooks/golang/goreleaser-build.yaml
     vars:
       go_version: "1.15"
+      goreleaser_args: "--snapshot --rm-dist --skip-publish"

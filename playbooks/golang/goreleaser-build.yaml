@@ -2,5 +2,3 @@
 - hosts: all
   roles:
     - role: goreleaser
-      vars:
-        goreleaser_args: "build --snapshot --rm-dist"
