@@ -1,1 +1,0 @@
-goreleaser_location: "{{ zuul.project.src_dir }}"

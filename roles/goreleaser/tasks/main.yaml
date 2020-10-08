@@ -24,10 +24,23 @@
   when: goreleaser_sign
 
 - name: Trigger goreleaser
-  command: "bin/goreleaser {{ goreleaser_args }}"
+  command: "{{ goreleaser_bin }} {{ goreleaser_args }}"
   args:
-    chdir: "{{ zuul.project.src_dir }}"
+    chdir: "{{ goreleaser_project_src_dir }}"
   environment:
     GITHUB_TOKEN: "{{ goreleaser_github_token.token | default(omit) }}"
     PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
 
+- name: Find tarballs in artifacts directory
+  find:
+    file_type: file
+    paths: "{{ goreleaser_dist_path }}"
+    patterns: "*.tar.gz"
+  register: result
+
+- name: Set fact for the tarball
+  set_fact:
+    goreleaser_tarball: "{{ result.files.0.path }}"
+
+- include_tasks: save_artifact.yaml
+  when: goreleaser_save_artifact|bool

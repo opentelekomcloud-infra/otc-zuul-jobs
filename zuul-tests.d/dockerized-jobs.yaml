@@ -3,18 +3,22 @@
     attempts: 1
     pre-run: playbooks/simpleton/pre.yaml
     run: playbooks/simpleton/run.yaml
+    files:
+      - playbooks/simpleton/*
+      - roles/simpleton/*
+      - zuul.d/dockerized-jobs.yaml
     vars:
       simple_env:
         LI: "leeee"
       simple_source_image: "node:latest"
       simple_prerun:
-      - yarn init -yp
+        - yarn init -yp
       simple_run:
-      - cat package.json
+        - cat package.json
 
 - project:
     merge-mode: squash-merge
     check: &id001
       jobs:
-      - simpleton
+        - simpleton
     gate: *id001

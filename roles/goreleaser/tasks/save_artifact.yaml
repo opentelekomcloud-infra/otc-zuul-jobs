@@ -1,0 +1,27 @@
+---
+- name: Ensure artifacts directory exists
+  file:
+    path: "{{ goreleaser_artifact_path }}"
+    state: directory
+  delegate_to: localhost
+
+- name: Collect tarball artifacts
+  synchronize:
+    dest: "{{ goreleaser_artifact_path }}"
+    mode: pull
+    src: "{{ goreleaser_tarball }}"
+    verify_host: true
+    owner: false
+    group: false
+
+- name: Return collection artifacts to Zuul
+  zuul_return:
+    data:
+      zuul:
+        artifacts:
+          - name:
+              "{% set x = goreleaser_tarball | basename | replace('.tar.gz', '') %}{{ x.split('-')[0] }}.{{ x.split('-')[1] }}"
+            url: "artifacts/{{ goreleaser_tarball | basename }}"
+            metadata:
+              type: go_binary_archive
+              version: "{% set x = goreleaser_tarball | basename | replace('.tar.gz', '') %}{{ x.split('_')[1:] | join('-') }}"
