@@ -7,6 +7,8 @@
       - roles/ensure-go/*
       - roles/ensure-goreleaser/*
       - zuul.d/go-jobs.yaml
+    vars:
+      goreleaser_project_src_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/goreleaser/project"
 
 - project:
     merge-mode: squash-merge
