@@ -11,6 +11,10 @@
       - yarn init -yp
       simple_run:
       - cat package.json
+    files:
+      - playbooks/simpleton/*
+      - roles/simpleton/*
+      - zuul.d/dockerized-jobs.yaml
 
 - project:
     merge-mode: squash-merge

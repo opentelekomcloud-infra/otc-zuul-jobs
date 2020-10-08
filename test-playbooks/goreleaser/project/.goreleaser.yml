@@ -1,0 +1,35 @@
+# Visit https://goreleaser.com for documentation on how to customize this
+# behavior.
+project_name: fake
+builds:
+  - env:
+    flags:
+      - -trimpath
+#    ldflags:
+#      - '-s -w -X main.version={{.Version}} -X main.commit={{.Commit}}'
+    goos:
+      - linux
+    goarch:
+      - amd64
+    binary: '{{ .ProjectName }}'
+archives:
+  - format: tar.gz
+    name_template: '{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}'
+checksum:
+  name_template: '{{ .ProjectName }}_{{ .Version }}_SHA256SUMS'
+  algorithm: sha256
+signs:
+  - artifacts: checksum
+    args:
+      - "--output"
+      - "${signature}"
+      - "--detach-sign"
+      - "${artifact}"
+release:
+  # Visit your project's GitHub Releases page to publish this release.
+  draft: true
+  github:
+    owner: opentelekomcloud
+    name: fake
+changelog:
+  skip: true
