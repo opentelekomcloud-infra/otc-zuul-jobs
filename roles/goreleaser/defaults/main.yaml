@@ -1,5 +1,8 @@
 ---
+goreleaser_dist_path: dist
+goreleaser_artifact_path: "{{ zuul.executor.log_root }}/artifacts/"
+goreleaser_save_artifact: true
 goreleaser_sign: false
 gpg_key:
   private:
-goreleaser_args: "--snaptshot --rm-dist"
+goreleaser_args: "--snapshot --rm-dist"

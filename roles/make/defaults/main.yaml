@@ -1,4 +1,6 @@
 ---
 zuul_work_dir: "{{ zuul.project.src_dir }}"
+make_build_artifact_path: "bin"
+make_target_artifact_path: "bin"
 make_command:
 additional_env:

@@ -1,0 +1,16 @@
+- job:
+    name: zuul-jobs-test-goreleaser-build
+    parent: goreleaser-build
+    description: Test goreleaser-build job
+    files:
+      - playbooks/golang/*
+      - roles/ensure-go/*
+      - roles/ensure-goreleaser/*
+      - zuul.d/go-jobs.yaml
+
+- project:
+    merge-mode: squash-merge
+    check: &id001
+      jobs:
+        - zuul-jobs-test-goreleaser-build
+    gate: *id001
