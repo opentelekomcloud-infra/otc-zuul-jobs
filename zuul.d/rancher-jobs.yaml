@@ -2,13 +2,11 @@
 - job:
     name: rancher-kontainer-integration
     description: |
-      Run Functional tests of the driver on Ra
-ncher+OTC.
+      Run Functional tests of the driver on Rancher+OTC.
     pre-run: playbooks/pre.yaml
     run: playbooks/run.yaml
     vars:
-      functest_project_name: "eu-de_zuul_ranch
-er"
+      functest_project_name: "eu-de_zuul_rancher"
       rancher_image: rancher/rancher:v2.4.8
       python_version: 3.8
       node_version: 10
@@ -19,8 +17,7 @@ er"
         - name: rancher
           label: ubuntu-focal
     required-projects:
-      - opentelekomcloud/kontainer-engine-driv
-er-otc
+      - opentelekomcloud/kontainer-engine-driver-otc
       - opentelekomcloud/ui-cluster-driver-otc
 
 - project-template:
