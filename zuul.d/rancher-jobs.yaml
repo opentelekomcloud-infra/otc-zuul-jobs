@@ -20,15 +20,4 @@
       - opentelekomcloud/kontainer-engine-driver-otc
       - opentelekomcloud/ui-cluster-driver-otc
 
-- project-template:
-    name: rancher-kontainer-integration-pti
-    check:
-      jobs:
-        - rancher-kontainer-integration
-    check-post:
-      jobs:
-        - rancher-kontainer-integration
-    gate:
-      queue: integrated
-      jobs:
-        - rancher-kontainer-integration
+

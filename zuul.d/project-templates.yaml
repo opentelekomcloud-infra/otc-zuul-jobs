@@ -40,3 +40,16 @@
     release:
       jobs:
         - release-ansible-collection
+
+- project-template:
+    name: rancher-kontainer-integration-pti
+    check:
+      jobs:
+        - rancher-kontainer-integration
+    check-post:
+      jobs:
+        - rancher-kontainer-integration
+    gate:
+      queue: integrated
+      jobs:
+        - rancher-kontainer-integration
