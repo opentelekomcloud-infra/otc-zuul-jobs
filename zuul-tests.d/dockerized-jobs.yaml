@@ -1,5 +1,5 @@
 - job:
-    name: simpleton
+    name: zuul-jobs-test-simpleton
     attempts: 1
     pre-run: playbooks/simpleton/pre.yaml
     run: playbooks/simpleton/run.yaml
@@ -20,5 +20,5 @@
     merge-mode: squash-merge
     check: &id001
       jobs:
-        - simpleton
+        - zuul-jobs-test-simpleton
     gate: *id001
