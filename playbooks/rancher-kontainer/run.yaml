@@ -10,7 +10,7 @@
 
     - name: Prepare Rancher test env
       include_role:
-        prepare-rancher-env
+        name: prepare-rancher-env
       vars:
         rancher_driver_location: "http://{{ ansible_host }}:8000/{{ rancher_kontainer_engine_tarball }}"
         rancher_ui_location: "http://{{ ansible_host }}:8000/ui/component.js"
