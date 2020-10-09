@@ -1,0 +1,26 @@
+---
+- hosts: all
+  tasks:
+    - name: Install binary dependencies
+      include_role:
+        name: bindep
+      vars:
+        bindep_dir: "{{ zuul_work_dir }}"
+      when: tox_install_bindep | default(true)
+
+- hosts: all
+  roles:
+    - ensure-python
+    - ensure-virtualenv
+    - ensure-pip
+    - ensure-docker
+    - ensure-go
+    - ensure-goreleaser
+    - ensure-javascript-build-tool
+
+- hosts: all
+  vars:
+    artifacts_folder: "{{ ansible_user_dir }}/artifacts"
+  roles:
+      #    - prepare-rancher-env
+

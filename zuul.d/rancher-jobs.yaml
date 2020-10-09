@@ -1,0 +1,37 @@
+---
+- job:
+    name: rancher-kontainer-integration
+    description: |
+      Run Functional tests of the driver on Ra
+ncher+OTC.
+    pre-run: playbooks/pre.yaml
+    run: playbooks/run.yaml
+    vars:
+      functest_project_name: "eu-de_zuul_ranch
+er"
+      rancher_image: rancher/rancher:v2.4.8
+      python_version: 3.8
+      node_version: 10
+      kontainer_project_src_dir: "{{ ansible_user_dir }}/{{ zuul.projects['github.com/opentelekomcloud/kontainer-engine-driver-otc'].src_dir }}"
+      ui_project_src_dir: "{{ ansible_user_dir }}/{{ zuul.projects['github.com/opentelekomcloud/ui-cluster-driver-otc'].src_dir }}"
+    nodeset:
+      nodes:
+        - name: rancher
+          label: ubuntu-focal
+    required-projects:
+      - opentelekomcloud/kontainer-engine-driv
+er-otc
+      - opentelekomcloud/ui-cluster-driver-otc
+
+- project-template:
+    name: rancher-kontainer-integration-pti
+    check:
+      jobs:
+        - rancher-kontainer-integration
+    check-post:
+      jobs:
+        - rancher-kontainer-integration
+    gate:
+      queue: integrated
+      jobs:
+        - rancher-kontainer-integration

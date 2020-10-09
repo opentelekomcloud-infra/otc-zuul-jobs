@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+
+    - name: Prepare Kontainer artifacts
+      include_role:
+        name: prepare-rancher-kontainer-artifacts
+      vars:
+        prepare_artifacts_dir: "{{ ansible_user_dir }}/artifacts"
+
+    - name: Prepare Rancher test env
+      include_role:
+        prepare-rancher-env
+      vars:
+        rancher_driver_location: "http://{{ ansible_host }}:8000/{{ rancher_kontainer_engine_tarball }}"
+        rancher_ui_location: "http://{{ ansible_host }}:8000/ui/component.js"
