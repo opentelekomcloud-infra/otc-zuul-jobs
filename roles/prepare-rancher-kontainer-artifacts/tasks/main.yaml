@@ -13,7 +13,8 @@
 
 - name: Set fact for the Kontainer engine binary
   set_fact:
-    rancher_kontainer_engine_tarball_base: "{{ result.files.0.path | basename}}"
+    rancher_kontainer_engine_tarball: "{{ result.files.0.path }}"
+    rancher_kontainer_engine_tarball_base: "{{ result.files.0.path | basename }}"
     cacheable: true
 
 - name: Build UI
