@@ -13,4 +13,3 @@
   command: "~/.local/bin/py.test -s -v {{ item.path }}"
   with_items: "{{ testcases.files }}"
   environment: "{{ rancher_env }}"
-

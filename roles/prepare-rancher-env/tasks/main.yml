@@ -57,7 +57,7 @@
   uri:
     url: 'https://{{ ansible_default_ipv4.address }}/v3/settings/server-url'
     method: PUT
-    body: {"name":"server-url","value":"https://{{ ansible_default_ipv4.address }}"}
+    body: {"name":"server-url", "value":"https://{{ ansible_default_ipv4.address }}"}
     headers:
       Authorization: "Bearer {{ login_result.json.token }}"
     status_code: 200
@@ -73,7 +73,7 @@
   uri:
     url: 'https://{{ ansible_default_ipv4.address }}/v3/users?action=changepassword'
     method: POST
-    body: {"currentPassword":"admin","newPassword":"{{ rancher_env.RANCHER_PASSWORD }}"}
+    body: {"currentPassword":"admin", "newPassword":"{{ rancher_env.RANCHER_PASSWORD }}"}
     headers:
       Authorization: "Bearer {{ login_result.json.token }}"
     status_code: 200
@@ -103,7 +103,7 @@
     src: "{{ zj_item.src }}"
     dest: "~/tests/{{ zj_item.path }}"
   loop: "{{ lookup('fileglob', 'templates/*.py.j2', wantlist=True) }}"
-    #  with_filetree: ../templates
+  #  with_filetree: ../templates
   loop_control:
     loop_var: zj_item
   when: zj_item.state == 'file' and zj_item.path != "test_addclusterdriver.py"
