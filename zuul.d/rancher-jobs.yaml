@@ -3,8 +3,8 @@
     name: rancher-kontainer-integration
     description: |
       Run Functional tests of the driver on Rancher+OTC.
-    pre-run: playbooks/pre.yaml
-    run: playbooks/run.yaml
+    pre-run: playbooks/rancher-kontainer/pre.yaml
+    run: playbooks/rancher-kontainer/run.yaml
     vars:
       functest_project_name: "eu-de_zuul_rancher"
       rancher_image: rancher/rancher:v2.4.8
