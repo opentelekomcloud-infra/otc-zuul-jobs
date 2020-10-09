@@ -95,15 +95,18 @@
 
 - name: Copy Driver add test case to Filesystem
   template:
-    src: "test_addclusterdriver.py"
+    src: "test_addclusterdriver.py.j2"
     dest: "~/driver/test_addclusterdriver.py"
 
 - name: Copy Test cases to Filesystem
   template:
-    src: "{{ item.src }}"
-    dest: "~/tests/{{ item.path }}"
-  with_filetree: ../templates
-  when: item.state == 'file' and item.path != "test_addclusterdriver.py"
+    src: "{{ zj_item.src }}"
+    dest: "~/tests/{{ zj_item.path }}"
+  loop: "{{ lookup('fileglob', 'templates/*.py.j2', wantlist=True) }}"
+    #  with_filetree: ../templates
+  loop_control:
+    loop_var: zj_item
+  when: zj_item.state == 'file' and zj_item.path != "test_addclusterdriver.py"
 
 - name: Add Cluster driver to rancher
   command: "~/.local/bin/py.test -s -v ~/driver/test_addclusterdriver.py"
