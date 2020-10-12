@@ -9,10 +9,13 @@
   synchronize:
     dest: "{{ goreleaser_artifact_path }}"
     mode: pull
-    src: "{{ goreleaser_tarball }}"
+    src: "{{ zj_tb }}"
     verify_host: true
     owner: false
     group: false
+  loop: "{{ goreleaser_tarballs }}"
+  loop_control:
+    loop_var: zj_tb
 
 - name: Return collection artifacts to Zuul
   zuul_return:
@@ -20,8 +23,14 @@
       zuul:
         artifacts:
           - name:
-              "{% set x = goreleaser_tarball | basename | replace('.tar.gz', '') %}{{ x.split('-')[0] }}.{{ x.split('-')[1] }}"
-            url: "artifacts/{{ goreleaser_tarball | basename }}"
+              "{% set x = zj_tb | basename | replace('.tar.gz', '') %}{{ x.split('_')[0] }}"
+            url: "artifacts/{{ zj_tb | basename }}"
             metadata:
               type: go_binary_archive
-              version: "{% set x = goreleaser_tarball | basename | replace('.tar.gz', '') %}{{ x.split('_')[1:] | join('-') }}"
+              version: "{% set x = zj_tb | basename | replace('.tar.gz', '') %}{{ x.split('_')[1] }}"
+              platform: "{% set x = zj_tb | basename | replace('.tar.gz', '') %}{{ x.split('_')[2] }}"
+  loop: "{{ goreleaser_tarballs }}"
+  loop_control:
+    loop_var: zj_tb
+
+

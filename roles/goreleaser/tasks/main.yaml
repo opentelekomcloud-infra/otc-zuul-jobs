@@ -35,12 +35,12 @@
   find:
     file_type: file
     paths: "{{ goreleaser_dist_path }}"
-    patterns: "*.tar.gz"
+    patterns: "*.tar.gz,*.zip,*.tgz"
   register: result
 
 - name: Set fact for the tarball
   set_fact:
-    goreleaser_tarball: "{{ result.files.0.path }}"
+    goreleaser_tarballs: "{{ result.files | map(attribute='path') | list }}"
 
 - include_tasks: save_artifact.yaml
   when: goreleaser_save_artifact|bool
