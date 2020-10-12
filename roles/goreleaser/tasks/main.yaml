@@ -40,7 +40,7 @@
 
 - name: Set fact for the tarball
   set_fact:
-    goreleaser_tarballs: "{{ result | sum(attribute='files', start=[]) | map('attribute', 'path') | list }}"
+    goreleaser_tarballs: "{{ result | sum(attribute='files', start=[]) | map(attribute='path') | list }}"
 
 - include_tasks: save_artifact.yaml
   when: goreleaser_save_artifact|bool
