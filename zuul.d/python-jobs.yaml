@@ -38,6 +38,7 @@
     irrelevant-files: *common-irrelevant-files
     vars:
       tox_envlist: py38
+      python_version: 3.8
 
 - job:
     name: otc-tox-py39
