@@ -1,0 +1,80 @@
+---
+- job:
+    name: otc-tox
+    parent: tox
+    abstract: true
+    nodeset: fedora-pod
+    description: |
+      Base job for running tox jobs
+
+- job:
+    name: otc-tox-py36
+    parent: otc-tox
+    description: |
+      Run tox -e py36 in a pod
+    irrelevant-files: &common-irrelevant-files
+      - ^.*\.rst$
+      - ^api-ref/.*$
+      - ^doc/.*$
+      - ^releasenotes/.*$
+      - ^deliverables/.*$
+    vars:
+      tox_envlist: py36
+
+- job:
+    name: otc-tox-py37
+    parent: otc-tox
+    description: |
+      Run tox -e py37 in a pod
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_envlist: py37
+
+- job:
+    name: otc-tox-py38
+    parent: otc-tox
+    description: |
+      Run tox -e py38 in a pod
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_envlist: py38
+      python_version: 3.8
+
+- job:
+    name: otc-tox-py39
+    parent: otc-tox
+    description: |
+      Run tox -e py39 in a pod
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_envlist: py39
+
+- job:
+    name: otc-tox-pep8
+    parent: otc-tox
+    description: |
+      Run tox -e pep8 in a pod
+    vars:
+      tox_envlist: pep8
+      test_setup_skip: true
+
+- job:
+    name: otc-tox-cover
+    parent: otc-tox
+    description: |
+      Run tox -e cover in a pod
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_envlist: cover
+      test_setup_skip: true
+    success-url: cover/
+
+- job:
+    name: otc-tox-docs
+    parent: otc-tox
+    description: |
+      Run tox -e docs in a pod
+    vars:
+      tox_envlist: docs
+      tox_pdf_envlist: pdf-docs
+      tox_skip_pdf: false
