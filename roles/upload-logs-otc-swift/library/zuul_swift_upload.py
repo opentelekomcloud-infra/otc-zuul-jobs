@@ -438,7 +438,9 @@ class Indexer():
     def _generate_log_index(self, folder_links, title, append_footer):
         """Create an index of logfiles and links to them"""
 
-        output = '<html><head><title>%s</title></head><body>\n' % title
+        output = '<html><head><title>%s</title>' % title
+        output += '<meta name="robots" content="noindex, nofollow">'
+        output += '</head><body>\n'
         output += '<h1>%s</h1>\n' % title
         output += '<table><tr><th></th><th>Name</th><th>Last Modified</th>'
         output += '<th>Size</th></tr>'
