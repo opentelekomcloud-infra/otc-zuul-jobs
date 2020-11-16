@@ -20,7 +20,6 @@
       - ^deliverables/.*$
     vars:
       tox_envlist: py36
-      bindep_profile: test py36
 
 - job:
     name: otc-tox-py37
@@ -30,7 +29,6 @@
     irrelevant-files: *common-irrelevant-files
     vars:
       tox_envlist: py37
-      bindep_profile: test py37
 
 - job:
     name: otc-tox-py38
@@ -40,7 +38,6 @@
     irrelevant-files: *common-irrelevant-files
     vars:
       tox_envlist: py38
-      bindep_profile: test py38
 
 - job:
     name: otc-tox-py39
@@ -50,7 +47,6 @@
     irrelevant-files: *common-irrelevant-files
     vars:
       tox_envlist: py39
-      bindep_profile: test py39
 
 - job:
     name: otc-tox-pep8
@@ -59,7 +55,6 @@
       Run tox -e pep8 in a pod
     vars:
       tox_envlist: pep8
-      bindep_profile: test pep8
       test_setup_skip: true
 
 - job:
@@ -70,7 +65,6 @@
     irrelevant-files: *common-irrelevant-files
     vars:
       tox_envlist: cover
-      bindep_profile: test cover
       test_setup_skip: true
     success-url: cover/
 
@@ -81,8 +75,5 @@
       Run tox -e docs in a pod
     vars:
       tox_envlist: docs
-      bindep_profile: compile docs
       tox_pdf_envlist: pdf-docs
       tox_skip_pdf: false
-
-
