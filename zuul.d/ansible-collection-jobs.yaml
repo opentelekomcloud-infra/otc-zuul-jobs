@@ -106,7 +106,7 @@
       - name: ansible/ansible
         override-checkout: stable-2.9
     vars:
-      tox_envlist: linters-2.9
+      tox_envlist: linters-29
 
 # - job:
 #     name: ansible-collection-test-sanity-old
