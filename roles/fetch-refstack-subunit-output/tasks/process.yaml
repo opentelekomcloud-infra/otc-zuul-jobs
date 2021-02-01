@@ -7,7 +7,7 @@
     chdir: "{{ zuul_work_dir }}"
   when: subunit_html_command is defined
 
-- name: Find subunit files
+- name: Find result files
   find:
     paths:
       - "{{ zuul_work_dir }}"
@@ -15,7 +15,8 @@
       - testr_results.html
       - testrepository.subunit
       - alerts.csv
-  register: subunit_files
+      - results.json
+  register: result_files
 
 - name: Collect test-results
   synchronize:
@@ -25,7 +26,7 @@
     verify_host: true
     group: no
     owner: no
-  loop: "{{ subunit_files.files }}"
+  loop: "{{ result_files.files }}"
   loop_control:
     loop_var: zj_item
 
@@ -39,6 +40,6 @@
             metadata:
               type: unit_test_report
   when: "'testr_results.html' in zj_item.path"
-  loop: "{{ subunit_files.files }}"
+  loop: "{{ result_files.files }}"
   loop_control:
     loop_var: zj_item

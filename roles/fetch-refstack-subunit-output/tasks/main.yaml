@@ -36,6 +36,13 @@
       set_fact:
         testr_command_dir: "{{ testr_command.stdout_lines[0] | dirname }}"
 
+    - name: Write result processor
+      script:
+        executable: "{{ zuul_work_dir }}/.venv/bin/python"
+        # TODO(gtema): This should become variable
+        cmd: "process_results.py .tempest results.json"
+        chdir: "{{ zuul_work_dir }}"
+
     - name: Generale list of failed tests
       shell:
         cmd: "{{ testr_command.stdout_lines[0] }} last --subunit | {{ testr_command_dir }}/subunit-filter --no-success | {{ testr_command_dir }}/subunit-ls > alerts.csv"
