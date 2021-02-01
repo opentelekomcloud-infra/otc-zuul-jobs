@@ -2,7 +2,7 @@
 # We want to use stestr if it exists or fallback to testr - and we want to
 # prefer files found in tox envs.
 - name: Find stestr or testr executable
-  script: "find-testr.sh {{ zuul_work_dir }}"
+  script: "find-testr.sh {{ zuul_work_dir }}/.tempest"
   register: testr_command
 
 - when:
@@ -36,11 +36,11 @@
       set_fact:
         testr_command_dir: "{{ testr_command.stdout_lines[0] | dirname }}"
 
-    - name: Write result processor
+    - name: Execute result processor
       script:
         executable: "{{ zuul_work_dir }}/.venv/bin/python"
-        # TODO(gtema): This should become variable
-        cmd: "process_results.py .tempest results.json"
+        # TODO(gtema): Those should become variables
+        cmd: "process_results.py .tempest .test_list refstack_results.json"
         chdir: "{{ zuul_work_dir }}"
 
     - name: Generale list of failed tests
@@ -50,16 +50,6 @@
       loop: "{{ all_subunit_dirs }}"
       loop_control:
         loop_var: zj_sibling
-      failed_when: false
-
-    - name: Build Alert csv Severity,Env,Service,Resource,Event,Value
-      replace:
-        path: "{{ zuul_work_dir }}/alerts.csv"
-        regexp: "^(.+)$"
-        replace: 'warning;Production;zuul_refstack;"\1";failure;1'
-
-    - name: Temp display of failed tests
-      command: "cat {{ zuul_work_dir }}/alerts.csv"
       failed_when: false
 
     - name: Copy the combined subunit file to the zuul work directory

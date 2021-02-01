@@ -1,0 +1,3 @@
+---
+results_file: "{{ zuul.executor.log_root }}/refstack_results.json"
+

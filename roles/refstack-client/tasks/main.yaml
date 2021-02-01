@@ -13,19 +13,19 @@
 - name: Generate tests list
   copy:
     content: "{{ tempest_tests }}"
-    dest: "{{ zuul_work_dir }}/tests"
+    dest: "{{ zuul_work_dir }}/.test_list"
   when:
     - tempest_tests is defined
     - tempest_tests|length > 0
-    - tempest_tests_url|length == 0
+    - tempest_tests_url | default('', True) | length == 0
 
 - name: Fetch test list from internet
   get_url:
     url: "{{ tempest_tests_url }}"
-    dest: "{{ zuul_work_dir }}/tests"
+    dest: "{{ zuul_work_dir }}/.test_list"
   when:
     - tempest_tests_url is defined
-    - tempest_tests_url|length > 0
+    - tempest_tests_url | default('', True) | length > 0
 
 - name: Create run.sh
   template:

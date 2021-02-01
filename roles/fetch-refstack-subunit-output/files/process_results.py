@@ -113,10 +113,11 @@ class App:
 
     def __init__(self):
         self.tempest_dir = sys.argv[1]
-        self.output_file = sys.argv[2]
+        self.test_list = sys.argv[2]
+        self.output_file = sys.argv[3]
         self.required_tests = {}
 
-    def _get_required_tests(self, tests_file='tests'):
+    def _get_required_tests(self, tests_file='.test_list'):
         lst = open(tests_file).read()
         p = re.compile(r'(.*)\[id-(.*)\]')
         for test in re.findall(r'.*\[.*\]', lst):
@@ -144,7 +145,7 @@ class App:
         return os.path.join(tempest_dir, sub_dir, subunit_file)
 
     def process(self):
-        self._get_required_tests()
+        self._get_required_tests(self.test_list)
         processor = SubunitProcessor(
             self._get_next_stream_subunit_output_file(self.tempest_dir))
         for test in processor.process_stream():

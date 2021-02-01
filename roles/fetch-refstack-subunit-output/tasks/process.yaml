@@ -15,7 +15,7 @@
       - testr_results.html
       - testrepository.subunit
       - alerts.csv
-      - results.json
+      - refstack_results.json
   register: result_files
 
 - name: Collect test-results

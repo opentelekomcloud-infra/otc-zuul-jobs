@@ -1,0 +1,12 @@
+---
+- name: Find refstack results
+  stat:
+    path: "{{ results_file }}"
+  register: result_stat
+
+- when:
+    - result_stat.stat.exists
+  block:
+    - name: Read refstack results
+      set_fact:
+        refstack_results: "{{ lookup('file', results_file) | from_json }}"
