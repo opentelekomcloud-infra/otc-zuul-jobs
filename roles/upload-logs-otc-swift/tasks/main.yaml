@@ -3,6 +3,10 @@
     name: set-zuul-log-path-fact
   when: zuul_log_path is not defined
 
+- name: You're using correct branch
+  debug:
+    msg: "You're on `swift-upload-verify` branch"
+
 # Always upload (true), never upload (false) or only on failure ('failure')
 - when: zuul_site_upload_logs | default(true) | bool or
         (zuul_site_upload_logs == 'failure' and not zuul_success | bool)

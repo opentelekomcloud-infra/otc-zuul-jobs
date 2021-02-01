@@ -64,6 +64,7 @@ try:
 except ImportError:
     from collections import Sequence
 
+
 mimetypes.init()
 mimetypes.add_type('text/plain', '.yaml')
 
@@ -802,7 +803,9 @@ class Uploader():
 
         # ensure file was uploaded
         if not self._file_exist(relative_path, file_detail):
+            logging.error("Failed to upload %s to swift", relative_path)
             raise Exception("Swift upload failed")
+        logging.error("Successfully uploaded %s to swift", relative_path)
 
 
 def run(cloud, container, files,
