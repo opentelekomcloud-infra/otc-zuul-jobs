@@ -23,6 +23,7 @@
         test_poweruser1_project_id: fake
         test_project1_id: fake
       publish_refstack_results: False
+    voting: false
 
 - project:
     merge-mode: squash-merge
