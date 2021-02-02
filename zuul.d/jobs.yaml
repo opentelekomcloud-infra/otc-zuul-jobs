@@ -29,7 +29,9 @@
         name: refstack_credentials
         pass-to-parent: true
       - alerta_data
-      - refstack_database
+      - secret: refstack_database
+        name: refstack_database
+        pass-to-parent: true
 
 - job:
     name: refstack-client-run-preprod
@@ -44,7 +46,9 @@
         name: refstack_credentials
         pass-to-parent: true
       - alerta_data
-      - refstack_database
+      - secret: refstack_database
+        name: refstack_database
+        pass-to-parent: true
 
 - job:
     name: golang-make
