@@ -1,3 +1,4 @@
 ---
-results_file: "{{ zuul.executor.log_root }}/refstack_results.json"
+publish_refstack_results_results_file: "{{ zuul.executor.log_root }}/refstack_results.json"
 
+publich_refstack_results: True

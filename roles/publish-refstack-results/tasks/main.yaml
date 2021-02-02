@@ -1,12 +1,22 @@
 ---
 - name: Find refstack results
   stat:
-    path: "{{ results_file }}"
+    path: "{{ publish_refstack_results_results_file }}"
   register: result_stat
 
 - when:
     - result_stat.stat.exists
   block:
-    - name: Read refstack results
-      set_fact:
-        refstack_results: "{{ lookup('file', results_file) | from_json }}"
+
+    - name: Process data
+      refstack_results:
+        login_host: "{{ refstack_database.host }}"
+        login_user: "{{ refstack_database.user_name }}"
+        login_password: "{{ refstack_database.user_password }}"
+        db: "{{ refstack_database.database }}"
+        run_id: "{{ zuul.build }}"
+        environment: "test_env"
+        results_file: "{{ publish_refstack_results_results_file }}"
+      when:
+        - publish_refstack_results | default(True)
+
