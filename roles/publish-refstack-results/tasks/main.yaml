@@ -1,0 +1,21 @@
+---
+- name: Find refstack results
+  stat:
+    path: "{{ publish_refstack_results_results_file }}"
+  register: result_stat
+
+- when:
+    - result_stat.stat.exists
+  block:
+
+    - name: Process data
+      refstack_results:
+        login_host: "{{ refstack_database.host }}"
+        login_user: "{{ refstack_database.user_name }}"
+        login_password: "{{ refstack_database.user_password }}"
+        db: "{{ refstack_database.database }}"
+        log_url: "{{ zuul.log_url }}"
+        results_file: "{{ publish_refstack_results_results_file }}"
+      when:
+        - publish_refstack_results | default(True)
+

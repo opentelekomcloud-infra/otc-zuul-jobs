@@ -3,8 +3,8 @@
 source .venv/bin/activate
 
 TEST_LIST=""
-if [ -f "tests" ]; then
-    TEST_LIST="--test-list tests"
+if [ -f ".test_list" ]; then
+    TEST_LIST="--test-list .test_list"
 fi
 
 # Currently there is bug in refstack-client, which fails in non-verbose mode

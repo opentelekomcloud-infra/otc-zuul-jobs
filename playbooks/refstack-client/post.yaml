@@ -2,8 +2,7 @@
   roles:
     - role: fetch-refstack-subunit-output
       vars:
-        zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/.tempest"
-    - role: publish-alerts
+- hosts: localhost
+  roles:
+    - role: publish-refstack-results
       vars:
-        zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/.tempest"
-        alerta: "{{ alerta_data }}"
