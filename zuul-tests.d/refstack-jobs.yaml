@@ -10,6 +10,7 @@
         tempest.api.identity.v3.test_api_discovery.TestApiDiscovery.test_api_media_types[id-657c1970-4722-4189-8831-7325f3bc4265]
       tempest_tests_url:
       tempest_count_users: 1
+      refstack_environment: fake_env
       refstack_credentials:
         test_domain_name: fake
         test_user_domain_name: fake

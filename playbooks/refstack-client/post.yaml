@@ -5,3 +5,4 @@
 - hosts: localhost
   roles:
     - role: publish-refstack-results
+      vars:

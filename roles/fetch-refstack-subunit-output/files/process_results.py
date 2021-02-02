@@ -114,7 +114,9 @@ class App:
     def __init__(self):
         self.tempest_dir = sys.argv[1]
         self.test_list = sys.argv[2]
-        self.output_file = sys.argv[3]
+        self.environment = sys.argv[3]
+        self.run_id = sys.argv[4]
+        self.output_file = sys.argv[5]
         self.required_tests = {}
 
     def _get_required_tests(self, tests_file='.test_list'):
@@ -152,9 +154,14 @@ class App:
             uuid = test.get('uuid')
             if uuid in self.required_tests:
                 self.required_tests[uuid].update(test)
+        data = {
+            'results': self.required_tests,
+            'environment': self.environment,
+            'run_id': self.run_id
+        }
 
         with open(self.output_file, 'w') as f:
-            json.dump(self.required_tests, f)
+            json.dump(data, f)
 
 
 if __name__ == '__main__':

@@ -40,7 +40,7 @@
       script:
         executable: "{{ zuul_work_dir }}/.venv/bin/python"
         # TODO(gtema): Those should become variables
-        cmd: "process_results.py .tempest .test_list refstack_results.json"
+        cmd: "process_results.py .tempest .test_list {{ refstack_environment }} {{ zuul.build }} refstack_results.json"
         chdir: "{{ zuul_work_dir }}"
 
     - name: Generale list of failed tests

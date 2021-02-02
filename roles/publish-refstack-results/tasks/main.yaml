@@ -14,8 +14,7 @@
         login_user: "{{ refstack_database.user_name }}"
         login_password: "{{ refstack_database.user_password }}"
         db: "{{ refstack_database.database }}"
-        run_id: "{{ zuul.build }}"
-        environment: "test_env"
+        log_url: "{{ zuul.log_url }}"
         results_file: "{{ publish_refstack_results_results_file }}"
       when:
         - publish_refstack_results | default(True)

@@ -70,10 +70,12 @@ options:
     description:
     - Run ID
     type: str
-  environment:
+    required: true
+  log_url:
     description:
-    - Environment against which refstack was executed
+    - Link to the logs location
     type: str
+    required: true
 author:
 - Artem Goncharov (@gtema)
 '''
@@ -182,6 +184,13 @@ def connect_to_db(module, conn_params, autocommit=False, fail_on_conn=True):
     return db_connection
 
 
+def execute_skip_error(cursor, query):
+    try:
+        cursor.execute(query)
+    except Exception:
+        pass
+
+
 def main():
     argument_spec = dict(
         login_user=dict(default='postgres'),
@@ -190,9 +199,8 @@ def main():
         login_unix_socket=dict(default=''),
         port=dict(type='int', default=5432, aliases=['login_port']),
         db=dict(type='str', aliases=['login_db']),
-        results_file=dict(type='str'),
-        run_id=dict(type='str'),
-        environment=dict(type='str'),
+        results_file=dict(type='str', required=True),
+        log_url=dict(type='str', required=True)
     )
 
     module = AnsibleModule(
@@ -201,51 +209,62 @@ def main():
     )
 
     results_file = module.params['results_file']
-    run_id = module.params['run_id']
-    environment = module.params['environment']
+    log_url = module.params['log_url']
 
     conn_params = get_conn_params(module, module.params)
     db_connection = connect_to_db(module, conn_params, autocommit=True)
 
     cursor = db_connection.cursor(cursor_factory=DictCursor)
 
-    try:
-        cursor.execute(
-            "CREATE TABLE refstack_run "
-            "(id varchar(36), "
-            "environment varchar(100), "
-            "date time)"
-        )
-    except Exception:
-        pass
-    try:
-        cursor.execute(
-            "CREATE TABLE refstack_test_log "
-            "(run_id varchar(36), "
-            "test_uuid varchar(40), "
-            "test_name text, "
-            "status text, "
-            "result text)"
-        )
-    except Exception:
-        pass
+    execute_skip_error(
+        cursor,
+        "CREATE TABLE refstack_run "
+        "(id varchar(36), "
+        "environment varchar(100), "
+        "log_link text, "
+        "run_time timestamp, "
+        "PRIMARY KEY (id))"
+    )
+
+    execute_skip_error(
+        cursor,
+        "CREATE TABLE refstack_test_results "
+        "(run_id varchar(36), "
+        "test_uuid varchar(40), "
+        "test_name text, "
+        "status text, "
+        "result text, "
+        "CONSTRAINT run_fk FOREIGN KEY(run_id) "
+        "REFERENCES refstack_run(id) "
+        "ON DELETE cascade"
+        ")"
+    )
+
+    execute_skip_error(
+        cursor,
+        "CREATE INDEX refstack_test_results_run_id_idx "
+        "ON refstack_test_results (run_id)"
+    )
 
     with open(results_file) as f:
         results = json.load(f)
 
     data = []
+    run_id = results['run_id']
     changed = False
-    for k, v in results.items():
+    for k, v in results['results'].items():
         data.append((
             run_id, k, v.get('name'), v.get('status'), v.get('result')))
 
     try:
-        cursor.execute("INSERT INTO refstack_run (id, environment, date) "
-                       "VALUES (%s, %s, now())",
-                       (run_id, environment))
+        cursor.execute("INSERT INTO refstack_run "
+                       "(id, environment, log_link, run_time) "
+                       "VALUES (%s, %s, %s, now())",
+                       (run_id, results['environment'],
+                        log_url))
 
         query = (
-            "INSERT INTO refstack_test_log "
+            "INSERT INTO refstack_test_results "
             "(run_id, test_uuid, test_name, status, result) "
             " VALUES %s"
         )
