@@ -23,9 +23,11 @@
     name: refstack-client-run
     parent: refstack-client-run-base
     vars:
-      environment: "production_eu-de"
+      refstack_environment: "production_eu-de"
     secrets:
-      - refstack_credentials
+      - secret: refstack_credentials
+        name: refstack_credentials
+        pass-to-parent: true
       - alerta_data
 
 - job:
@@ -41,6 +43,7 @@
     secrets:
       - secret: refstack_credentials_preprod
         name: refstack_credentials
+        pass-to-parent: true
       - alerta_data
 
 - job:
