@@ -14,7 +14,7 @@
         login_user: "{{ refstack_database.user_name }}"
         login_password: "{{ refstack_database.user_password }}"
         db: "{{ refstack_database.database }}"
-        log_url: "{{ zuul.log_url }}"
+        log_url: "{{ ('https://zuul.eco.tsi-dev.otc-service.com/t/eco/build/' + zuul.build + '/logs') }}"
         results_file: "{{ publish_refstack_results_results_file }}"
       when:
         - publish_refstack_results | default(True)
