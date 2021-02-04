@@ -30,6 +30,7 @@ import io
 import logging
 import mimetypes
 import os
+
 try:
     import queue as queuelib
 except ImportError:
@@ -742,21 +743,12 @@ class Uploader():
             return True
         return False
 
-    def _file_exist(self, object_name, file_detail: FileDetail):
-        """Check that file is uploaded
-
-        Check that object exists and `etag` value matches given file's md5
-        """
-        try:
-            obj = self.cloud.get_object_metadata(object_name, self.container)
-        except openstack.exceptions.HttpException as http_err:
-            if http_err.status_code == 404:
-                return False
-            raise http_err
-
-        relative_path = os.path.join(self.prefix, file_detail.relative_path)
-        local_md5 = _file_md5(relative_path)
-        return obj.etag == local_md5
+    def _file_exist(self, object_name):
+        """Check that file is uploaded"""
+        obj = self.cloud.get_object_metadata(self.container, object_name)
+        if obj is None:
+            return False
+        return True
 
     def _post_file(self, file_detail):
         relative_path = os.path.join(self.prefix, file_detail.relative_path)
@@ -801,7 +793,7 @@ class Uploader():
         )
 
         # ensure file was uploaded
-        if not self._file_exist(relative_path, file_detail):
+        if not self._file_exist(relative_path):
             raise Exception("Swift upload failed")
 
 
