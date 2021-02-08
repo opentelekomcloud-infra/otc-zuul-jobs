@@ -4,31 +4,34 @@
     description: |
       Build ansible collection
     parent: unittests
+    nodeset: fedora-pod
     pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/build.yaml
     vars:
-      python_version: 3.6
+      python_version: 3.9
 
 - job:
     name: ansible-collection-install
     description: |
       Install ansible collection
     parent: unittests
+    nodeset: fedora-pod
     pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/install.yaml
     vars:
-      python_version: 3.6
+      python_version: 3.9
 
 - job:
     name: ansible-collection-publish
     description: |
       Publish ansible collection
     parent: unittests
+    nodeset: fedora-pod
     pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/build.yaml
     post-run: playbooks/ansible-collection/publish.yaml
     vars:
-      python_version: 3.6
+      python_version: 3.9
 
 - job:
     name: ansible-collection-test-base
@@ -36,10 +39,11 @@
     abstract: true
     description: |
       Execute ansible-test for the collection
+    nodeset: fedora-pod
     pre-run: playbooks/ansible-test-base/pre.yaml
     run: playbooks/ansible-test-base/run.yaml
     vars:
-      python_version: 3.6
+      python_version: 3.9
       ansible_test_collections: true
 
 - job:
@@ -78,6 +82,7 @@
 - job:
     name: tox-linters-ansible-devel
     parent: tox-linters
+    nodeset: fedora-pod
     description: |
       Run openstack collections linter tests using the devel branch of ansible
     # non-voting because we can't prevent ansible devel from breaking us
@@ -89,6 +94,7 @@
 - job:
     name: tox-linters-ansible-2.10
     parent: tox-linters
+    nodeset: fedora-pod
     description: |
       Run openstack collections linter tests using the 2.10 branch of ansible
     voting: true
@@ -99,6 +105,7 @@
 - job:
     name: tox-linters-ansible-2.9
     parent: tox-linters
+    nodeset: fedora-pod
     description: |
       Run openstack collections linter tests using the 2.9 branch of ansible
     voting: true
