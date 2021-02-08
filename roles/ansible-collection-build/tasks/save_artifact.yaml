@@ -12,6 +12,14 @@
     verify_host: true
     owner: false
     group: false
+  when: "ansible_connection != 'kubectl'"
+
+- include_tasks: rsync.yaml
+  when: zj_pod.1.pod is defined
+  loop: "{{ openshift_pods.items()|list }}"
+  loop_control:
+    loop_var: zj_pod
+  run_once: true
 
 - name: Return collection artifacts to Zuul
   zuul_return:

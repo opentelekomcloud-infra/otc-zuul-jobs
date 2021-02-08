@@ -59,6 +59,17 @@
       test_setup_skip: true
 
 - job:
+    name: otc-tox-linters
+    parent: otc-tox
+    description: |
+      Runs code linting tests.
+      Uses tox with the ``linters`` environment.
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_envlist: linters
+      test_setup_skip: true
+
+- job:
     name: otc-tox-cover
     parent: otc-tox
     description: |
