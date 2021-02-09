@@ -6,26 +6,13 @@
   delegate_to: localhost
 
 - name: Collect tarball artifacts
-  synchronize:
+  fetch:
     dest: "{{ goreleaser_artifact_path }}"
-    mode: pull
     src: "{{ zj_tb }}"
-    verify_host: true
-    owner: false
-    group: false
+    flat: true
   loop: "{{ goreleaser_tarballs }}"
   loop_control:
     loop_var: zj_tb
-  when: "ansible_connection != 'kubectl'"
-
-- include_tasks: rsync.yaml
-  when:
-    - zj_pod.1.pod is defined
-    - ansible_connection == 'kubectl'
-  loop: "{{ openshift_pods.items()|list }}"
-  loop_control:
-    loop_var: zj_pod
-  run_once: true
 
 - name: Return collection artifacts to Zuul
   zuul_return:

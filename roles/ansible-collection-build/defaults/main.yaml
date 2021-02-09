@@ -1,3 +1,4 @@
+---
 ansible_collection_build_galaxy_executable: "{{ ansible_collection_build_pip_virtualenv }}/bin/ansible-galaxy"
 ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
 ansible_collection_build_galaxy_output_path: "{{ ansible_user_dir }}/build_artifacts"
