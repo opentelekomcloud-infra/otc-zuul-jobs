@@ -1,5 +1,13 @@
 ---
 - job:
+    name: golang-make
+    parent: golang-go
+    description: |
+      Run golang commands under make
+    pre-run: playbooks/golang/make-pre.yaml
+    run: playbooks/golang/make-run.yaml
+
+- job:
     name: otc-golang-make
     parent: golang-make
     nodeset: fedora-pod
