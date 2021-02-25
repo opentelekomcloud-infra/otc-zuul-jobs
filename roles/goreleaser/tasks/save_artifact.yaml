@@ -20,12 +20,12 @@
       zuul:
         artifacts:
           - name:
-              "{% set x = zj_tb | basename | replace('.tar.gz', '') %}{{ x.split('_')[0] }}"
+              "{% set x = zj_tb | basename | replace('.tar.gz', '') | replace('.zip', '') %}{{ x.split('_')[0] }}"
             url: "artifacts/{{ zj_tb | basename }}"
             metadata:
               type: go_binary_archive
-              version: "{% set x = zj_tb | basename | replace('.tar.gz', '') %}{{ x.split('_')[1] }}"
-              platform: "{% set x = zj_tb | basename | replace('.tar.gz', '') %}{{ x.split('_')[2] }}"
+              version: "{% set x = zj_tb | basename | replace('.tar.gz', '') | replace('.zip', '') %}{{ x.split('_')[1] }}"
+              platform: "{% set x = zj_tb | basename | replace('.tar.gz', '') | replace('.zip', '') %}{{ x.split('_')[2] }}"
   loop: "{{ goreleaser_tarballs }}"
   loop_control:
     loop_var: zj_tb
