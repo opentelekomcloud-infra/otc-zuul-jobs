@@ -86,6 +86,7 @@
       Run openstack collections linter tests using the devel branch of ansible
     # non-voting because we can't prevent ansible devel from breaking us
     voting: false
+    nodeset: ubuntu-focal
     required-projects:
       - name: ansible/ansible
         override-checkout: devel
@@ -96,6 +97,7 @@
     description: |
       Run openstack collections linter tests using the 2.10 branch of ansible
     voting: true
+    nodeset: ubuntu-focal
     required-projects:
       - name: ansible/ansible
         override-checkout: stable-2.10
@@ -106,6 +108,7 @@
     description: |
       Run openstack collections linter tests using the 2.9 branch of ansible
     voting: true
+    nodeset: ubuntu-focal
     required-projects:
       - name: ansible/ansible
         override-checkout: stable-2.9
