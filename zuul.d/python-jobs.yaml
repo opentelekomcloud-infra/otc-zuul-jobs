@@ -3,7 +3,7 @@
     name: otc-tox
     parent: tox
     abstract: true
-    nodeset: ubuntu-focal
+    nodeset: fedora-pod
     description: |
       Base job for running tox jobs
 
