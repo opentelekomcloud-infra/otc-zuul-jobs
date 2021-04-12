@@ -1,4 +1,6 @@
 ---
 - hosts: all
   roles:
-    - ensure-go
+    - role: ensure-go
+      vars:
+        go_version: "1.16.3"
