@@ -8,10 +8,9 @@
         ansible_test_collection_namespace: "{{ ansible_test_collections|ternary(ansible_collection_namespace, '') }}"
 
     - name: Run ansible-test
-      import_role:
+      include_role:
         name: ansible-test
       vars:
         ansible_test_venv_path: "{{ ensure_ansible_root_dir }}"
         ansible_test_ansible_path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
         ansible_test_python: "{{ python_version }}"
-
