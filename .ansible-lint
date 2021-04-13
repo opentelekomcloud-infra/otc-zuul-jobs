@@ -1,5 +1,6 @@
 exclude_paths:
   - test-playbooks/  # TODO(ssbarnea): remove skip in follow-up
+  - zuul.d/secrets.yaml
 parseable: true
 quiet: false
 skip_list:
@@ -10,6 +11,7 @@ skip_list:
            # ansible-lint are fixed.
   - '208'  # File permissions not mentioned
   - '301'  # Commands should not change things if nothing needs doing
+  - '302'  # Using command rather than an argument to e.g. file
 rulesdir:
   - ./.rules/
 use_default_rules: true

@@ -2,6 +2,8 @@
 - job:
     name: golang-make
     parent: golang-go
+    vars:
+      go_version: "1.16.3"
     description: |
       Run golang commands under make
     pre-run: playbooks/golang/make-pre.yaml
