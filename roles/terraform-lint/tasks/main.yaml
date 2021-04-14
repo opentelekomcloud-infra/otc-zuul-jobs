@@ -1,6 +1,6 @@
 ---
 - name: Initialize terraform
-  command: "{{ terraform_executable }} init -no-color -input=false > /dev/null"
+  command: "{{ terraform_executable }} init -no-color -input=false"
   args:
     chdir: "{{ zuul_work_dir }}"
 
