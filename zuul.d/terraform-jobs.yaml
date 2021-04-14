@@ -2,7 +2,6 @@
 - job:
     name: otc-terraform-lint
     parent: unittests
-    abstract: true
     nodeset: fedora-pod
     description: |
       Base job for running terraform fmt command
