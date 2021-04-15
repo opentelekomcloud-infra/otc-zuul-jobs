@@ -4,7 +4,7 @@
     parent: terraform-base
     vars:
       terraform_command: fmt
-      terraform_extra_args: -check -recursive
+      terraform_extra_args: "-check -recursive"
       terraform_version: 0.15.0
     nodeset: fedora-pod
     description: |
