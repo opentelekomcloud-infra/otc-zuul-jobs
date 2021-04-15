@@ -1,31 +1,9 @@
 ---
 - job:
-    name: terraform-fmt
-    parent: terraform-base
-    vars:
-      terraform_command: fmt
-      terraform_extra_args: "-check -recursive"
-      terraform_version: 0.15.0
+    name: otc-terraform-lint
+    parent: unittests
     nodeset: fedora-pod
     description: |
-      Run terraform fmt -check command
-
-- job:
-    name: terraform-validate
-    parent: terraform-base
-    vars:
-      terraform_command: validate
-      terraform_version: 0.15.0
-    nodeset: fedora-pod
-    description: |
-      Run terraform validate command
-
-- job:
-    name: terraform-test
-    parent: terraform-base
-    vars:
-      terraform_command: test
-      terraform_version: 0.15.0
-    nodeset: fedora-pod
-    description: |
-      Run terraform test command
+      Base job for running terraform fmt command
+    pre-run: playbooks/terraform/terraform-pre.yaml
+    run: playbooks/terraform/terraform-run.yaml
