@@ -1,2 +1,0 @@
-terraform_executable: "{{ ansible_user_dir }}/.local/bin/terraform"
-zuul_work_dir: "{{ zuul.project.src_dir }}"
