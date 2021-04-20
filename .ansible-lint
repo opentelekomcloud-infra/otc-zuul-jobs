@@ -12,6 +12,8 @@ skip_list:
   - '208'  # File permissions not mentioned
   - '301'  # Commands should not change things if nothing needs doing
   - '302'  # Using command rather than an argument to e.g. file
+warn_list:
+  - '303'  # Using command rather than module  
 rulesdir:
   - ./.rules/
 use_default_rules: true

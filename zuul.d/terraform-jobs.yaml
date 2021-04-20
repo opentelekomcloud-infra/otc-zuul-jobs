@@ -1,0 +1,9 @@
+---
+- job:
+    name: otc-terraform-lint
+    parent: unittests
+    nodeset: fedora-pod
+    description: |
+      Base job for running terraform fmt command
+    pre-run: playbooks/terraform/terraform-pre.yaml
+    run: playbooks/terraform/terraform-run.yaml
