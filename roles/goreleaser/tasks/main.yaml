@@ -1,5 +1,4 @@
 ---
-
 - name: Create GPG private key tempfile
   tempfile:
     state: file
@@ -34,7 +33,8 @@
 - name: Find tarballs in artifacts directory
   find:
     file_type: file
-    paths: "{{ goreleaser_dist_path }}"
+    paths:
+      - "{{ goreleaser_dist_path }}"
     patterns: "*.tar.gz,*.zip,*.tgz"
   register: result
 
