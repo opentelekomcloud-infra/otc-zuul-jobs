@@ -5,7 +5,7 @@
     vars:
       go_version: "1.16.3"
     description: |
-      Run GOlang commands under make
+      Run Golang commands under make
     pre-run: playbooks/golang/make-pre.yaml
     run: playbooks/golang/make-run.yaml
 
@@ -14,7 +14,7 @@
     parent: golang-make
     nodeset: fedora-pod
     description: |
-      Base job for running GOlang jobs
+      Base job for running Golang jobs
 
 - job:
     name: golang-make-test
@@ -31,7 +31,7 @@
 - job:
     name: goreleaser-build
     description: |
-      Build GOlang binaries with goreleaser.
+      Build Golang binaries with goreleaser.
     nodeset: fedora-pod
     pre-run: playbooks/golang/goreleaser-pre.yaml
     run: playbooks/golang/goreleaser-build.yaml
