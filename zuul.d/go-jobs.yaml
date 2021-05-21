@@ -12,7 +12,7 @@
 - job:
     name: otc-golang-make
     parent: golang-make
-    nodeset: fedora-pod
+    # nodeset: fedora-pod
     description: |
       Base job for running Golang jobs
 
