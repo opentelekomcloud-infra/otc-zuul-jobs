@@ -20,7 +20,7 @@
       Perform multiple required tests on any ansible-collection project
     check:
       jobs:
-        - tox-pep8
+        - otc-tox-pep8
         # - tox-functional
         # - tox-linters-ansible-devel
         - tox-linters-ansible-2.10
@@ -30,7 +30,7 @@
         - otc-ansible-collection-test-integration
     gate:
       jobs:
-        - tox-pep8
+        - otc-tox-pep8
         # - tox-linters-ansible-devel
         - tox-linters-ansible-2.10
         - ansible-collection-build
