@@ -82,10 +82,13 @@
 
 - job:
     name: otc-tox-docs
-    parent: otc-tox
     description: |
       Run tox -e docs in a pod
+    nodeset: fedora-pod
     vars:
       tox_envlist: docs
-      tox_pdf_envlist: pdf-docs
-      tox_skip_pdf: false
+      bindep_profile: compile doc
+    pre-run: playbooks/tox-docs/pre.yaml
+    run: playbooks/tox-docs/run.yaml
+    post-run: playbooks/tox-docs/post.yaml
+    success-url: docs/
