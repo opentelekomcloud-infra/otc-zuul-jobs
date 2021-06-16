@@ -40,3 +40,16 @@
     release:
       jobs:
         - release-ansible-collection
+
+- project-template:
+    name: publish-otc-docs-pti
+    description: |
+      Runs normal `Open Telekom Cloud PTI documentation build jobs
+      following the project testing interface and publishes the result
+      using a promote job.
+    check:
+      jobs:
+        - otc-tox-docs
+    gate:
+      jobs:
+        - otc-tox-docs
