@@ -53,3 +53,6 @@
     gate:
       jobs:
         - otc-tox-docs
+    promote:
+      jobs:
+        - promote-otc-tox-docs
