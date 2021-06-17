@@ -1,0 +1,66 @@
+- hosts: localhost
+  tasks:
+    - name: Check execution context
+      when: "zuul.branch is not defined"
+      fail:
+        msg: "This playbook must be run in a branch-based pipeline (e.g., 'promote')."
+
+    - name: Download docs archive
+      include_role:
+        name: download-artifact
+      vars:
+        # download_artifact_job: provided by zuul job
+        download_artifact_api: "https://zuul.eco.tsi-dev.otc-service.com/api/tenant/{{ zuul.tenant }}"
+        download_artifact_type:
+          - docs_archive
+          - docs_pdf
+        download_artifact_pipeline: gate
+
+    - name: Create working directory
+      file:
+        path: "{{ zuul.executor.work_root }}/docs"
+        state: directory
+        mode: 0755
+
+    - name: Extract docs archive
+      # TODO(clarkb) what is the proper way to set mode on this task?
+      vars:
+        findme:
+          - "{{ zuul.executor.work_root }}/docs-html.tar.bz2"
+          - "{{ zuul.executor.work_root }}/docs-html.tar.gz"
+      unarchive:  # noqa 208
+        src: "{{ lookup('first_found', findme) }}"
+        dest: "{{ zuul.executor.work_root }}/docs"
+
+    - name: Write root_marker file
+      include_role:
+        name: write-root-marker
+      when: "write_root_marker"
+      vars:
+        root_marker_dir: "{{ zuul.executor.work_root }}/docs"
+
+    - name: Find PDF files
+      find:
+        paths: "{{ zuul.executor.work_root }}/"
+        file_type: file
+        patterns: "*.pdf"
+      register: pdf_files
+
+    - name: Move found PDF file into doc dir
+      command: "mv {{ item.path }} {{ zuul.executor.work_root }}/docs"
+      with_items: "{{ pdf_files.files }}"
+      when: pdf_files.matched > 0
+
+    - name: Set container name
+      set_fact:
+        container_name: "{{ zuul.project.short_name }}"
+
+    - name: Upload docs to Swift
+      os_object:
+        cloud: "{{ cloud_docs }}"
+        container: "{{ container_name }}"
+        filename: "{{ lookup('first_found', 'findme') }}"
+      vars:
+        findme:
+          - "{{ zuul.executor.work_root }}/docs-html.tar.bz2"
+          - "{{ zuul.executor.work_root }}/docs-html.tar.gz"
