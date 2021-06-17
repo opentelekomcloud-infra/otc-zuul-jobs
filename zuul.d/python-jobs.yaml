@@ -92,3 +92,6 @@
     run: playbooks/tox-docs/run.yaml
     post-run: playbooks/tox-docs/post.yaml
     success-url: docs/
+    # OTC Docs may take 30 min only to push 26000
+    # files into VM
+    timeout: 3600
