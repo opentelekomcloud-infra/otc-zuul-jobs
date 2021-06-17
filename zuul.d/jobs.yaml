@@ -46,7 +46,7 @@
     vars:
       tox_envlist: linters
       tox_environment:
-        ANSIBLE_ROLES_PATH: ~/src/github.com/opentelekomcloud-infra/base-jobs/roles:~/src/opendev.org/zuul/zuul-jobs/roles:~/src/github.comg/opentelekomcloud-infra/otc-zuul-jobs/roles:~/src/github.com/opentelekomcloud-infra/project-config/roles:~/src/github.com/opentelekomcloud-infra/system-config/roles
+        ANSIBLE_ROLES_PATH: ~/src/github.com/opentelekomcloud-infra/base-jobs/roles:~/src/opendev.org/zuul/zuul-jobs/roles:~/src/github.com/opentelekomcloud-infra/otc-zuul-jobs/roles:~/src/github.com/opentelekomcloud-infra/project-config/roles:~/src/github.com/opentelekomcloud-infra/system-config/roles
 
 - job:
     name: otc-promote-docs-base
