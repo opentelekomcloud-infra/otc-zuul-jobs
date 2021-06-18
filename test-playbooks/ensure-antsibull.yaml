@@ -1,0 +1,5 @@
+- hosts: all
+  tasks:
+    - name: Include ensure-antsibull
+      include_role:
+        name: ensure-antsibull

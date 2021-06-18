@@ -1,0 +1,8 @@
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+zuul_work_virtualenv: "{{ ansible_user_dir }}/.venv"
+
+antsibull_docs_executable: "{{ zuul_work_virtualenv }}/bin/antsibull-docs"
+antsibull_docs_squash: true
+antsibull_docs_dir: "{{ zuul_work_dir }}/doc/source/"
+antsibull_docs_tmp_dir: "{{ zuul_work_dir }}/tmp/"
+

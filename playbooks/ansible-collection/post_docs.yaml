@@ -1,0 +1,5 @@
+- hosts: all
+  roles:
+    - fetch-sphinx-output
+    - fetch-sphinx-tarball
+

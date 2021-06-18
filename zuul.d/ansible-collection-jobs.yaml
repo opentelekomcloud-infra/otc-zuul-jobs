@@ -5,7 +5,6 @@
       Build ansible collection
     parent: unittests
     nodeset: fedora-pod
-    pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/build.yaml
     vars:
       python_version: 3.9
@@ -16,7 +15,6 @@
       Install ansible collection
     parent: unittests
     nodeset: fedora-pod
-    pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/install.yaml
     vars:
       python_version: 3.9
@@ -27,7 +25,6 @@
       Publish ansible collection
     parent: unittests
     nodeset: fedora-pod
-    pre-run: playbooks/ansible-collection/pre.yaml
     run: playbooks/ansible-collection/build.yaml
     post-run: playbooks/ansible-collection/publish.yaml
     vars:
@@ -77,6 +74,19 @@
     vars:
       ansible_test_test_command: "integration"
       ansible_test_no_temp_unicode: true
+
+- job:
+    name: ansible-collection-docs
+    description: |
+      Build Ansible collection docs.
+    nodeset: fedora-pod
+    pre-run:
+      - playbooks/ansible-collection/pre_docs.yaml
+    run: playbooks/ansible-collection/build_docs.yaml
+    post-run: playbooks/ansible-collection/post_docs.yaml
+    vars:
+      python_version: 3.9
+      sphinx_python: python3
 
 # Linters
 - job:

@@ -1,0 +1,6 @@
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+zuul_work_virtualenv: "{{ ansible_user_dir }}/.venv"
+
+antsibull_packages:
+  - "antsibull"
+doc_building_extra_packages: []

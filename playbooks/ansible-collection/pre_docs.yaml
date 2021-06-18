@@ -1,0 +1,15 @@
+---
+- hosts: all
+  roles:
+    - ensure-antsibull
+    - ensure-sphinx
+    # antsibull-docs works either from proper location
+    # (ansible_collections/namespace/collection) or for installed collection.
+    # It is easier to install collection rather then mess with ensuring we are
+    # in a proper place
+    - ansible-collection-build
+    - role: ansible-collection-install
+      vars:
+        # ansible_collection_build_collection_tarball gets populated in the
+        # build role
+        ansible_collection_install_galaxy_collection_name: "{{ ansible_collection_build_collection_tarball }}"

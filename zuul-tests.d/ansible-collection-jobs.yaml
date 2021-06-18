@@ -8,7 +8,7 @@
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
-      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
 
 - job:
     name: zuul-jobs-test-ansible-collection-install
@@ -20,7 +20,6 @@
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
-      ansible_collection_build_collection_path: test-playbooks/ansible/collection
       ansible_collection_install_galaxy_collection_name: "openstack.cloud"
 
 - job:
@@ -32,7 +31,7 @@
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
-      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
       ansible_collection_name: "collection_name"
       ansible_collection_namespace: "namespace_name"
 
@@ -45,7 +44,7 @@
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
-      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
       ansible_collection_name: "collection_name"
       ansible_collection_namespace: "namespace_name"
 
@@ -58,11 +57,25 @@
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
-      ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
       ansible_collection_name: "collection_name"
       ansible_collection_namespace: "namespace_name"
       ansible_test_integration_env:
         fake_env_val: "dummy"
+
+- job:
+    name: zuul-jobs-test-ansible-collection-docs
+    parent: ansible-collection-docs
+    description: Test ansible-collection-docs job
+    files:
+      - playbooks/ansible-collection/*
+      - roles/ansible-collection-docs/*
+      - test-playbooks/ansible/collection
+      - zuul.d/ansible-collection-jobs.yaml
+    vars:
+      zuul_work_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
+      ansible_collection_name: "collection_name"
+      ansible_collection_namespace: "namespace_name"
 
 - project:
     merge-mode: squash-merge
@@ -73,4 +86,5 @@
         - zuul-jobs-test-ansible-collection-test-sanity
         - zuul-jobs-test-ansible-collection-test-units
         - zuul-jobs-test-ansible-collection-test-integration
+        - zuul-jobs-test-ansible-collection-docs
     gate: *id001
