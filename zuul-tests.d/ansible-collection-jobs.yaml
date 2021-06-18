@@ -5,6 +5,7 @@
     files:
       - playbooks/ansible-collection/*
       - roles/ansible-collection-build/*
+      - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
       ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
@@ -16,6 +17,7 @@
     files:
       - playbooks/ansible-collection/*
       - roles/ansible-collection-install/*
+      - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
       ansible_collection_build_collection_path: test-playbooks/ansible/collection
@@ -27,6 +29,7 @@
     description: Test ansible-collection-test-sanity job
     files:
       - roles/ansible-test-base/*
+      - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
       ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
@@ -39,6 +42,7 @@
     description: Test ansible-collection-test-sanity job
     files:
       - roles/ansible-test-base/*
+      - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
       ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"
@@ -51,6 +55,7 @@
     description: Test ansible-collection-test-integration job
     files:
       - roles/ansible-test-base/*
+      - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
     vars:
       ansible_collection_build_collection_dir: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test-playbooks/ansible/collection"

@@ -1,0 +1,14 @@
+---
+namespace: "namespace_name"
+name: "collection_name"
+version: "1.0.1"
+readme: "README.md"
+authors:
+  - fake author
+dependencies:
+license:
+  - "MIT"
+tags:
+  - demo
+  - collection
+repository: "https://www.github.com/my_org/my_collection"
