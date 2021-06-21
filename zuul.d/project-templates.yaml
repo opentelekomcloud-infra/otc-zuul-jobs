@@ -56,3 +56,23 @@
     promote:
       jobs:
         - promote-otc-tox-docs
+
+- project-template:
+    name: release-notes-jobs
+    description: |
+      Builds the release notes jobs under python 3 and publishes the
+      result using a promote job.
+      .. note::
+         Only repos listed in ``openstack/governance`` repository are
+         allowed to publish to the `OpenStack docs website
+         <https://docs.openstack.org>`_ .
+    check:
+      jobs:
+        - build-otc-releasenotes:
+            vars:
+              sphinx_python: python3
+    gate:
+      jobs:
+        - build-otc-releasenotes:
+            vars:
+              sphinx_python: python3
