@@ -95,3 +95,13 @@
     # OTC Docs may take 30 min only to push 26000
     # files into VM
     timeout: 3600
+
+- job:
+    name: build-otc-releasenotes
+    parent: build-reno-releasenotes
+    nodeset: fedora-pod
+    description: |
+      Build releasenotes, with optional translation support, using reno.
+    # Building translated releasenotes can take long for large repositories
+    timeout: 3600
+
