@@ -25,7 +25,7 @@
 - name: Trigger goreleaser
   command: "{{ goreleaser_bin }} {{ goreleaser_args }}"
   args:
-    chdir: "{{ goreleaser_project_src_dir }}"
+    chdir: "{{ zuul_work_dir }}"
   environment:
     GITHUB_TOKEN: "{{ goreleaser_github_token.token | default(omit) }}"
     PATH: "/usr/local/go/bin:{{ ansible_env.PATH }}"
@@ -34,7 +34,7 @@
   find:
     file_type: file
     paths:
-      - "{{ goreleaser_dist_path }}"
+      - "{{ zuul_work_dir }}/{{ goreleaser_dist_path }}"
     patterns: "*.tar.gz,*.zip,*.tgz"
   register: result
 

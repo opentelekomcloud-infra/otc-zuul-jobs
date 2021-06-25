@@ -11,12 +11,12 @@
 
 - name: Discover if galaxy.yml.in exists
   stat:
-    path: "{{ ansible_collection_build_collection_dir }}/galaxy.yml.in"
+    path: "{{ zuul_work_dir }}/galaxy.yml.in"
   register: galaxy_in
 
 - name: Generate version number for ansible collection
   args:
-    chdir: "{{ ansible_collection_build_collection_dir }}"
+    chdir: "{{ ansible_user_dir }}/{{ zuul_work_dir }}"
     executable: "{{ ansible_collection_build_pip_virtualenv |
       ternary(ansible_collection_build_pip_virtualenv+ '/bin/python3', 'python3') }}"
   script: build.py
@@ -26,7 +26,7 @@
 
 - name: Ensure galaxy.yml exists
   stat:
-    path: "{{ ansible_collection_build_collection_dir }}/galaxy.yml"
+    path: "{{ zuul_work_dir }}/galaxy.yml"
   register: galaxy
 
 - name: Fail if no galaxy.yml
@@ -36,7 +36,7 @@
 
 - name: Build an ansible collection
   args:
-    chdir: "{{ ansible_collection_build_collection_dir }}"
+    chdir: "{{ zuul_work_dir }}"
   command: >-
     {{ ensure_ansible_galaxy_executable }}
     collection build --force --output-path {{ ansible_collection_build_galaxy_output_path }} .
@@ -44,7 +44,7 @@
 - name: Find tarballs in folder
   find:
     file_type: file
-    paths: "{{ ansible_collection_build_galaxy_output_path }}"
+    paths: "{{ zuul_work_dir }}/{{ ansible_collection_build_galaxy_output_path }}"
     patterns: "*.tar.gz"
   register: result
 

@@ -7,7 +7,7 @@
 - name: Collect tarball artifacts
   fetch:
     dest: "{{ ansible_collection_build_artifact_path }}"
-    src: "{{ ansible_collection_build_collection_tarball }}"
+    src: "{{ ansible_user_dir }}/{{ ansible_collection_build_collection_tarball }}"
     flat: true
 
 - name: Return collection artifacts to Zuul

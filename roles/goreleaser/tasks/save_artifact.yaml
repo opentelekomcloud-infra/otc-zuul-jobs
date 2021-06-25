@@ -8,7 +8,7 @@
 - name: Collect tarball artifacts
   fetch:
     dest: "{{ goreleaser_artifact_path }}"
-    src: "{{ zj_tb }}"
+    src: "{{ ansible_user_dir }}/{{ zj_tb }}"
     flat: true
   loop: "{{ goreleaser_tarballs }}"
   loop_control:
