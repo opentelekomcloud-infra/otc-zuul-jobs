@@ -76,3 +76,6 @@
         - build-otc-releasenotes:
             vars:
               sphinx_python: python3
+    promote:
+      jobs:
+        - promote-otc-releasenotes
