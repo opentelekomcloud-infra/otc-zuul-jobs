@@ -44,7 +44,9 @@
         - release-ansible-collection
     promote:
       jobs:
-        - promote-otc-tox-docs
+        - promote-otc-tox-docs:
+            vars:
+              download_artifact_job: "ansible-collection-docs"
 
 - project-template:
     name: publish-otc-docs-pti
