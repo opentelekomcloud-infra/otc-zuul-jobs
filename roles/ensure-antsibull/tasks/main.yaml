@@ -1,0 +1,13 @@
+- name: Install pip
+  include_role:
+    name: ensure-pip
+
+- name: Install virtualenv
+  include_role:
+    name: ensure-virtualenv
+
+- name: Install base doc building packages
+  pip:
+    name: "{{ antsibull_packages | union(doc_building_extra_packages) }}"
+    chdir: "{{ zuul_work_dir }}"
+    virtualenv: "{{ zuul_work_virtualenv }}"

@@ -23,7 +23,7 @@ Install Ansible
    Extra arguments to pass to pip, like "--user" or "--update".
 
 .. zuul:rolevar:: ensure_ansible_venv_path
-   :default: '~/.local/venv'
+   :default: '~/.venv'
 
    Path to directory of Virtualenv
 

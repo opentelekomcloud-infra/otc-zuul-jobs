@@ -27,6 +27,7 @@
         - ansible-collection-build
         - ansible-collection-test-sanity
         - ansible-collection-test-units
+        - ansible-collection-docs
         - otc-ansible-collection-test-integration
     gate:
       jobs:
@@ -36,10 +37,14 @@
         - ansible-collection-build
         - ansible-collection-test-sanity
         - ansible-collection-test-units
+        - ansible-collection-docs
         - otc-ansible-collection-test-integration
     release:
       jobs:
         - release-ansible-collection
+    promote:
+      jobs:
+        - promote-otc-tox-docs
 
 - project-template:
     name: publish-otc-docs-pti

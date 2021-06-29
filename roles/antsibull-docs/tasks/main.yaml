@@ -1,0 +1,69 @@
+- name: Prepare collection temporarylocation
+  file:
+    state: directory
+    path: "{{ antsibull_docs_tmp_dir }}"
+    # antsibull-doc requires dir with 700 priv
+    mode: "0700"
+
+- name: Generate ansible modules documentation
+  args:
+    executable: "/bin/bash"
+  shell: >-
+    source {{ zuul_work_virtualenv }}/bin/activate;
+    {{ antsibull_docs_executable }} collection
+    --use-current
+    {{ antsibull_docs_squash | ternary('--squash-hierarchy', '') }}
+    --dest-dir {{ antsibull_docs_tmp_dir }}
+    {{ ansible_collection_doc_namespace }}.{{ ansible_collection_doc_name }}
+
+- name: Check original doc/sources dir
+  stat:
+    path: "{{ antsibull_docs_dir }}"
+  register: doc_stat
+
+- name: Ensure final destination exists
+  file:
+    state: "directory"
+    path: "{{ antsibull_docs_dir }}"
+
+# We want that local content takes precedence. Therefore apply local on top of
+# generated and copy back
+- name: Apply local doc content on top of generated
+  copy:
+    src: "{{ antsibull_docs_dir }}"
+    dest: "{{ antsibull_docs_tmp_dir }}"
+    remote_src: True
+  when: doc_stat.stat.exists
+
+- name: Copy resulting content into destination
+  copy:
+    src: "{{ antsibull_docs_tmp_dir }}"
+    dest: "{{ antsibull_docs_dir }}"
+    remote_src: True
+
+- name: Find common_return_values
+  stat:
+    path: "{{ antsibull_docs_dir }}/common_return_values.rst"
+  register: common_return_values_stat
+
+- name: Create common_return_values file from template
+  copy:
+    src: "common_return_values.rst"
+    dest: "{{ antsibull_docs_dir }}/common_return_values.rst"
+  when: not common_return_values_stat.stat.exists
+
+- name: Find list_of_all_collections
+  stat:
+    path: "{{ antsibull_docs_dir }}/list_of_collections.rst"
+  register: list_stat
+
+- name: Create list_of_collections file from template
+  copy:
+    src: "list_of_collections.rst"
+    dest: "{{ antsibull_docs_dir }}/list_of_collections.rst"
+  when: not list_stat.stat.exists
+
+- name: Ensure _static folder exists
+  file:
+    path: "{{ antsibull_docs_dir }}/_static"
+    state: "directory"

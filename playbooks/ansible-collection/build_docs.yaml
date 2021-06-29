@@ -1,0 +1,16 @@
+---
+- hosts: all
+  tasks:
+    # For some reason ansible_test_collection_name squeeze as empty into collection, unless we do something with the value. Who knows why - please tell
+    - name: Set some facts
+      set_fact:
+        ansible_collection_doc_name: "{{ ansible_collection_name }}"
+        ansible_collection_doc_namespace: "{{ ansible_collection_namespace }}"
+
+    - include_role:
+        name: antsibull-docs
+
+    - name: Build html with Sphinx
+      include_role:
+        name: sphinx
+

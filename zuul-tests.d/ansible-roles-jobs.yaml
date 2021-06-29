@@ -4,10 +4,22 @@
     files:
       - roles/ensure-ansible
     run: test-playbooks/ensure-ansible.yaml
+    vars:
+      python_version: 3.9
+
+- job:
+    name: zuul-jobs-test-ensure-antsibull
+    description: Test ensure-antsibull job
+    files:
+      - roles/ensure-antsibull
+    run: test-playbooks/ensure-antsibull.yaml
+    vars:
+      python_version: 3.9
 
 - project:
     merge-mode: squash-merge
     check: &id001
       jobs:
         - zuul-jobs-test-ensure-ansible
+        - zuul-jobs-test-ensure-antsibull
     gate: *id001

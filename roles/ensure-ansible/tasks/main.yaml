@@ -3,6 +3,16 @@
   include_role:
     name: ensure-pip
 
+- name: Install virtualenv
+  include_role:
+    name: ensure-virtualenv
+
+# Installation of ansible in fresh venv is not possible until pip updates inside.
+- name: Initialize venv
+  pip:
+    name: "pip"
+    virtualenv: "{{ ensure_ansible_venv_path|default(omit, true) }}"
+
 - name: Install Ansible
   pip:
     name: "{{ ensure_ansible_package_name|default('ansible-base', true) }}"
@@ -23,3 +33,6 @@
     ensure_ansible_ansible_executable: "{{ result.virtualenv }}/bin/ansible"
     ensure_ansible_galaxy_executable: "{{ result.virtualenv }}/bin/ansible-galaxy"
     cacheable: true
+
+- name: Output Ansible version
+  command: "{{ ensure_ansible_ansible_executable }} --version"
