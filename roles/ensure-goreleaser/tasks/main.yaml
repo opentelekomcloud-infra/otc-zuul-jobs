@@ -12,7 +12,7 @@
     mode: 0775
 
 - name: Invoke goreleaser fetcher
-  command: "{{ tempdir.path }}/goreleaser.sh v0.176.0"
+  command: "{{ tempdir.path }}/goreleaser.sh"
   environment:
     BINDIR: "{{ goreleaser_bin_location }}"
 
