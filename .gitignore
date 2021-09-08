@@ -12,5 +12,8 @@ doc/build
 # pbr generates these
 AUTHORS
 ChangeLog
+dist
+.cache
 
+# Editors
 .vscode
