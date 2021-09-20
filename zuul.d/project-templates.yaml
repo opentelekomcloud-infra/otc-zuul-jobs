@@ -63,6 +63,31 @@
         - promote-otc-tox-docs
 
 - project-template:
+    name: api-ref-jobs
+    description: |
+      Build the api-ref document and publish the result
+      using a promote job.
+    check:
+      jobs:
+        - build-otc-api-ref:
+            files: &api-ref-triggers
+              - ^os_api_ref/.*
+              - ^api-ref/.*
+              - ^doc/api_samples/.*
+              - bindep.txt
+              - doc/requirements.txt
+              - test-requirements.txt
+              - tox.ini
+    gate:
+      jobs:
+        - build-otc-api-ref:
+            files: *api-ref-triggers
+    promote:
+      jobs:
+        - promote-api-ref:
+            files: *api-ref-triggers
+
+- project-template:
     name: release-notes-jobs
     description: |
       Builds the release notes jobs under python 3 and publishes the
