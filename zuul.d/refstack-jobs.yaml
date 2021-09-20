@@ -1,0 +1,31 @@
+---
+- job:
+    name: refstack-client-run
+    parent: refstack-client-run-base
+    vars:
+      refstack_environment: "production_eu-de"
+    secrets:
+      - secret: refstack_credentials
+        name: refstack_credentials
+        pass-to-parent: true
+      - alerta_data
+      - secret: refstack_database
+        name: refstack_database
+        pass-to-parent: true
+
+- job:
+    name: refstack-client-run-preprod
+    parent: refstack-client-run-base
+    vars:
+      refstack_environment: "preprod"
+      tempest_count_users: 8
+      tempest_image_ref: 3fab204d-2371-477e-9149-4a6146c3a771
+      tempest_image_ref_alt: e49199fd-9934-40b3-986b-dc06023a5f5c
+    secrets:
+      - secret: refstack_credentials_preprod
+        name: refstack_credentials
+        pass-to-parent: true
+      - alerta_data
+      - secret: refstack_database
+        name: refstack_database
+        pass-to-parent: true
