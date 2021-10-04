@@ -104,11 +104,11 @@
     gate:
       jobs:
         - build-otc-umn:
-            files: *umn-triggers
+            files: *docs-umn-triggers
     promote:
       jobs:
         - promote-umn:
-            files: *umn-triggers
+            files: *docs-umn-triggers
 
 - project-template:
     name: release-notes-jobs
