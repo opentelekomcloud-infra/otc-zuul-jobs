@@ -88,6 +88,29 @@
             files: *api-ref-triggers
 
 - project-template:
+    name: umn-jobs
+    description: |
+      Build the UMN document and publish the result
+      using a promote job.
+    check:
+      jobs:
+        - build-otc-umn:
+            files: &docs-umn-triggers
+              - ^umn/.*
+              - bindep.txt
+              - doc/requirements.txt
+              - test-requirements.txt
+              - tox.ini
+    gate:
+      jobs:
+        - build-otc-umn:
+            files: *docs-umn-triggers
+    promote:
+      jobs:
+        - promote-umn:
+            files: *docs-umn-triggers
+
+- project-template:
     name: release-notes-jobs
     description: |
       Builds the release notes jobs under python 3 and publishes the
