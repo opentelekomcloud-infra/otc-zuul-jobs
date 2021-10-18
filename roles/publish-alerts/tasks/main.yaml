@@ -37,3 +37,8 @@
         loop_var: zj_alert_item
       no_log: true
       failed_when: false
+
+    - name: Delete alerts file
+      file:
+        path: "{{ p.stat.path }}"
+        state: "absent"
