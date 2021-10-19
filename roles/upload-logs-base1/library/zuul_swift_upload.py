@@ -32,6 +32,7 @@ try:
 except ImportError:
     import Queue as queuelib
 import sys
+import tarfile
 import threading
 import traceback
 
@@ -73,7 +74,7 @@ def get_cloud(cloud):
 
 class Uploader():
     def __init__(self, cloud, container, prefix=None, delete_after=None,
-                 public=True, dry_run=False):
+                 public=True, archive_mode=False, dry_run=False):
 
         self.dry_run = dry_run
         if dry_run:
@@ -86,6 +87,7 @@ class Uploader():
         self.container = container
         self.prefix = prefix or ''
         self.delete_after = delete_after
+        self.archive_mode = archive_mode
 
         sess = self.cloud.config.get_session()
         adapter = requests.adapters.HTTPAdapter(pool_maxsize=100)
@@ -156,6 +158,14 @@ class Uploader():
         threads = []
         # Keep track on upload failures
         failures = []
+        if self.archive_mode:
+            tar = tarfile.open("data.tar.gz", "w:gz")
+            for file in file_list:
+                tar.add(file.filename)
+            tar.close()
+            failures = self.post_archive("data.tar.gz")
+            os.remove("data.tar.gz")
+            return failures
 
         queue = queuelib.Queue()
         # add items to queue
@@ -173,6 +183,21 @@ class Uploader():
             t.join()
 
         return failures
+
+    def post_archive(self, name):
+        response = self.cloud.put(
+            "{}/{}?extract-archive=tar.gz".format(
+                self.container,
+                self.prefix,
+            ),
+            headers={
+                "X-Detect-Content-Type": True,
+                "Content-Type": "application/gzip",
+                "X-Delete-After": str(self.delete_after)
+            },
+            data=open(name, 'r')
+        )
+        return [{"file": "archive.tar.gz", "error": response.text}]
 
     def post_thread(self, queue, failures):
         while True:
@@ -259,7 +284,7 @@ class Uploader():
 def run(cloud, container, files,
         indexes=True, parent_links=True, topdir_parent_link=False,
         partition=False, footer='index_footer.html', delete_after=15552000,
-        prefix=None, public=True, dry_run=False):
+        prefix=None, public=True, archive_mode=False, dry_run=False):
 
     if prefix:
         prefix = prefix.lstrip('/')
@@ -289,7 +314,7 @@ def run(cloud, container, files,
 
         # Upload.
         uploader = Uploader(cloud, container, prefix, delete_after,
-                            public, dry_run)
+                            public, archive_mode, dry_run)
         upload_failures = uploader.upload(file_list)
         return uploader.url, uploader.endpoint, uploader.path, upload_failures
 
@@ -308,6 +333,7 @@ def ansible_main():
             footer=dict(type='str'),
             delete_after=dict(type='int'),
             prefix=dict(type='str'),
+            archive_mode=dict(type='bool', default=False),
         )
     )
 
@@ -323,7 +349,8 @@ def ansible_main():
             footer=p.get('footer'),
             delete_after=p.get('delete_after', 15552000),
             prefix=p.get('prefix'),
-            public=p.get('public')
+            public=p.get('public'),
+            archive_mode=p.get('archive_mode')
         )
     except (keystoneauth1.exceptions.http.HttpError,
             requests.exceptions.RequestException):
@@ -374,6 +401,9 @@ def cli_main():
     parser.add_argument('--prefix',
                         help='Prepend this path to the object names when '
                              'uploading')
+    parser.add_argument('--archive_mode', action='store_true',
+                        help='Upload all files as archive. '
+                             'Use only when swift supports that')
     parser.add_argument('--dry-run', action='store_true',
                         help='do not attempt to create containers or upload, '
                              'useful with --verbose for debugging')

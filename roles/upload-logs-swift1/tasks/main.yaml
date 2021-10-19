@@ -28,6 +28,7 @@
         files:
           - "{{ zuul.executor.log_root }}/"
         delete_after: "{{ zuul_log_delete_after | default(omit) }}"
+        archive_mode: true
       register: upload_results
 
 - name: Setting zuul_upload_logs_results
