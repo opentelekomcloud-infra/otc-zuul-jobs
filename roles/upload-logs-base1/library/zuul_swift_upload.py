@@ -169,7 +169,7 @@ class Uploader():
                 except Exception:
                     pass
             tar.close()
-            failures.append(self.post_archive("data.tar.gz"))
+            failures.append(self.post_archive(fp.name))
             os.remove(fp.name)
             return failures
 
