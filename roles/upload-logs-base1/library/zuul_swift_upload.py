@@ -160,16 +160,17 @@ class Uploader():
         # Keep track on upload failures
         failures = []
         if self.archive_mode:
-            with tempfile.NamedTemporaryFile() as fp:
-                tar = tarfile.open(fp.name, "w:gz")
-                for file in file_list:
-                    try:
-                        if file.filename:
-                            tar.add(file.filename)
-                    except Exception:
-                        pass
-                tar.close()
-                failures.append(self.post_archive("data.tar.gz"))
+            fp = tempfile.NamedTemporaryFile()
+            tar = tarfile.open(fp.name, "w:gz")
+            for file in file_list:
+                try:
+                    if file.filename:
+                        tar.add(file.filename)
+                except Exception:
+                    pass
+            tar.close()
+            failures.append(self.post_archive("data.tar.gz"))
+            os.remove(fp.name)
             return failures
 
         queue = queuelib.Queue()
