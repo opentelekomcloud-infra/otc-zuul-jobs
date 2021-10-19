@@ -190,7 +190,7 @@ class Uploader():
         return failures
 
     def post_archive(self, name):
-        response = self.cloud.put(
+        response = self.cloud.object_store.put(
             "{}/{}?extract-archive=tar.gz".format(
                 self.container,
                 self.prefix,
