@@ -197,7 +197,7 @@ class Uploader():
                 self.prefix,
             ),
             headers={
-                "X-Detect-Content-Type": True,
+                "X-Detect-Content-Type": "true",
                 "Content-Type": "application/gzip",
                 "X-Delete-After": str(self.delete_after)
             },
