@@ -160,17 +160,25 @@ class Uploader():
         # Keep track on upload failures
         failures = []
         if self.archive_mode:
-            fp = tempfile.NamedTemporaryFile(delete=False)
+            fp = tempfile.NamedTemporaryFile(
+                suffix='.tar.gz', delete=False)
             fp.close()
             tar = tarfile.open(fp.name, "w:gz")
             for file in file_list:
                 try:
-                    if file.filename:
-                        tar.add(file.filename)
-                except Exception:
-                    pass
+                    if file.full_path:
+                        tar.add(
+                            file.full_path,
+                            arcname=file.relative_path,
+                        )
+                except Exception as ex:
+                    failures.append({
+                        "file": file.full_path,
+                        "error": "Error appending {}: {}".format(
+                            file.relative_path, ex)
+                    })
             tar.close()
-            failures.append(self.post_archive(fp.name))
+            failures.extend(self.post_archive(fp.name))
             os.remove(fp.name)
             return failures
 
@@ -192,20 +200,31 @@ class Uploader():
         return failures
 
     def post_archive(self, name):
+        failures = []
         with open(name, 'rb') as f:
+            headers = {
+                "X-Detect-Content-Type": "true",
+                "Content-Type": "application/gzip",
+                "Accept": "application/json"
+            }
+
+            if self.delete_after:
+                headers['x-delete-after'] = str(self.delete_after)
             response = self.cloud.object_store.put(
                 "{}/{}?extract-archive=tar.gz".format(
                     self.container,
                     self.prefix,
                 ),
-                headers={
-                    "X-Detect-Content-Type": "true",
-                    "Content-Type": "application/gzip",
-                    "X-Delete-After": str(self.delete_after)
-                },
+                headers=headers,
                 data=f
             )
-        return [{"file": "archive.tar.gz", "error": response.text}]
+            errors = response.json().get('Errors')
+            for error in errors:
+                failures.append({
+                    "file": error[0],
+                    "error": error[1]})
+
+        return failures
 
     def post_thread(self, queue, failures):
         while True:
