@@ -163,9 +163,13 @@ class Uploader():
             with tempfile.NamedTemporaryFile() as fp:
                 tar = tarfile.open(fp.name, "w:gz")
                 for file in file_list:
-                    tar.add(file.filename)
+                    try:
+                        if file.filename:
+                            tar.add(file.filename)
+                    except Exception:
+                        pass
                 tar.close()
-                failures = self.post_archive("data.tar.gz")
+                failures.append(self.post_archive("data.tar.gz"))
             return failures
 
         queue = queuelib.Queue()
