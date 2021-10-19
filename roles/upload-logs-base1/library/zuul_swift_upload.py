@@ -33,6 +33,7 @@ except ImportError:
     import Queue as queuelib
 import sys
 import tarfile
+import tempfile
 import threading
 import traceback
 
@@ -159,12 +160,12 @@ class Uploader():
         # Keep track on upload failures
         failures = []
         if self.archive_mode:
-            tar = tarfile.open("data.tar.gz", "w:gz")
-            for file in file_list:
-                tar.add(file.filename)
-            tar.close()
-            failures = self.post_archive("data.tar.gz")
-            os.remove("data.tar.gz")
+            with tempfile.NamedTemporaryFile() as fp:
+                tar = tarfile.open(fp.name, "w:gz")
+                for file in file_list:
+                    tar.add(file.filename)
+                tar.close()
+                failures = self.post_archive("data.tar.gz")
             return failures
 
         queue = queuelib.Queue()
