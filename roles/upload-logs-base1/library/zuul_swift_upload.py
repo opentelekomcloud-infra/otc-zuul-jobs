@@ -169,9 +169,8 @@ class Uploader():
                 except Exception:
                     pass
             tar.close()
-            fp.close()
+            fp.seek(0)
             failures.append(self.post_archive(fp.name))
-            os.remove(fp.name)
             return failures
 
         queue = queuelib.Queue()
