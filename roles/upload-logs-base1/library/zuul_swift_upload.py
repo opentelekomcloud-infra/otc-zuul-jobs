@@ -161,6 +161,7 @@ class Uploader():
         failures = []
         if self.archive_mode:
             fp = tempfile.NamedTemporaryFile(delete=False)
+            fp.close()
             tar = tarfile.open(fp.name, "w:gz")
             for file in file_list:
                 try:
@@ -169,7 +170,6 @@ class Uploader():
                 except Exception:
                     pass
             tar.close()
-            fp.close()
             failures.append(self.post_archive(fp.name))
             os.remove(fp.name)
             return failures
