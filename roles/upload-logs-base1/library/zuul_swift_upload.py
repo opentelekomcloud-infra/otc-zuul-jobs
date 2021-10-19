@@ -60,7 +60,7 @@ except ImportError:
         retry_function,
     )
 
-MAX_UPLOAD_THREADS = 24
+MAX_UPLOAD_THREADS = 12
 
 
 def get_cloud(cloud):
