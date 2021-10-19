@@ -191,18 +191,19 @@ class Uploader():
         return failures
 
     def post_archive(self, name):
-        response = self.cloud.object_store.put(
-            "{}/{}?extract-archive=tar.gz".format(
-                self.container,
-                self.prefix,
-            ),
-            headers={
-                "X-Detect-Content-Type": "true",
-                "Content-Type": "application/gzip",
-                "X-Delete-After": str(self.delete_after)
-            },
-            data=open(name, 'rb')
-        )
+        with open(name, 'rb') as f:
+            response = self.cloud.object_store.put(
+                "{}/{}?extract-archive=tar.gz".format(
+                    self.container,
+                    self.prefix,
+                ),
+                headers={
+                    "X-Detect-Content-Type": "true",
+                    "Content-Type": "application/gzip",
+                    "X-Delete-After": str(self.delete_after)
+                },
+                data=f
+            )
         return [{"file": "archive.tar.gz", "error": response.text}]
 
     def post_thread(self, queue, failures):
