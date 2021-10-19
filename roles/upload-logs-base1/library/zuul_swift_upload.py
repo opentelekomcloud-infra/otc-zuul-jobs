@@ -201,7 +201,7 @@ class Uploader():
                 "Content-Type": "application/gzip",
                 "X-Delete-After": str(self.delete_after)
             },
-            data=open(name, 'r')
+            data=open(name, 'rb')
         )
         return [{"file": "archive.tar.gz", "error": response.text}]
 
