@@ -107,7 +107,7 @@
     description: |
       Run openstack collections linter tests using the 2.10 branch of ansible
     voting: true
-    nodeset: ubuntu-focal
+    nodeset: fedora-pod
     required-projects:
       - name: ansible/ansible
         override-checkout: stable-2.10
