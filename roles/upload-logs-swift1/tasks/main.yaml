@@ -10,14 +10,14 @@
     # Use chmod instead of file because ansible 2.5 file with recurse and
     # follow can't really handle symlinks to .
     - name: Ensure logs are readable before uploading
-      delegate_to: localhost
+      delegate_to: "{{ _undocumented_test_worker_node_ | default('localhost') }}"
       command: "chmod -R u=rwX,g=rX,o=rX {{ zuul.executor.log_root }}/"
       # ANSIBLE0007 chmod used in place of argument mode to file
       tags:
         - skip_ansible_lint
 
     - name: Upload logs to swift
-      delegate_to: localhost
+      delegate_to: "{{ _undocumented_test_worker_node_ | default('localhost') }}"
       zuul_swift_upload:
         cloud: "{{ zuul_log_cloud_config }}"
         partition: "{{ zuul_log_partition }}"
