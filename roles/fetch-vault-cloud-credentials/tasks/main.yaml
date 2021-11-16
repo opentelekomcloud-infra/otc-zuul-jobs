@@ -1,0 +1,33 @@
+- name: Get vault token
+  no_log: true
+  uri:
+    url: "{{ fetch_vault_cloud_credentials_vault.vault_addr }}/v1/auth/approle/login"
+    method: "POST"
+    body:
+      role_id: "{{ fetch_vault_cloud_credentials_vault.role_id }}"
+      secret_id: "{{ fetch_vault_cloud_credentials_vault.secret_id }}"
+    body_format: json
+  register: vault_token
+
+- name: Read credentials from vault
+  no_log: true
+  uri:
+    headers:
+      X-Vault-Token: "{{ vault_token.json.auth.client_token }}"
+    url: "{{ fetch_vault_cloud_credentials_vault.vault_addr }}/v1/secret/data/{{ fetch_vault_cloud_credentials_vault.secret_name | default(fetch_vault_cloud_credentials_secret_name) }}"
+  register: vault_data
+
+- name: Construct proper cloud credentials structure
+  no_log: true
+  set_fact:
+    cloud_config:
+      profile: "{{ vault_data.json.data.data.profile | default(omit) }}"
+      auth:
+        auth_url: "{{ vault_data.json.data.data.auth_url | default(omit) }}"
+        user_domain_name: "{{ vault_data.json.data.data.user_domain_name | default(omit) }}"
+        username: "{{ vault_data.json.data.data.username | default(omit) }}"
+        password: "{{ vault_data.json.data.data.password | default(omit) }}"
+        project_name: "{{ vault_data.json.data.data.project_name | default(omit) }}"
+        project_id: "{{ vault_data.json.data.data.project_id | default(omit) }}"
+      object_store_endpoint_override: "{{ vault_data.json.data.data.object_store_endpoint_override | default(omit) }}"
+  when: vault_data is defined

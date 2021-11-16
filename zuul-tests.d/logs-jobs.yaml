@@ -1,0 +1,20 @@
+- job:
+    name: zuul-jobs-upload-logs-swift
+    description: Test upload-logs-swift1 job
+    nodeset: fedora-pod
+    files:
+      - roles/upload-logs-swift1
+    run: test-playbooks/upload-logs.yaml
+    vars:
+      python_version: 3.9
+      vault_cloud_secret_name: "clouds/otcci_logs"
+    secrets:
+      - secret: zuul_jobs_vault
+        name: zuul_jobs_vault
+
+- project:
+    merge-mode: squash-merge
+    check-post: &id001
+      jobs:
+        - zuul-jobs-upload-logs-swift
+    gate: *id001

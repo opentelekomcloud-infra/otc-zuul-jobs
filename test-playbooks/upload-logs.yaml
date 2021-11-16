@@ -1,0 +1,42 @@
+---
+- hosts: all
+  vars:
+    _undocumented_test_worker_node_: "{{ inventory_hostname }}"
+  tasks:
+    - name: Install OpenStackSDK
+      pip:
+        name:
+          - openstacksdk
+
+    - name: Get cloud config from vault
+      no_log: true
+      vault_read:
+        vault_addr: "{{ zuul_jobs_vault.vault_addr }}"
+        role_id: "{{ zuul_jobs_vault.role_id }}"
+        secret_id: "{{ zuul_jobs_vault.secret_id }}"
+        mode: "cloud_config"
+        secret_name: "{{ vault_cloud_secret_name }}"
+      register: vault_data
+
+    - name: Create Fake Logdir
+      become: true
+      file:
+        state: directory
+        path: "{{ zuul.executor.log_root }}"
+        mode: "0777"
+      register: fake_zuul_logdir
+
+    - name: Add content to tempfile
+      copy:
+        content: "fake content"
+        dest: "{{ fake_zuul_logdir.path }}/testfile"
+
+    - name: Include upload logs role
+      no_log: true
+      include_role:
+        name: upload-logs-swift1
+      vars:
+        zuul_log_container_public: false
+        zuul_log_cloud_config: "{{ vault_data.secret }}"
+        zuul_log_delete_after: 600
+        zuul_log_container: "test"
