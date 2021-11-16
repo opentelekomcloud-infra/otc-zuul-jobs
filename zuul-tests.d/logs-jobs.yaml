@@ -4,6 +4,7 @@
     nodeset: fedora-pod
     files:
       - roles/upload-logs-swift1
+      - roles/upload-logs-base1
     run: test-playbooks/upload-logs.yaml
     vars:
       python_version: 3.9
