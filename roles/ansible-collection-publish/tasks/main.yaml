@@ -12,6 +12,7 @@
       register: _ansiblecfg_tmp
 
     - name: Create ansible.cfg configuration file
+      no_log: true
       template:
         dest: "{{ _ansiblecfg_tmp.path }}"
         mode: 0600
