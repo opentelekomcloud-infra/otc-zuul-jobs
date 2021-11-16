@@ -16,8 +16,18 @@
       tags:
         - skip_ansible_lint
 
+    - name: Delete blacklisted files
+      delegate_to: "{{ _undocumented_test_worker_node_ | default('localhost') }}"
+      file:
+        state: "absent"
+        path: "{{ zj_item }}"
+      loop: "{{ zuul_log_blacklist_files }}"
+      loop_control:
+        loop_var: zj_item
+
     - name: Upload logs to swift
       delegate_to: "{{ _undocumented_test_worker_node_ | default('localhost') }}"
+      no_log: true
       zuul_swift_upload:
         cloud: "{{ zuul_log_cloud_config }}"
         partition: "{{ zuul_log_partition }}"

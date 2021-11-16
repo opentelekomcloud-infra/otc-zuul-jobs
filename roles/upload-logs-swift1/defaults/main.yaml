@@ -2,3 +2,5 @@ zuul_log_partition: false
 zuul_log_container: logs
 zuul_log_container_public: true
 zuul_log_create_indexes: true
+zuul_log_blacklist:
+  - job-output.json
