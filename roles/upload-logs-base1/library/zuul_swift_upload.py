@@ -349,7 +349,7 @@ def run(cloud, container, files,
 def ansible_main():
     module = AnsibleModule(
         argument_spec=dict(
-            cloud=dict(required=True, type='raw'),
+            cloud=dict(required=True, type='raw', no_log=True),
             container=dict(required=True, type='str'),
             files=dict(required=True, type='list'),
             partition=dict(type='bool', default=False),
