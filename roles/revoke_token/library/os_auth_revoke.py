@@ -46,8 +46,8 @@ def get_cloud(cloud):
 def main():
     module = AnsibleModule(
         argument_spec=dict(
-            cloud=dict(required=True, type='raw'),
-            revoke_token=dict(required=True, type='str')
+            cloud=dict(required=True, type='raw', no_log=True),
+            revoke_token=dict(required=True, type='str', no_log=True)
         )
     )
 
