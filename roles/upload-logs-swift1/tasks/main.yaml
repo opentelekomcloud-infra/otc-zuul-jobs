@@ -25,6 +25,13 @@
       loop_control:
         loop_var: zj_item
 
+    # Job-output.json may contain sensitive information. Unless we know how to
+    # sanitize it properly simply enforce it is empty
+    - name: Create dummy job-output.json
+      copy:
+        dest: "{{ zuul.executor.log_root }}/job-output.json"
+        content: ""
+
     - name: Upload logs to swift
       delegate_to: "{{ _undocumented_test_worker_node_ | default('localhost') }}"
       no_log: true
