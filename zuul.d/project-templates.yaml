@@ -23,7 +23,7 @@
         - otc-tox-pep8
         # - tox-functional
         # - tox-linters-ansible-devel
-        - tox-linters-ansible-2.10
+        - tox-linters
         - ansible-collection-build
         - ansible-collection-test-sanity
         - ansible-collection-test-units
@@ -33,7 +33,7 @@
       jobs:
         - otc-tox-pep8
         # - tox-linters-ansible-devel
-        - tox-linters-ansible-2.10
+        - tox-linters
         - ansible-collection-build
         - ansible-collection-test-sanity
         - ansible-collection-test-units
