@@ -1,0 +1,56 @@
+---
+- hosts: all
+  vars:
+    extra_vars_file: "{{ zuul.project.src_dir }}/extra_vars.yaml"
+    playbook_file: "{{ ansible_user_dir }}/wrk/playbooks/gitstyring.yaml"
+    log_file: "{{ ansible_user_dir }}/gitstyring.txt"
+  tasks:
+    - name: Create extra_vars tempfile
+      tempfile:
+        state: file
+      register: extra_vars_tmp
+
+    - name: Set extra_vars
+      no_log: true
+      set_fact:
+        extra_vars:
+          vault:
+            secret_name: "{{ zuul_gitcontrol_vault.secret_name }}"
+            vault_addr: "{{ zuul_gitcontrol_vault.vault_addr }}"
+            role_id: "{{ zuul_gitcontrol_vault.role_id }}"
+            secret_id: "{{ zuul_gitcontrol_vault.secret_id }}"
+          gitcontrol_organizations: "{{ gitcontrol_organizations }}"
+          gitcontrol_root_dir: "{{ gitcontrol_root_dir }}"
+
+    - name: Construct execution command
+      set_fact:
+        ansible_command: >-
+          {{ ensure_ansible_ansible_executable }}-playbook
+          {{ playbook_file }}
+          -e "@{{ extra_vars_tmp.path }}"
+          {{ check_mode | ternary('--check', '', '') }}
+          -v
+
+    - block:
+        - name: Dump extra_vars
+          copy:
+            dest: "{{ extra_vars_tmp.path }}"
+            content: "{{ extra_vars | to_nice_yaml }}"
+            mode: "0600"
+
+        - name: Log execution header
+          shell: 'echo "Running {{ ansible_command }}" > {{ log_file }}'
+
+        - name: Apply configuration
+          shell: "{{ ansible_command }} >> {{ log_file }}"
+
+      always:
+        - name: Shred extra_vars file
+          command: "shred {{ extra_vars_tmp.path }}"
+
+        - name: Fetch log
+          fetch:
+            src: "{{ log_file }}"
+            dest: "{{ zuul.executor.log_root }}/gitstyring.txt"
+            flat: true
+          ignore_errors: true

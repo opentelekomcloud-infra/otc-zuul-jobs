@@ -1,0 +1,60 @@
+---
+- name: Initialize variables
+  set_fact:
+    repo_branch_protections: []
+
+- name: Substitute branch protection template with the content
+  set_fact:
+    repo_branch_protections: "{{
+        repo_branch_protections +
+        [ org.branch_protection_templates[zj_bp.template] | combine({'branch': zj_bp['branch']}) ]
+      }}"
+  loop: "{{ repo.branch_protections }}"
+  loop_control:
+    loop_var: "zj_bp"
+  when:
+    - "repo.branch_protections is defined"
+    - "'template' in zj_bp"
+
+- name: Append original (non template) branch protections
+  set_fact:
+    repo_branch_protections: "{{
+        repo_branch_protections +
+        [zj_bp]
+      }}"
+  loop: "{{ repo.branch_protections }}"
+  loop_control:
+    loop_var: "zj_bp"
+  when:
+    - "repo.branch_protections is defined"
+    - "'template' not in zj_bp"
+
+- name: "Apply repository {{ repo_name }}"
+  opentelekomcloud.gitcontrol.github_org_repository:
+    token: "{{ github_token }}"
+    owner: "{{ organization }}"
+    name: "{{ repo.name | default(repo_name) }}"
+    state: "{{ repo.state | default('present') }}"
+    description: "{{ repo.description | default(omit) }}"
+    homepage: "{{ repo.homepage | default(omit) }}"
+    archived: "{{ repo.archived | default(omit) }}"
+    has_issues: "{{ repo.has_issues | default(omit) }}"
+    has_projects: "{{ repo.has_projects | default(omit) }}"
+    has_wiki: "{{ repo.has_wiki | default(omit) }}"
+    private: "{{ repo.private | default(omit) }}"
+    visibility: "{{ repo.visibility | default(omit) }}"
+    is_template: "{{ repo.is_template | default(omit) }}"
+    auto_init: "{{ repo.auto_init | default(omit) }}"
+    gitignore_template: "{{ repo.gitignore_template | default(omit) }}"
+    license_template: "{{ repo.license_template | default(omit) }}"
+    allow_forking: "{{ repo.allow_forking | default(omit) }}"
+    allow_squash_merge: "{{ repo.allow_squash_merge | default(omit) }}"
+    allow_merge_commit: "{{ repo.allow_merge_commit | default(omit) }}"
+    allow_rebase_merge: "{{ repo.allow_rebase_merge | default(omit) }}"
+    allow_auto_merge: "{{ repo.allow_auto_merge | default(omit) }}"
+    delete_branch_on_merge: "{{ repo.delete_branch_on_merge | default(omit) }}"
+    default_branch: "{{ repo.default_branch | default(omit) }}"
+    topics: "{{ repo.topics | default(omit) }}"
+    teams: "{{ repo.teams | default(omit) }}"
+    collaborators: "{{ repo.collaborators | default(omit) }}"
+    branch_protections: "{{ repo_branch_protections | default(omit) }}"

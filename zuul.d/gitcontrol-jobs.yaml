@@ -1,0 +1,16 @@
+- job:
+    name: gitcontrol-apply
+    parent: unittests
+    nodeset: fedora-pod
+    description: |
+      Apply collection
+    pre-run: playbooks/gitcontrol/pre.yaml
+    run: playbooks/gitcontrol/run.yaml
+    vars:
+      check_mode: false
+
+- job:
+    name: gitcontrol-apply-dry-run
+    parent: gitcontrol-apply
+    vars:
+      check_mode: true

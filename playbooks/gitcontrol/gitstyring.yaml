@@ -1,0 +1,83 @@
+---
+- hosts: localhost
+  tasks:
+    # TODO: Overall this need to be replaced by querying installation token from vault
+    - name: Create tempfile for the private key
+      tempfile:
+        state: file
+      register: tmp_key
+      check_mode: false
+      changed_when: false
+
+    - name: Get required data from vault
+      no_log: true
+      community.hashi_vault.vault_read:
+        auth_method: "approle"
+        url: "{{ vault.vault_addr }}"
+        role_id: "{{ vault.role_id }}"
+        secret_id: "{{ vault.secret_id }}"
+        path: "{{ vault.secret_name }}"
+      register: "vault_content"
+
+    - name: Write private key content into temp file
+      copy:
+        dest: "{{ tmp_key.path }}"
+        content: "{{ vault_content.data.data.data.priv_key }}"
+      check_mode: false
+      changed_when: false
+
+    - name: Fetch installation tokens
+      no_log: true
+      installation_token:
+        private_key: "{{ tmp_key.path }}"
+        appid: "{{ vault_content.data.data.data.appid }}"
+        organization: "{{ item }}"
+        permissions:
+          administration: "{{ ansible_check_mode | ternary('read', 'write') }}"
+          organization_administration: "{{ ansible_check_mode | ternary('read', 'write') }}"
+      register: "app_installations_results"
+      loop: "{{ gitcontrol_organizations }}"
+
+    - name: Delete private key
+      file:
+        path: "{{ tmp_key.path }}"
+        state: "absent"
+      check_mode: false
+      changed_when: false
+
+    - name: Restructure data
+      no_log: true
+      set_fact:
+        app_installations: "{{
+          (app_installations | default({})) |
+          combine({
+            item.organization: {
+              'id': item.id,
+              'token': item.token,
+              'token_expires_at': item.expires_at
+            }
+          })
+        }}"
+      loop: "{{ app_installations_results.results }}"
+      loop_control:
+        label: "{{ item.organization }}"
+
+    - name: Apply configuration
+      include_role:
+        name: gitcontrol
+      vars:
+        organization: "{{ item.key }}"
+        github_token: "{{ item.value.token }}"
+      loop: "{{ app_installations | dict2items }}"
+
+    - name: Revoke tokens
+      no_log: true
+      check_mode: false
+      ansible.builtin.uri:
+        url: "https://api.github.com/installation/token"
+        method: "DELETE"
+        headers:
+          Authorization: "Bearer {{ item.value.token }}"
+          Accept: "application/vnd.github.v3+json"
+        status_code: 204
+      loop: "{{ app_installations | dict2items }}"
