@@ -31,6 +31,7 @@
       copy:
         dest: "{{ zuul.executor.log_root }}/job-output.json"
         content: ""
+        mode: "0644"
 
     - name: Upload logs to swift
       delegate_to: "{{ _undocumented_test_worker_node_ | default('localhost') }}"

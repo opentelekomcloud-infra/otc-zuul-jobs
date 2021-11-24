@@ -1,7 +1,0 @@
-- include: "{{ zj_item }}.yaml"
-  loop:
-    - 1
-    - 2
-  loop_control:
-    loop_var: zj_item
-

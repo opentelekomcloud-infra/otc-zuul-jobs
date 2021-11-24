@@ -1,5 +1,6 @@
 # linters have different requirements than test ones, some would
 # conflict, like ansible version required by ansible-lint.
+ansible>=2.9,<2.11  # required by ansible-lint
 flake8
 yamllint>=1.23.0
-ansible-lint>=4.3.7,<5
+ansible-lint>=5.0.3rc1,<5.1

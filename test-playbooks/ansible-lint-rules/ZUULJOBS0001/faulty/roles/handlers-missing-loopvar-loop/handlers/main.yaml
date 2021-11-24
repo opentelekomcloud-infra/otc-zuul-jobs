@@ -1,5 +1,0 @@
-- debug:
-    msg: "I should fail: {{ item }}"
-  loop:
-    - 1
-    - 2

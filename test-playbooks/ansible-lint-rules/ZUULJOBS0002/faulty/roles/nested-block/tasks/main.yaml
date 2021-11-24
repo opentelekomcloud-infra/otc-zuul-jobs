@@ -1,5 +1,0 @@
-- block:
-    - block:
-        - synchronize:
-            src: dummy
-            dest: dummy

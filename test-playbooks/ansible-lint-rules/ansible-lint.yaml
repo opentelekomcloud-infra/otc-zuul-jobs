@@ -1,7 +1,0 @@
-parseable: true
-quiet: false
-rulesdir:
-  - ../../.rules/
-skip_list:
-  - 306
-verbosity: 1

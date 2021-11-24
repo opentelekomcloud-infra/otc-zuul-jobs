@@ -3,19 +3,20 @@ exclude_paths:
   - zuul.d/secrets.yaml
 parseable: true
 quiet: false
+mock_modules:
+  - zuul_return
+  - zuul_console
+  - community.hashi_vault.vault_read
+  - opentelekomcloud.gitcontrol.github_org_members
+  - opentelekomcloud.gitcontrol.github_org_teams
+  - opentelekomcloud.gitcontrol.github_org_repository
+loop_var_prefix: zj_
+enable_list:
+  - no-same-owner
 skip_list:
-  - '106'  # Role name does not match ``^[a-z][a-z0-9_]+$`` pattern
-  - '204'  # Lines should be no longer than 160 chars
-           # TODO(AJaeger): E208 gives false positives currently, we
-           # should enable it once all issues in zuul-jobs and
-           # ansible-lint are fixed.
-  - '208'  # File permissions not mentioned
-  - '301'  # Commands should not change things if nothing needs doing
-  - '302'  # Using command rather than an argument to e.g. file
-  - '701'  # No 'galaxy_info' found
-warn_list:
-  - '303'  # Using command rather than module  
-rulesdir:
-  - ./.rules/
+  - meta-no-info  # No 'galaxy_info' found
+  - no-changed-when  # Commands should not change things if nothing needs doing
+  - no-tabs  # Most files should not contain tabs
+  - role-name  # Role name does not match ``^[a-z][a-z0-9_]+$`` pattern
 use_default_rules: true
 verbosity: 1

@@ -57,12 +57,13 @@
         src: "{{ temp_subunit_file.path }}"
         dest: "{{ zuul_work_dir }}/testrepository.subunit"
         remote_src: yes
+        mode: "0644"
 
     - name: Remove the temporary file
       file:
         name: "{{ temp_subunit_file.path }}"
         state: absent
-      ignore_errors: true
+      failed_when: "false"
 
     - name: Process and fetch subunit results
       include: process.yaml

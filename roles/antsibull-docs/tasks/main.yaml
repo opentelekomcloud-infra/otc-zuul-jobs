@@ -25,6 +25,7 @@
   file:
     state: "directory"
     path: "{{ antsibull_docs_dir }}"
+    mode: "0755"
 
 # We want that local content takes precedence. Therefore apply local on top of
 # generated and copy back
@@ -33,6 +34,7 @@
     src: "{{ antsibull_docs_dir }}"
     dest: "{{ antsibull_docs_tmp_dir }}"
     remote_src: True
+    mode: "0755"
   when: doc_stat.stat.exists
 
 - name: Copy resulting content into destination
@@ -40,6 +42,7 @@
     src: "{{ antsibull_docs_tmp_dir }}"
     dest: "{{ antsibull_docs_dir }}"
     remote_src: True
+    mode: "0755"
 
 - name: Find common_return_values
   stat:
@@ -50,6 +53,7 @@
   copy:
     src: "common_return_values.rst"
     dest: "{{ antsibull_docs_dir }}/common_return_values.rst"
+    mode: "0644"
   when: not common_return_values_stat.stat.exists
 
 - name: Find list_of_all_collections
@@ -61,9 +65,11 @@
   copy:
     src: "list_of_collections.rst"
     dest: "{{ antsibull_docs_dir }}/list_of_collections.rst"
+    mode: "0644"
   when: not list_stat.stat.exists
 
 - name: Ensure _static folder exists
   file:
     path: "{{ antsibull_docs_dir }}/_static"
     state: "directory"
+    mode: "0755"

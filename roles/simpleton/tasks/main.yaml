@@ -3,6 +3,7 @@
   template:
     src: "Dockerfile.j2"
     dest: "{{ zuul_work_dir }}/Dockerfile"
+    mode: "0644"
 
 - name: Files to be written to image
   command: "ls -l"

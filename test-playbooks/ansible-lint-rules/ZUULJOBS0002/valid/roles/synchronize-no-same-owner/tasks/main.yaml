@@ -1,5 +1,0 @@
-- synchronize:
-    src: dummy
-    dest: dummy
-    owner: no
-    group: no
