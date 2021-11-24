@@ -1,4 +1,0 @@
-- include: "{{ item }}.yaml"
-  loop:
-    - 1
-    - 2

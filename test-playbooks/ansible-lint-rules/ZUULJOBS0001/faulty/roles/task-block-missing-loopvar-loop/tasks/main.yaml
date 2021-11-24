@@ -1,6 +1,0 @@
-- block:
-    - debug:
-        var: item
-      loop:
-        - 1
-        - 2

@@ -2,6 +2,7 @@
   template:
     src: accounts.yaml.j2
     dest: "{{ tempest_accounts_file }}"
+    mode: "0644"
 
 - name: Generate tempest.conf
   vars:
@@ -9,11 +10,13 @@
   template:
     src: tempest.conf.j2
     dest: "{{ zuul_work_dir }}/tempest.conf"
+    mode: "0644"
 
 - name: Generate tests list
   copy:
     content: "{{ tempest_tests }}"
     dest: "{{ zuul_work_dir }}/.test_list"
+    mode: "0644"
   when:
     - tempest_tests is defined
     - tempest_tests|length > 0

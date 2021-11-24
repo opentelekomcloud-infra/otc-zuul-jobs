@@ -18,7 +18,8 @@
     _start_at: "{{ number_entries|int // ansible_test_split_in * (ansible_test_do_number -1)|int }}"
     _end_at: "{{ (number_entries|int // ansible_test_split_in * (ansible_test_do_number |int)) }}"
 
-- debug:
+- name: Debug
+  debug:
     msg: "Do roles: {{ ansible_test_targets.stdout_lines[_start_at|int:_end_at|int] }}"
 
 - name: Define integration targets

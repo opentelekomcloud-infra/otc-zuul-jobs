@@ -1,5 +1,0 @@
-- debug:
-    msg: "I should fail: {{ item }}"
-  with_list:
-    - 1
-    - 2

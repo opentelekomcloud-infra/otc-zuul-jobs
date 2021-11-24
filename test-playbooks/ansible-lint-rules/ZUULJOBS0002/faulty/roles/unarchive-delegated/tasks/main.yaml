@@ -1,4 +1,0 @@
-- unarchive:
-    src: "{{ file }}.tar.bz2"
-    dest: "dummy"
-  delegate_to: localhost

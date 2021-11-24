@@ -31,6 +31,7 @@
     src: "{{ zj_item }}"
     dest: "{{ _test_location }}/tests/integration/"
     remote_src: true
+    mode: "0755"
   with_fileglob:
     - "{{ ansible_test_ansible_path }}/test/integration/cloud-config-*.ini"
   loop_control:

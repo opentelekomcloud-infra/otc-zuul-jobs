@@ -1,4 +1,0 @@
-- synchronize:
-    src: dummy
-    dest: dummy
-  delegate_to: localhost

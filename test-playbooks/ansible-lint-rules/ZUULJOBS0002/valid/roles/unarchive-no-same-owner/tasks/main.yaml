@@ -1,5 +1,0 @@
-- unarchive:
-    src: "{{ file }}.tar.gz"
-    dest: dummy
-    extra_opts:
-      - '--no-same-owner'

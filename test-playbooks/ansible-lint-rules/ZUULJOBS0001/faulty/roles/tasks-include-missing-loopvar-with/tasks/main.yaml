@@ -1,4 +1,0 @@
-- include: "{{ item }}.yaml"
-  with_list:
-    - 1
-    - 2

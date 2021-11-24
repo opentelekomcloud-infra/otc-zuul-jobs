@@ -1,5 +1,0 @@
-- debug:  # noqa ZUULJOBS0001
-    var: item
-  loop:
-    - 1
-    - 2

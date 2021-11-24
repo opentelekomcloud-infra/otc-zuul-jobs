@@ -1,3 +1,0 @@
-- unarchive:
-    src: "{{ file }}.tar.gz"
-    dest: "dummy"

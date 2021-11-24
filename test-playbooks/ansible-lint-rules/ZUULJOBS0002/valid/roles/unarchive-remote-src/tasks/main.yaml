@@ -1,4 +1,0 @@
-- unarchive:
-     src: "{{ file }}.tar.xz"
-     dest: "dummy"
-     remote_src: true
