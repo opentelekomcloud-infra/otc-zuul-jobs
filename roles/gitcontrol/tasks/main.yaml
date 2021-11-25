@@ -11,7 +11,7 @@
 
 - name: Apply {{ organization }} members
   opentelekomcloud.gitcontrol.github_org_members:
-    token: "{{ token }}"
+    token: "{{ github_token }}"
     organization: "{{ organization }}"
     members: "{{ org.members }}"
     exclusive: "{{ org.exclusive | default(True) }}"
@@ -22,7 +22,7 @@
 
 - name: Apply {{ organization }} teams
   opentelekomcloud.gitcontrol.github_org_teams:
-    token: "{{ token }}"
+    token: "{{ github_token }}"
     organization: "{{ organization }}"
     teams: "{{ org.teams | default([]) }}"
     exclusive: "{{ org.exclusive | default(True) }}"
