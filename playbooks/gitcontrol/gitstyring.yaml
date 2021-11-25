@@ -34,6 +34,7 @@
         organization: "{{ item }}"
         permissions:
           administration: "{{ ansible_check_mode | ternary('read', 'write') }}"
+          members: "{{ ansible_check_mode | ternary('read', 'write') }}"
           organization_administration: "{{ ansible_check_mode | ternary('read', 'write') }}"
       register: "app_installations_results"
       loop: "{{ gitcontrol_organizations }}"
