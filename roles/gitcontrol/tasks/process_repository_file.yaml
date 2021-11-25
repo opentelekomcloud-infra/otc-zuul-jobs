@@ -1,0 +1,9 @@
+---
+- name: Process repo
+  include_tasks: apply_repository.yaml
+  vars:
+    repo: "{{ zj_item.value }}"
+    repo_name: "{{ zj_item.key }}"
+  loop: "{{ data | dict2items }}"
+  loop_control:
+    loop_var: "zj_item"

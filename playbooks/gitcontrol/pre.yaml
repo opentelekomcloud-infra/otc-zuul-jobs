@@ -1,0 +1,46 @@
+---
+- hosts: all
+  roles:
+    - role: ansible-collection-install
+      vars:
+        ansible_collection_install_galaxy_collection_name: "git+https://github.com/opentelekomcloud/ansible-collection-gitcontrol.git,main"
+
+- hosts: all
+  tasks:
+    - name: Install required python dependencies
+      pip:
+        virtualenv: "{{ ensure_ansible_root_dir }}"
+        name:
+          - requests
+          - hvac
+
+    - name: Install required Ansible collections
+      command: "{{ ensure_ansible_galaxy_executable }} collection install {{ item }}"
+      loop:
+        - community.hashi_vault
+
+    - name: Prepare execution folders
+      file:
+        path: "{{ ansible_user_dir }}/wrk/{{ zj_item }}"
+        state: "directory"
+        mode: "0755"
+      loop:
+        - "playbooks"
+        - "playbooks/roles"
+        - "playbooks/library"
+      loop_control:
+        loop_var: "zj_item"
+
+    - name: Copy required content
+      copy:
+        dest: "{{ ansible_user_dir }}/wrk/{{ zj_item.dest }}"
+        src: "{{ zj_item.src }}"
+      loop:
+        - src: "../../roles/gitcontrol/"
+          dest: "playbooks/roles/gitcontrol"
+        - src: "../library/"
+          dest: "playbooks/library"
+        - src: "gitstyring.yaml"
+          dest: "playbooks/gitstyring.yaml"
+      loop_control:
+        loop_var: "zj_item"
