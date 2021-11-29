@@ -38,3 +38,10 @@
     vars:
       go_version: "1.16.3"
       goreleaser_args: "--snapshot --rm-dist --skip-publish --skip-sign"
+
+- job:
+    name: otc-golangci-lint
+    parent: golangci-lint
+    nodeset: fedora-pod
+    vars:
+      golangci_lint_version: 1.43.0
