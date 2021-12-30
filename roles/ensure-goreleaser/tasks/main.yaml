@@ -14,7 +14,7 @@
 - name: Invoke goreleaser fetcher
   command: "{{ tempdir.path }}/goreleaser.sh"
   environment:
-    BINDIR: "{{ goreleaser_bin_location }}"
+    TMPDIR: "{{ goreleaser_bin_location }}"
 
 - name: Set path to goreleaser
   set_fact:
