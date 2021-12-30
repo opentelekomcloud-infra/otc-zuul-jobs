@@ -7,16 +7,16 @@
 
 - name: Fetch goreleaser fetcher
   get_url:
-    url: "https://install.goreleaser.com/github.com/goreleaser/goreleaser.sh"
+    url: "https://git.io/goreleaser"
     dest: "{{ tempdir.path }}/goreleaser.sh"
     mode: 0775
 
 - name: Invoke goreleaser fetcher
-  command: "{{ tempdir.path }}/goreleaser.sh"
+  command: "{{ tempdir.path }}/goreleaser.sh --version"
   environment:
-    BINDIR: "{{ goreleaser_bin_location }}"
+    TMPDIR: "{{ tempdir.path }}"
 
 - name: Set path to goreleaser
   set_fact:
-    goreleaser_bin: "{{ goreleaser_bin_location }}/goreleaser"
+    goreleaser_bin: "{{ tempdir.path }}/goreleaser"
     cacheable: true
