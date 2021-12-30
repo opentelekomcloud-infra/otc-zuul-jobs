@@ -18,5 +18,5 @@
 
 - name: Set path to goreleaser
   set_fact:
-    goreleaser_bin: "{{ goreleaser_bin_location }}/goreleaser"
+    goreleaser_bin: "{{ tempdir.path }}/goreleaser"
     cacheable: true
