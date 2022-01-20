@@ -1,3 +1,3 @@
 ---
 goreleaser_bin_location: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/bin"
-goreleaser_version: "v1.3.0"
+goreleaser_version: ""
