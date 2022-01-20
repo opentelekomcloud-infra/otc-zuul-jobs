@@ -5,18 +5,35 @@
     suffix: build
   register: tempdir
 
-- name: Fetch goreleaser fetcher
-  get_url:
-    url: "https://git.io/goreleaser"
-    dest: "{{ tempdir.path }}/goreleaser.sh"
-    mode: 0775
+- name: Get tag name if version not defined
+  uri:
+    url: "https://api.github.com/repos/goreleaser/goreleaser/releases/latest"
+    return_content: yes
+  register: release
+  when: goreleaser_version|length == 0
 
-- name: Invoke goreleaser fetcher
-  command: "{{ tempdir.path }}/goreleaser.sh --version"
-  environment:
-    TMPDIR: "{{ tempdir.path }}"
+- name: Download GoReleaser
+  get_url:
+    url: "https://github.com/goreleaser/goreleaser/releases/download/{{ goreleaser_version or release.json.tag_name }}/goreleaser_{{ ansible_system }}_{{ ansible_architecture }}.tar.gz"
+    dest: "{{ tempdir.path }}/goreleaser.tar.gz"
+    force: yes
+
+- name: Create BINDIR
+  file:
+    path: "{{ goreleaser_bin_location }}"
+    state: directory
+    mode: "0755"
+
+- name: Unarchive GoReleaser
+  unarchive:
+    src: "{{ tempdir.path }}/goreleaser.tar.gz"
+    dest: "{{ goreleaser_bin_location }}"
+    remote_src: yes
+
+- name: Check goreleaser version
+  command: "{{ goreleaser_bin_location }}/goreleaser --version"
 
 - name: Set path to goreleaser
   set_fact:
-    goreleaser_bin: "{{ tempdir.path }}/goreleaser"
+    goreleaser_bin: "{{ goreleaser_bin_location }}/goreleaser"
     cacheable: true
