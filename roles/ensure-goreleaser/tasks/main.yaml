@@ -28,6 +28,7 @@
   unarchive:
     src: "{{ tempdir.path }}/goreleaser.tar.gz"
     dest: "{{ goreleaser_bin_location }}"
+    remote_src: yes
 
 - name: Set path to goreleaser
   set_fact:
