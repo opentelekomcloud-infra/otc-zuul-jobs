@@ -8,6 +8,7 @@
 - name: Get tag name if version defined
   uri:
     url: "https://api.github.com/repos/goreleaser/goreleaser/releases/tags/{{ goreleaser_version }}"
+    return_content: yes
   register: release
   when: goreleaser_version != ""
 
