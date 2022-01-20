@@ -7,7 +7,7 @@
 
 - name: Get tag name if version not defined
   uri:
-    url: "https://api.github.com/repos/goreleaser/goreleaser/releases/tags/{{ goreleaser_version }}"
+    url: "https://api.github.com/repos/goreleaser/goreleaser/releases/latest"
     return_content: yes
   register: release
   when: goreleaser_version|length == 0
