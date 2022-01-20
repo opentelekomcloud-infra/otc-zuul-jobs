@@ -5,18 +5,18 @@
     suffix: build
   register: tempdir
 
+- name: Get tag name if version defined
+  uri:
+    url: "https://api.github.com/repos/goreleaser/goreleaser/releases/tags/{{ goreleaser_version }}"
+  register: release
+  when: goreleaser_version != ""
+
 - name: Get tag name if version not defined
   uri:
     url: "https://api.github.com/repos/goreleaser/goreleaser/releases/latest"
     return_content: yes
   register: release
   when: goreleaser_version == ""
-
-- name: Get tag name if version defined
-  uri:
-    url: "https://api.github.com/repos/goreleaser/goreleaser/releases/tags/{{ goreleaser_version }}"
-  register: release
-  when: goreleaser_version != ""
 
 - name: Download GoReleaser
   get_url:
