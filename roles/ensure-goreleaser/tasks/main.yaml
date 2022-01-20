@@ -24,6 +24,12 @@
     dest: "{{ tempdir.path }}/goreleaser.tar.gz"
     force: yes
 
+- name: Create BINDIR
+  file:
+    path: "{{ goreleaser_bin_location }}"
+    state: directory
+    mode: "0755"
+
 - name: Unarchive GoReleaser
   unarchive:
     src: "{{ tempdir.path }}/goreleaser.tar.gz"
