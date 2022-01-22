@@ -1,0 +1,23 @@
+- name: Create temp directory
+  tempfile:
+    state: directory
+  register: vault_archive_tempdir
+
+- name: Download vault checksums
+  uri:
+    url: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_SHA256SUMS"
+    return_content: true
+  register: vault_checksums
+
+- name: Download vault archive
+  get_url:
+    url: "https://releases.hashicorp.com/vault/{{ vault_version }}/vault_{{ vault_version }}_{{ vault_os }}_{{ vault_arch }}.zip"
+    dest: "{{ vault_archive_tempdir.path }}/vault_{{ vault_version }}_{{ vault_os }}_{{ vault_arch }}.zip"
+    checksum: "sha256:{{ vault_checksums.content | regex_search('(?P<checksum>.*)\\b\\s+vault_'+vault_version+'_'+vault_os+'_'+vault_arch, '\\g<checksum>') }}"
+
+- name: Install vault
+  unarchive:
+    src: "{{ vault_archive_tempdir.path }}/vault_{{ vault_version }}_{{ vault_os }}_{{ vault_arch }}.zip"
+    dest: "{{ vault_install_dir }}"
+    remote_src: yes
+  become: true

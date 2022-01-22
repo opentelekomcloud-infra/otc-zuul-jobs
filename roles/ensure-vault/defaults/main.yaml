@@ -1,0 +1,4 @@
+vault_version: "1.9.2"
+vault_os: "{{ ansible_system | lower }}"
+vault_arch: "{{ vault_arch_translation[ansible_architecture] }}"
+vault_install_dir: "/usr/local/bin"
