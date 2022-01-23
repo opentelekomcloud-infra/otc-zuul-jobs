@@ -4,16 +4,16 @@ Create HashiVault AppRole wrapped secret-id.
 
 .. zuul:rolevar:: vault_role_name
 
-   AppRole name to try to generate secret-id for
+   AppRole name to try to generate secret-id for.
 
 .. zuul:rolevar:: zuul_vault_addr
 
-   HashiVault URL
+   HashiVault URL.
 
 .. zuul:rolevar:: vault_token
 
    Token with privileges to check presence of the application role and generate
-   new secret-id
+   new secret-id.
 
 .. zuul:rolevar:: vault_secret_dest
 

@@ -1,0 +1,23 @@
+- hosts: all
+  vars:
+    vault_addr: "http://127.0.0.1:8200"
+    vault_token: "root"
+  roles:
+    - ensure-vault
+  tasks:
+    - name: Start vault in dev mode
+      command: "/usr/local/bin/vault server -dev -dev-root-token-id=root"
+      async: 300
+      poll: 0
+
+    - name: Destroy vault token
+      include_role:
+        name: "destroy-vault-token"
+
+    - name: Check the token was revoked
+      uri:
+        url: "{{ vault_addr }}/v1/auth/token/lookup-self"
+        headers:
+          X-Vault-Token: "{{ vault_token }}"
+        method: "GET"
+        status_code: 403

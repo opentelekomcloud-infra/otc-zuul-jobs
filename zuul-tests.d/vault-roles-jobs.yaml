@@ -22,6 +22,14 @@
       - roles/create-vault-approle-token
     run: test-playbooks/create-vault-approle-token.yaml
 
+- job:
+    name: zuul-jobs-test-destroy-vault-token
+    description: Test destroy-vault-token job
+    files:
+      - roles/ensure-vault
+      - roles/destroy-vault-token
+    run: test-playbooks/destroy-vault-token.yaml
+
 - project:
     merge-mode: squash-merge
     check: &id001
@@ -29,4 +37,5 @@
         - zuul-jobs-test-ensure-vault
         - zuul-jobs-test-create-vault-approle-secret
         - zuul-jobs-test-create-vault-approle-token
+        - zuul-jobs-test-destroy-vault-token
     gate: *id001

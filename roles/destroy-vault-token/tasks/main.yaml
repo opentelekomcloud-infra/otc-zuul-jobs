@@ -1,0 +1,9 @@
+- name: Destroy vault token
+  no_log: true
+  uri:
+    url: "{{ vault_addr }}/v1/auth/token/revoke-self"
+    headers:
+      X-Vault-Token: "{{ vault_token }}"
+    method: "POST"
+    status_code: 204
+  when:

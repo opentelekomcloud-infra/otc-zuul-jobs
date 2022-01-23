@@ -6,13 +6,18 @@ Create File with vault approle login token
 
    Vault URL.
 
-.. zuul:rolevar:: vault_client_token
+.. zuul:rolevar:: vault_token
 
-   Client token to use for unwrapping secret_id,
+   Client token to use for unwrapping secret_id.
 
 .. zuul:rolevar:: vault_wrapping_token_id
 
    Wrapped secret-id.
+
+.. zuul:rolevar:: vault_role_name
+
+   Role name or the AppRole. If set together with wrapped
+   secret-id is used to verify wrapped token.
 
 .. zuul:rolevar:: vault_role_id
 
