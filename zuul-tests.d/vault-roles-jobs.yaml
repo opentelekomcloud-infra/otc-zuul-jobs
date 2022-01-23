@@ -1,0 +1,13 @@
+- job:
+    name: zuul-jobs-test-ensure-vault
+    description: Test ensure-vault job
+    files:
+      - roles/ensure-vault
+    run: test-playbooks/ensure-vault.yaml
+
+- project:
+    merge-mode: squash-merge
+    check: &id001
+      jobs:
+        - zuul-jobs-test-ensure-vault
+    gate: *id001

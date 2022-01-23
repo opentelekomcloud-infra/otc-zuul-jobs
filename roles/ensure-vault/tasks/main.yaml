@@ -1,0 +1,12 @@
+- name: Check installed vault version
+  command: vault version
+  register: vault_installed_version
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ vault_install_dir }}"
+  failed_when: false
+
+- name: Skip if correct version of vault is installed
+  include_tasks: install-vault.yaml
+  when:
+    - vault_installed_version.rc != 0 or
+      vault_version != (vault_installed_version.stdout|regex_replace(vault_version_pattern, '\\g<version>'))
