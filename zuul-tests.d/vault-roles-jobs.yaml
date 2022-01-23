@@ -13,10 +13,20 @@
       - roles/create-vault-approle-secret
     run: test-playbooks/create-vault-approle-secret.yaml
 
+- job:
+    name: zuul-jobs-test-create-vault-approle-token
+    description: Test create-vault-approle-token job
+    files:
+      - roles/ensure-vault
+      - roles/create-vault-approle-secret
+      - roles/create-vault-approle-token
+    run: test-playbooks/create-vault-approle-token.yaml
+
 - project:
     merge-mode: squash-merge
     check: &id001
       jobs:
         - zuul-jobs-test-ensure-vault
         - zuul-jobs-test-create-vault-approle-secret
+        - zuul-jobs-test-create-vault-approle-token
     gate: *id001

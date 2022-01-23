@@ -1,0 +1,59 @@
+- hosts: all
+  environment:
+    VAULT_ADDR: "http://127.0.0.1:8200"
+    VAULT_TOKEN: "root"
+  vars:
+    secret_dest: "{{ ansible_user_dir }}/.vault_wrap_secret"
+    token_dest: "{{ ansible_user_dir }}/.vault_test_token"
+    vault_addr: "http://127.0.0.1:8200"
+    vault_token: "root"
+    vault_role_name: "test"
+  roles:
+    - ensure-vault
+  tasks:
+    - name: Start vault in dev mode
+      command: "/usr/local/bin/vault server -dev -dev-root-token-id=root"
+      async: 300
+      poll: 0
+
+    - name: Enable approle auth
+      command: "/usr/local/bin/vault auth enable approle"
+
+    - name: Create test approle
+      command: "/usr/local/bin/vault write -f auth/approle/role/{{ vault_role_name }}"
+
+    - name: Get approle role-id
+      uri:
+        url: "{{ vault_addr }}/v1/auth/approle/role/{{ vault_role_name }}/role-id"
+        headers:
+          X-Vault-Token: "{{ vault_token }}"
+        method: "GET"
+      register: vault_approle_role_id
+
+    - name: Generate new secret for the role
+      include_role:
+        name: "create-vault-approle-secret"
+      vars:
+        vault_secret_dest: "{{ secret_dest }}"
+
+    - name: Get content of the created secret
+      slurp:
+        src: "{{ secret_dest }}"
+      register: secret
+
+    - name: Generate AppRole token
+      include_role:
+        name: "create-vault-approle-token"
+      vars:
+        vault_role_id: "{{ vault_approle_role_id.json.data.role_id }}"
+        vault_wrapping_token_id: "{{ secret['content'] | b64decode }}"
+        vault_token_dest: "{{ token_dest }}"
+
+    - name: Get content of the created token
+      slurp:
+        src: "{{ token_dest }}"
+      register: token
+
+    - name: Debug created token
+      debug:
+        msg: "{{ token['content'] | b64decode }}"
