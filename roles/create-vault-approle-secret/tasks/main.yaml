@@ -1,0 +1,46 @@
+- name: Check vault requestor role presence
+  no_log: true
+  uri:
+    url: "{{ vault_addr }}/v1/auth/approle/role/{{ vault_role_name }}"
+    headers:
+      X-Vault-Token: "{{ vault_token }}"
+    method: "GET"
+    status_code: [200, 403, 404]
+  when:
+    - "vault_role_name is defined"
+  register: vault_role
+
+- name: Generate requestor role wrapped secret-id with job timeout as wrap ttl
+  no_log: true
+  uri:
+    url: "{{ vault_addr }}/v1/auth/approle/role/{{ vault_role_name }}/secret-id"
+    headers:
+      X-Vault-Token: "{{ vault_token }}"
+      X-Vault-Wrap-Ttl: "{{ zuul.timeout }}s"
+    method: "POST"
+    body:
+      metadata: "{{ (
+        '{\"build\": \"' + zuul.build + '\"'
+        + ',\"job\": \"' + zuul.job + '\"'
+        + '}' ) | string
+      }}"
+    body_format: json
+  when:
+    - "vault_role_name is defined"
+    - "vault_role.status == 200"
+  register: vault_secret_data
+
+# NOTE(gtema): even the module does not leak content we do not want even
+# checksum of it to be easily readable, therefore use no_log
+- name: Write wrapped vault secret-id into the destination
+  no_log: true
+  copy:
+    content: "{{ vault_secret_data.json.wrap_info.token }}"
+    dest: "{{ vault_secret_dest }}"
+    mode: "0400"
+  when:
+    - "vault_secret_dest is defined"
+    - "vault_secret_data is defined"
+    - "vault_secret_data.json is defined"
+    - "vault_secret_data.json.wrap_info is defined"
+    - "vault_secret_data.json.wrap_info.token is defined"
