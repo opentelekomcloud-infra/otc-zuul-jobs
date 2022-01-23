@@ -1,0 +1,59 @@
+- name: Lookup unwrap secret - verify it has expected data
+  no_log: true
+  uri:
+    url: "{{ vault_addr }}/v1/sys/wrapping/lookup"
+    headers:
+      X-Vault-Token: "{{ vault_token }}"
+    body:
+      token: "{{ vault_wrapping_token_id }}"
+    body_format: json
+    method: "POST"
+  when:
+    - "vault_token is defined"
+    - "vault_wrapping_token_id is defined"
+    - "vault_role_name is defined"
+  failed_when:
+    - "vault_unwrap_lookup_data.json.data.creation_path != 'auth/approle/role/' + vault_role_name + '/secret-id'"
+  register: vault_unwrap_lookup_data
+
+- name: Unwrap secret
+  no_log: true
+  uri:
+    url: "{{ vault_addr }}/v1/sys/wrapping/unwrap"
+    headers:
+      X-Vault-Token: "{{ vault_token }}"
+    body:
+      token: "{{ vault_wrapping_token_id }}"
+    body_format: json
+    method: "POST"
+  when:
+    - "vault_token is defined"
+    - "vault_wrapping_token_id is defined"
+  register: vault_unwrap_data
+
+- name: Login to vault
+  no_log: true
+  uri:
+    url: "{{ vault_addr }}/v1/auth/approle/login"
+    body:
+      role_id: "{{ vault_role_id }}"
+      secret_id: "{{ vault_secret_id | default(vault_unwrap_data.json.data.secret_id) }}"
+    body_format: json
+    method: "POST"
+  when:
+  register: vault_token_data
+
+# NOTE(gtema): even the module does not leak content we do not want even
+# checksum of it to be easily readable, therefore use no_log
+- name: Write vault token into the destination
+  no_log: true
+  copy:
+    content: "{{ vault_token_data.json.auth.client_token }}"
+    dest: "{{ vault_token_dest }}"
+    mode: "0400"
+  when:
+    - "vault_token_dest is defined"
+    - "vault_token_data is defined"
+    - "vault_token_data.json is defined"
+    - "vault_token_data.json.auth is defined"
+    - "vault_token_data.json.auth.client_token is defined"
