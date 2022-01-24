@@ -14,7 +14,7 @@ Upload artifact archive to swift
 
    Swift endpoint URL
 
-.. zuul:rolevar:: upload_Artifact_swift_container_name
+.. zuul:rolevar:: upload_artifact_swift_container_name
    :default: zuul.project.short_name
 
    Container name
@@ -23,6 +23,11 @@ Upload artifact archive to swift
    :default: true
 
    Flag whether container should be publicly readable or not
+
+.. zuul:rolevar:: upload_artifact_swift_container_read_acl
+
+   Read ACL on the container to set. If not set
+   upload_artifact_swift_container_public is being analyzed.
 
 .. zuul:rolevar:: upload_artifact_swift_prefix
 
