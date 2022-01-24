@@ -1,0 +1,4 @@
+---
+upload_artifact_swift_prefix: ""
+upload_artifact_swift_container_name: "{{ zuul.project.short_name }}"
+upload_artifact_swift_container_public: true
