@@ -1,0 +1,50 @@
+---
+- hosts: all
+  vars:
+    _undocumented_test_worker_node_: "{{ inventory_hostname }}"
+    fake_archive: "{{ zuul.executor.log_root}}/test_archive.tar.gz"
+  tasks:
+    - name: Install OpenStackSDK
+      pip:
+        name:
+          - openstacksdk
+
+    - name: Get cloud config from vault
+      no_log: true
+      vault_cloud_config:
+        vault_addr: "{{ zuul_vault_addr }}"
+        vault_role_id: "{{ zuul_jobs_vault.role_id }}"
+        vault_secret_id: "{{ zuul_jobs_vault.secret_id }}"
+        mode: "token"
+        cloud_secret_path: "{{ zuul_jobs_vault.cloud_config_secret_path }}"
+      register: vault_data
+
+    - name: Create Fake dir
+      become: true
+      file:
+        state: directory
+        path: "{{ zuul.executor.log_root }}"
+        mode: "0777"
+      register: fake_dir
+
+    - name: Add content to tempfile
+      copy:
+        content: "fake content"
+        dest: "{{ fake_dir.path }}/testfile"
+
+    - name: Archive content
+      archive:
+        path: "{{ fake_dir.path }}/testfile"
+        dest: "{{ fake_archive }}"
+        format: "gz"
+        force_archive: true
+
+    - name: Include upload logs role
+      no_log: true
+      include_role:
+        name: upload-artifact-swift
+      vars:
+        upload_artifact_swift_cloud: "{{ vault_data.config }}"
+        artifact_src: "{{ fake_archive }}"
+        container: "test"
+        prefix: "fake_archive"

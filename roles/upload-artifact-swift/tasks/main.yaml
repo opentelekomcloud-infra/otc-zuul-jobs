@@ -3,28 +3,11 @@
     path: "{{ artifact_src }}"
   register: "artifact_stat"
 
-- name: Create Swift container
+- name: Upload artifact to swift
   no_log: true
-  uri:
-    url: "{{ upload_artifact_swift_object_store_endpoint }}/{{ upload_artifact_swift_container_name }}"
-    method: "PUT"
-    headers:
-      X-Auth-Token: "{{ swift_token }}"
-      X-Container-Read: "{{ upload_artifact_swift_container_read_acl | default(omit) }}"
-      X-Container-Meta-Web-Index: "index.html"
-      X-Container-Meta-Web-Listing: "false"
-    status_code: [200, 201, 202]
-  when: "artifact_stat.stat.exists"
-
-- name: Upload artifact archive to Swift
-  no_log: true
-  uri:
-    url: "{{ upload_artifact_swift_object_store_endpoint }}/{{ upload_artifact_swift_container_name }}/{{ upload_artifact_swift_prefix }}?extract-archive=tar.gz"
-    method: "PUT"
+  upload_artifact_swift:
+    cloud: "{{ upload_artifact_swift_cloud }}"
+    container: "{{ upload_artifact_swift_container_name }}"
+    read_acl: "{{ upload_artifact_swift_container_read_acl }}"
+    prefix: "{{ upload_artifact_swift_prefix }}"
     src: "{{ artifact_stat.stat.path }}"
-    headers:
-      X-Auth-Token: "{{ swift_token }}"
-      X-Detect-Content-Type: "true"
-      Content-Type: "application/gzip"
-    status_code: [200, 201]
-  when: "artifact_stat.stat.exists"
