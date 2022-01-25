@@ -46,5 +46,5 @@
       vars:
         upload_artifact_swift_cloud: "{{ vault_data.config }}"
         artifact_src: "{{ fake_archive }}"
-        container: "test"
-        prefix: "fake_archive"
+        upload_artifact_swift_container: "test"
+        upload_artifact_swift_prefix: "fake_archive"
