@@ -3,11 +3,6 @@
     path: "{{ artifact_src }}"
   register: "artifact_stat"
 
-- name: Construct container read acl
-  set_fact:
-    container_read_acl: "{{ upload_artifact_swift_container_public | ternary('.r:*,.rlistings', omit, omit) }}"
-  when: "upload_artifact_swift_container_read_acl is not defined"
-
 - name: Create Swift container
   no_log: true
   uri:
