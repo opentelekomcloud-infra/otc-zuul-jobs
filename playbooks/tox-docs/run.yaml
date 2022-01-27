@@ -2,3 +2,5 @@
   roles:
     - revoke-sudo
     - tox
+    - role: build-pdf-docs
+      when: not tox_skip_pdf

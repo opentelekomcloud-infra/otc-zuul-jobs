@@ -88,6 +88,8 @@
     vars:
       tox_envlist: docs
       bindep_profile: compile doc
+      tox_pdf_envlist: pdf-docs
+      tox_skip_pdf: false
     pre-run: playbooks/tox-docs/pre.yaml
     run: playbooks/tox-docs/run.yaml
     post-run: playbooks/tox-docs/post.yaml
