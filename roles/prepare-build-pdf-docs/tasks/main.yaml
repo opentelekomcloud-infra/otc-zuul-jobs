@@ -1,0 +1,24 @@
+- name: Check tox env for PDF build in tox.ini
+  shell: |
+    grep '^\[testenv:{{ tox_pdf_envlist }}\]' {{ zuul_work_dir }}/tox.ini
+  register: pdfdocs_env
+  ignore_errors: yes
+
+- name: Install PDF prereqs
+  package:
+    name:
+      - latexmk
+      - texlive-xetex
+      - texlive-fonts-recommended
+      # Required for tgtermes.sty style, this is a recommended package
+      # for texlive-fonts-recommended but it is not installed by default.
+      - tex-gyre
+      - cm-super
+      - fonts-liberation
+      - inkscape
+      - xindy
+      # Required by sphinxcontrib-svg2pdfconverter to handle SVG images
+      - librsvg2-bin
+    state: present
+  become: yes
+  when: pdfdocs_env is success
