@@ -35,6 +35,7 @@
       copy:
         dest: "{{ ansible_user_dir }}/wrk/{{ zj_item.dest }}"
         src: "{{ zj_item.src }}"
+        mode: "0644"
       loop:
         - src: "../../roles/gitcontrol/"
           dest: "playbooks/roles/gitcontrol"

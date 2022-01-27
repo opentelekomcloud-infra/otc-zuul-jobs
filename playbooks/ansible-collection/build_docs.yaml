@@ -7,10 +7,10 @@
         ansible_collection_doc_name: "{{ ansible_collection_name }}"
         ansible_collection_doc_namespace: "{{ ansible_collection_namespace }}"
 
-    - include_role:
+    - name: Trigger antsibull
+      include_role:
         name: antsibull-docs
 
     - name: Build html with Sphinx
       include_role:
         name: sphinx
-
