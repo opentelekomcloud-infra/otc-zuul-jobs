@@ -23,6 +23,7 @@
       copy:
         dest: "{{ tmp_key.path }}"
         content: "{{ vault_content.data.data.data.priv_key }}"
+        mode: "0400"
       check_mode: false
       changed_when: false
 
