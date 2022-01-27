@@ -18,7 +18,7 @@
             secret_name: "{{ zuul_gitcontrol_vault.secret_name }}"
             vault_addr: "{{ zuul_gitcontrol_vault.vault_addr }}"
             role_id: "{{ zuul_gitcontrol_vault.role_id }}"
-            secret_id: "{{ zuul_gitcontrol_vault.secret_id }}"
+            secret_id: "{{ zuul_gitcontrol_vault.secret_id }}"
           gitcontrol_organizations: "{{ gitcontrol_organizations }}"
           gitcontrol_root_dir: "{{ gitcontrol_root_dir }}"
 
