@@ -1,3 +1,13 @@
+- name: Include OS-specific variables
+  include_vars: "{{ zj_distro_os }}"
+  loop_control:
+    loop_var: zj_distro_os
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yaml"
+    - "{{ ansible_distribution }}.{{ ansible_architecture }}.yaml"
+    - "{{ ansible_distribution }}.yaml"
+    - "{{ ansible_os_family }}.yaml"
+
 - name: Check tox env for PDF build in tox.ini
   shell: |
     grep '^\[testenv:{{ tox_pdf_envlist }}\]' {{ zuul_work_dir }}/tox.ini
@@ -6,19 +16,10 @@
 
 - name: Install PDF prereqs
   package:
-    name:
-      - latexmk
-      - texlive-xetex
-      - texlive-fonts-recommended
-      # Required for tgtermes.sty style, this is a recommended package
-      # for texlive-fonts-recommended but it is not installed by default.
-      - tex-gyre
-      - cm-super
-      - fonts-liberation
-      - inkscape
-      - xindy
-      # Required by sphinxcontrib-svg2pdfconverter to handle SVG images
-      - librsvg2-bin
+    name: "{{ zj_package }}"
     state: present
   become: yes
+  loop: "{{ packages }}"
+  loop_control:
+    loop_var: zj_package
   when: pdfdocs_env is success
