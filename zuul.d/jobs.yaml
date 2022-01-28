@@ -1,37 +1,5 @@
 ---
 - job:
-    name: build-otc-api-ref
-    parent: otc-tox-docs
-    description: |
-      Build api-ref document. This is only run on master branch of a project.
-    timeout: 1800
-    vars:
-      sphinx_build_dir: api-ref/build
-      tox_envlist: api-ref
-      tox_skip_pdf: true
-    # We only publish the master (main) branch, so no need to run
-    # for changes on other branches.
-    branches:
-      - master
-      - main
-
-- job:
-    name: build-otc-umn
-    parent: otc-tox-docs
-    description: |
-      Build UMN document. This is only run on master branch of a project.
-    timeout: 1800
-    vars:
-      sphinx_build_dir: umn/build
-      tox_envlist: umn
-      tox_skip_pdf: true
-    # We only publish the master (main) branch, so no need to run
-    # for changes on other branches.
-    branches:
-      - master
-      - main
-
-- job:
     name: otc-zuul-jobs-linters
     parent: tox
     description: |
