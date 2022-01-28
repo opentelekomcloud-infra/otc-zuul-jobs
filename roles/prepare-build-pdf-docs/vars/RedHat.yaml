@@ -1,14 +1,19 @@
 packages:
   - latexmk
-  - texlive-fncychap
-  - texlive-gnu-freefont
-  - texlive-titlesec
-  - texlive-tabulary
-  - texlive-framed
-  - texlive-wrapfig
-  - texlive-upquote
-  - texlive-capt-of
-  - texlive-needspace
-  - texlive-polyglossia
-  - liberation-serif-fonts
   - liberation-sans-fonts
+  - liberation-serif-fonts
+  - texlive-capt-of
+  - texlive-cmap
+  - texlive-fncychap
+  - texlive-framed
+  - texlive-gnu-freefont
+  - texlive-kvoptions
+  - texlive-needspace
+  - texlive-parskip
+  - texlive-polyglossia
+  - texlive-tabulary
+  - texlive-tex-gyre
+  - texlive-titlesec
+  - texlive-upquote
+  - texlive-wrapfig
+  - texlive-xetex
