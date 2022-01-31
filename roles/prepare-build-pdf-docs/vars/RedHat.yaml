@@ -1,5 +1,6 @@
 packages:
   - latexmk
+  - liberation-mono-fonts
   - liberation-sans-fonts
   - liberation-serif-fonts
   - texlive-capt-of

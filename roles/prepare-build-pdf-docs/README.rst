@@ -2,7 +2,7 @@ Install Packages for build-pdf-docs
 
 Install binary packages for :zuul:role:`build-pdf-docs`.
 
-This role currently only supports Ubuntu Bionic.
+This role currently only supports RedHat based OS.
 
 If the tox environment specified in `tox_pdf_envlist`
 does not exist, package installation will be skipped.
