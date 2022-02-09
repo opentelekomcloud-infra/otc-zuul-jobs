@@ -21,13 +21,11 @@
   uri:
     url: "{{ vault_addr }}/v1/sys/wrapping/unwrap"
     headers:
-      X-Vault-Token: "{{ vault_token }}"
+      X-Vault-Token: "{{ vault_wrapping_token_id }}"
     body:
-      token: "{{ vault_wrapping_token_id }}"
     body_format: json
     method: "POST"
   when:
-    - "vault_token is defined"
     - "vault_wrapping_token_id is defined"
   register: vault_unwrap_data
 
