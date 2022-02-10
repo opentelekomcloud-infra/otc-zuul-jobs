@@ -1,4 +1,4 @@
-- name: Check vault requestor role presence
+- name: Check vault requestor role ({{ vault_role_name }}) presence
   no_log: true
   uri:
     url: "{{ vault_addr }}/v1/auth/approle/role/{{ vault_role_name }}"
