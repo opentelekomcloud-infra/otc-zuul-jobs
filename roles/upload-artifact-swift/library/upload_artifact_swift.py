@@ -64,7 +64,11 @@ def main():
         else:
             read_acl = p['read_acl']
         cloud.update_container(
-            p['container'], {'x-container-read': read_acl})
+            p['container'], {
+                'x-container-read': read_acl,
+                'X-Container-Meta-Web-Index': 'index.html',
+                'X-Container-Meta-Access-Control-Allow-Origin': '*'
+            })
 
         with open(p['src'], 'rb') as f:
             headers = {
