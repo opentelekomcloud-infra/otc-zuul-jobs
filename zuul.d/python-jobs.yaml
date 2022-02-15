@@ -107,3 +107,8 @@
     # Building translated releasenotes can take long for large repositories
     timeout: 3600
 
+- job:
+    name: otc-build-docker-image
+    parent: build-docker-image
+    nodeset: ubuntu-focal
+    timeout: 2700 # 45 minutes
