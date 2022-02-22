@@ -4,3 +4,6 @@
     default-branch: master
     templates:
       - publish-otc-docs-pti
+    check:
+      jobs:
+        - build-otc-sphinx-json
