@@ -26,10 +26,10 @@
       publish_refstack_results: False
     voting: false
 
-- project:
-    merge-mode: squash-merge
-    check:
-      jobs: &id001
-        - zuul-jobs-test-refstack-client-run-base
-    gate:
-      jobs: *id001
+# - project:
+#     merge-mode: squash-merge
+#     check:
+#       jobs: &id001
+#         - zuul-jobs-test-refstack-client-run-base
+#     gate:
+#       jobs: *id001

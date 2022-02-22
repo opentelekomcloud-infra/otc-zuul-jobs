@@ -3,6 +3,7 @@
     attempts: 1
     pre-run: playbooks/simpleton/pre.yaml
     run: playbooks/simpleton/run.yaml
+    nodeset: ubuntu-focal
     files:
       - playbooks/simpleton/*
       - roles/simpleton/*
@@ -20,5 +21,6 @@
     merge-mode: squash-merge
     check: &id001
       jobs:
-        - zuul-jobs-test-simpleton
+        - zuul-jobs-test-simpleton:
+            voting: false
     gate: *id001
