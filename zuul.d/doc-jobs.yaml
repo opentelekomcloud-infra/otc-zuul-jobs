@@ -36,3 +36,19 @@
     branches:
       - master
       - main
+
+- job:
+    name: build-otc-sphinx-json
+    description: |
+      Build Sphinx-doc json output for feeding it as index into the Search
+      engine.
+    nodeset: fedora-pod
+    vars:
+      sphinx_builders: json
+    pre-run:
+      - playbooks/docs/pre.yaml
+    run:
+      - playbooks/docs/run.yaml
+    post-run:
+      - playbooks/docs/post.yaml
+
