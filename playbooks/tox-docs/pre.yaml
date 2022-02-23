@@ -6,6 +6,3 @@
     - ensure-python
     - role: prepare-build-pdf-docs
       when: not tox_skip_pdf
-    - role: ensure-sphinx
-      doc_building_packages:
-        - sphinx

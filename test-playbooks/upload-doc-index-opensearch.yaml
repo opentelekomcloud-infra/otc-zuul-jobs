@@ -1,0 +1,26 @@
+- hosts: all
+  roles:
+    - role: bindep
+      bindep_profile: doc
+    - ensure-tox
+    - ensure-python
+    - role: tox
+      tox_install_siblings: false
+      tox_envlist: docs
+      bindep_profile: compile doc
+
+  tasks:
+    # Build json output
+    - name: Execute sphinx to generate JSON output
+      include_role:
+        name: sphinx
+      vars:
+        sphinx_builders: json
+        zuul_work_virtualenv: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/.tox/docs"
+
+    - name: Include upload-doc-index-opensearch
+      include_role:
+        name: upload-doc-index-opensearch
+      vars:
+        search_engine_url: "test.com:9200"
+        sphinx_json_dir: "doc/source/json"

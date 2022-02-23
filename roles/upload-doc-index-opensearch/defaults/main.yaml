@@ -1,0 +1,13 @@
+---
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+zuul_work_virtualenv: "{{ ansible_user_dir }}/.venv"
+sphinx_json_dir: "{{ zuul.project.src_dir }}"
+
+sphinx_opensearch_command: sphinxsearch
+search_replace_index: true
+search_upload_batches: 5
+search_engine_type: opensearch
+search_engine_doc_url: 'http://docs.com'
+search_engine_base_url: '/'
+search_engine_username: foo
+search_engine_password: bar
