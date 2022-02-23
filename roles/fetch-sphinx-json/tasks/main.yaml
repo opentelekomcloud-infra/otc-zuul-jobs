@@ -29,14 +29,14 @@
 
 - name: Create browseable Json directory
   file:
-    path: "{{ zuul_output_dir }}/logs/docs"
+    path: "{{ zuul_output_dir }}/logs/docs-json"
     state: directory
     mode: 0755
 
-- name: Extract archive HTML
+- name: Extract archive JSON
   unarchive:
     src: "{{ zuul_output_dir }}/logs/docs-json.tar.gz"
-    dest: "{{ zuul_output_dir }}/logs/docs"
+    dest: "{{ zuul_output_dir }}/logs/docs-json"
     remote_src: true
     extra_opts:
       - "--no-same-owner"
@@ -49,8 +49,8 @@
           - name: "Docs archive"
             url: "docs-json.tar.gz"
             metadata:
-              type: docs_archive
+              type: docs_archive_json
           - name: "Docs json preview"
-            url: "docs/"
+            url: "docs-json/"
             metadata:
-              type: docs_site
+              type: docs_site_json

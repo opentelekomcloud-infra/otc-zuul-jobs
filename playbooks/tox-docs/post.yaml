@@ -2,3 +2,4 @@
   roles:
     - fetch-tox-output
     - fetch-sphinx-tarball
+    - fetch-sphinx-json
