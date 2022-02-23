@@ -47,7 +47,6 @@
 
          Flag to indicate whether the project need to installed into the venv
          when building json.
-    nodeset: fedora-pod
     vars:
       sphinx_builders: json
     pre-run:
