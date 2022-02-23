@@ -1,6 +1,7 @@
 - hosts: all
   roles:
     - role: ensure-if-python
-      # docs do not need the package itself to be installed
-      install_package: false
+      # docs do not need the package itself to be installed, but sphinx-theme
+      # projects might need to.
+      install_package: "{{ sphinx_install_package | default(false) }}"
     - role: sphinx
