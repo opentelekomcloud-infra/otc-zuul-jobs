@@ -1,0 +1,91 @@
+# Sphinx might build multiple PDF files, for example for graphic files
+# to include. We only want to grab the end result and not any such
+# input files.
+
+- name: Check for PDF file names
+  stat:
+    path: "{{ zuul_work_dir }}/{{ sphinx_build_dir }}/pdf/{{ zj_sphinx_pdf }}"
+    get_checksum: false
+    get_mime: false
+    get_md5: false
+  with_items: "{{ sphinx_pdf_files }}"
+  loop_control:
+    loop_var: zj_sphinx_pdf
+  register: pdf_file_stat
+
+- name: Set pdf_files_found to default
+  set_fact:
+    pdf_files_found: false
+
+- name: Check if any file found
+  set_fact:
+    pdf_files_found: true
+  when: zj_pdf.stat.exists
+  with_items: "{{ pdf_file_stat.results }}"
+  loop_control:
+    loop_var: zj_pdf
+
+# Now loop...
+
+- name: Grab PDF files
+  when:
+    - pdf_files_found
+    - not zuul_use_fetch_output
+  block:
+    - name: Create PDF directory
+      delegate_to: localhost
+      file:
+        path: "{{ zuul.executor.log_root }}/pdf"
+        state: directory
+        mode: 0755
+
+    - name: Fetch PDF files
+      synchronize:
+        dest: "{{ zuul.executor.log_root }}/pdf/{{ zj_pdf.zj_sphinx_pdf }}"
+        mode: pull
+        src: "{{ zj_pdf.stat.path }}"
+        verify_host: true
+        owner: no
+        group: no
+      with_items: "{{ pdf_file_stat.results }}"
+      loop_control:
+        loop_var: zj_pdf
+      when: zj_pdf.stat.exists
+
+- name: Copy PDF files
+  when:
+    - pdf_files_found
+    - zuul_use_fetch_output
+  block:
+    - name: Create local PDF directory
+      file:
+        path: "{{ zuul_output_dir }}/logs/pdf"
+        state: directory
+        mode: 0755
+
+    - name: Copy PDF files
+      copy:
+        dest: "{{ zuul_output_dir }}/logs/pdf/{{ zj_pdf.zj_sphinx_pdf }}"
+        src: "{{ zj_pdf.stat.path }}"
+        remote_src: true
+        mode: 0644
+      with_items: "{{ pdf_file_stat.results }}"
+      loop_control:
+        loop_var: zj_pdf
+      when: zj_pdf.stat.exists
+
+- name: Return PDF artifact to Zuul
+  zuul_return:
+    data:
+      zuul:
+        artifacts:
+          - name: "Docs PDF: {{ zj_pdf.zj_sphinx_pdf }}"
+            url: "pdf/{{ zj_pdf.zj_sphinx_pdf }}"
+            metadata:
+              type: docs_pdf
+  with_items: "{{ pdf_file_stat.results }}"
+  loop_control:
+    loop_var: zj_pdf
+  when:
+    - pdf_files_found
+    - zj_pdf.stat.exists

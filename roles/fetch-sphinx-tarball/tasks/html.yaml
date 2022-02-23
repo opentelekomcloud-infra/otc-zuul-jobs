@@ -1,0 +1,74 @@
+- name: Create temporary HTML archive file
+  tempfile:
+    state: file
+    suffix: ".tar.gz"
+  register: html_archive
+
+- name: Archive HTML
+  command: "tar -f {{ html_archive.path }} -C {{ zuul_work_dir }}/{{ sphinx_build_dir }}/html --exclude=.doctrees -cz ."
+  args:
+    warn: false
+
+- block:
+    - name: Fetch archive HTML
+      synchronize:
+        dest: "{{ zuul.executor.log_root }}/docs-html.tar.gz"
+        mode: pull
+        src: "{{ html_archive.path }}"
+        verify_host: true
+        owner: no
+        group: no
+
+    - name: Create browseable HTML directory
+      delegate_to: localhost
+      file:
+        path: "{{ zuul.executor.log_root }}/docs"
+        state: directory
+        mode: 0755
+
+    - name: Extract archive HTML
+      delegate_to: localhost
+      unarchive:
+        src: "{{ zuul.executor.log_root }}/docs-html.tar.gz"
+        dest: "{{ zuul.executor.log_root }}/docs"
+        remote_src: true
+        extra_opts:
+          - "--no-same-owner"
+  when: not zuul_use_fetch_output
+
+- block:
+    - name: Copy archive HTML
+      copy:
+        dest: "{{ zuul_output_dir }}/logs/docs-html.tar.gz"
+        src: "{{ html_archive.path }}"
+        mode: 0644
+        remote_src: true
+
+    - name: Create browseable HTML directory
+      file:
+        path: "{{ zuul_output_dir }}/logs/docs"
+        state: directory
+        mode: 0755
+
+    - name: Extract archive HTML
+      unarchive:
+        src: "{{ zuul_output_dir }}/logs/docs-html.tar.gz"
+        dest: "{{ zuul_output_dir }}/logs/docs"
+        remote_src: true
+        extra_opts:
+          - "--no-same-owner"
+  when: zuul_use_fetch_output
+
+- name: Return artifact to Zuul
+  zuul_return:
+    data:
+      zuul:
+        artifacts:
+          - name: "Docs archive"
+            url: "docs-html.tar.gz"
+            metadata:
+              type: docs_archive
+          - name: "Docs preview site"
+            url: "docs/"
+            metadata:
+              type: docs_site

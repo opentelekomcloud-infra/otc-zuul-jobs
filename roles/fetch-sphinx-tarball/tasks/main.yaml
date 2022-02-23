@@ -1,0 +1,33 @@
+- name: Inspect sphinx build directory
+  find:
+    file_type: any
+    follow: true
+    paths: "{{ zuul_work_dir }}/{{ sphinx_build_dir }}"
+  register: sphinx_dir
+
+- name: Parse sphinx build directory
+  set_fact:
+    sphinx_dir: "{{ sphinx_dir.files | map(attribute='path') | map('regex_replace', '^.*/(.*)$', '\\1') | list }}"
+
+- name: Process sphinx HTML
+  when: "'html' in sphinx_dir"
+  include_tasks: html.yaml
+
+- name: Process sphinx PDF
+  when: "'pdf' in sphinx_dir"
+  include_tasks: pdf.yaml
+
+- name: Process sphinx Json
+  when: "'json' in sphinx_dir"
+  include_tasks: json.yaml
+
+# Other sphinx output processing can be added here.
+
+# Finally fail, if no html exists
+
+- name: Fail if no HTML exists
+  fail:
+    msg: 'No html output in "{{ sphinx_build_dir }}".'
+  when:
+    - zuul_success | default(true) | bool
+    - "'html' not in sphinx_dir"

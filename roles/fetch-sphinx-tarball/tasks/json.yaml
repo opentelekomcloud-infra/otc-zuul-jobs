@@ -1,0 +1,74 @@
+- name: Create temporary JSON archive file
+  tempfile:
+    state: file
+    suffix: ".tar.gz"
+  register: json_archive
+
+- name: Archive JSON
+  command: "tar -f {{ json_archive.path }} -C {{ zuul_work_dir }}/{{ sphinx_build_dir }}/json --exclude=.doctrees -cz ."
+  args:
+    warn: false
+
+- block:
+    - name: Fetch archive JSON
+      synchronize:
+        dest: "{{ zuul.executor.log_root }}/docs-json.tar.gz"
+        mode: pull
+        src: "{{ json_archive.path }}"
+        verify_host: true
+        owner: no
+        group: no
+
+    - name: Create browseable JSON directory
+      delegate_to: localhost
+      file:
+        path: "{{ zuul.executor.log_root }}/docs-json"
+        state: directory
+        mode: 0755
+
+    - name: Extract archive HTML
+      delegate_to: localhost
+      unarchive:
+        src: "{{ zuul.executor.log_root }}/docs-json.tar.gz"
+        dest: "{{ zuul.executor.log_root }}/docs-json"
+        remote_src: true
+        extra_opts:
+          - "--no-same-owner"
+  when: not zuul_use_fetch_output
+
+- block:
+    - name: Copy archive JSON
+      copy:
+        dest: "{{ zuul_output_dir }}/logs/docs-json.tar.gz"
+        src: "{{ json_archive.path }}"
+        mode: 0644
+        remote_src: true
+
+    - name: Create browseable JSON directory
+      file:
+        path: "{{ zuul_output_dir }}/logs/docs-json"
+        state: directory
+        mode: 0755
+
+    - name: Extract archive JSON
+      unarchive:
+        src: "{{ zuul_output_dir }}/logs/docs-json.tar.gz"
+        dest: "{{ zuul_output_dir }}/logs/docs-json"
+        remote_src: true
+        extra_opts:
+          - "--no-same-owner"
+  when: zuul_use_fetch_output
+
+- name: Return artifact to Zuul
+  zuul_return:
+    data:
+      zuul:
+        artifacts:
+          - name: "Docs JSON archive"
+            url: "docs-json.tar.gz"
+            metadata:
+              type: docs_json_archive
+          - name: "Docs poneview site"
+            url: "docs-json/"
+            metadata:
+              type: docs_json_site
