@@ -4,3 +4,6 @@
     - tox
     - role: build-pdf-docs
       when: not tox_skip_pdf
+    # Build json output
+    - role: sphinx
+      sphinx_builders: json
