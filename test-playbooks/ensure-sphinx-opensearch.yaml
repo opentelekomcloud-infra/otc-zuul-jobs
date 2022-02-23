@@ -1,0 +1,5 @@
+- hosts: all
+  tasks:
+    - name: Include ensure-sphinx-opensearch
+      include_role:
+        name: ensure-sphinx-opensearch
