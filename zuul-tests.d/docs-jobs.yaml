@@ -1,0 +1,18 @@
+- job:
+    name: zuul-jobs-
+    parent: tox-linters
+    description: Lint Ansible playbooks and roles
+    required-projects:
+      - zuul/zuul-jobs
+    nodeset: fedora-pod
+    vars:
+      tox_environment:
+        ANSIBLE_ROLES_PATH: ~/src/opendev.org/zuul/zuul-jobs/roles:~/src/github.com/opentelekomcloud-infra/otc-zuul-jobs/roles
+
+- project:
+    merge-mode: squash-merge
+    check:
+      jobs: &id001
+        - zuul-jobs-tox-linters
+    gate:
+      jobs: *id001

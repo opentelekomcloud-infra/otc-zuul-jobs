@@ -1,5 +1,4 @@
 Fetch Sphinx json artifact
-==========================
 
 **Role Variables**
 

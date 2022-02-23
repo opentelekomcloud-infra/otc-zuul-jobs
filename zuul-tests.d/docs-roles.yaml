@@ -1,0 +1,15 @@
+- job:
+    name: zuul-jobs-test-ensure-sphinx-opensearch
+    description: Test ensure-sphinx-opensearch job
+    files:
+      - roles/ensure-sphinx-opensearch
+    run: test-playbooks/ensure-sphinx-opensearch.yaml
+    vars:
+      python_version: 3.9
+
+- project:
+    merge-mode: squash-merge
+    check: &id001
+      jobs:
+        - zuul-jobs-test-ensure-sphinx-opensearch
+    gate: *id001

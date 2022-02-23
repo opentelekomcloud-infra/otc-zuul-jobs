@@ -1,0 +1,23 @@
+---
+- name: Install pip
+  include_role:
+    name: ensure-pip
+
+# Ensure we have the latest pip in the sphinx venv, not the system
+# one.  Older pips don't do things like parse version constraints or
+# rust build flags correctly, and some jobs like the translate jobs
+# use this environment to install from master requirements.txt that
+# needs this sort of thing to work.
+- name: Setup virtual environment
+  pip:
+    name: pip
+    virtualenv: '{{ zuul_work_virtualenv }}'
+    virtualenv_command: '{{ ensure_pip_virtualenv_command }}'
+    extra_args: '--upgrade'
+
+- name: Install sphinx-opensearch requirements
+  pip:
+    name: "{{ sphinx_opensearch }}"
+    chdir: "{{ zuul_work_dir }}"
+    virtualenv: "{{ zuul_work_virtualenv }}"
+    virtualenv_command: "{{ ensure_pip_virtualenv_command }}"
