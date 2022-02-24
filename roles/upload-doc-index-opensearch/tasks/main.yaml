@@ -5,4 +5,4 @@
 - name: Run sphinx-opensearch
   args:
     executable: /bin/bash
-  shell: "source {{ zuul_work_virtualenv }}/bin/activate; {{ zuul_work_virtualenv }}/bin/{{ sphinx_opensearch_command }} --hosts {{ search_engine_url }} --post-count {{ search_upload_batches }} {{ search_replace_index | ternary('--delete-index', '') }} --base-url {{ search_engine_base_url }} --doc-url {{ search_engine_doc_url }} --path {{ sphinx_json_dir }} --variant {{ search_engine_type }} --user {{ search_engine_username }} --password {{ search_engine_password }}"
+  shell: "source {{ zuul_work_virtualenv }}/bin/activate; {{ zuul_work_virtualenv }}/bin/{{ sphinx_opensearch_command }} --hosts {{ search_engine_url }} --post-count {{ search_upload_batches }} {{ search_replace_index | ternary('--delete-index', '') }} --base-url {{ search_engine_base_url }} --doc-url {{ search_engine_doc_url }} --path {{ sphinx_json_dir }} --index {{ search_engine_index_name }} --variant {{ search_engine_type }} --user {{ search_engine_username }} --password {{ search_engine_password }}"

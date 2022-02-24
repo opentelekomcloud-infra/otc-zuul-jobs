@@ -9,5 +9,6 @@ search_upload_batches: 5
 search_engine_type: opensearch
 search_engine_doc_url: 'http://docs.com'
 search_engine_base_url: '/'
+search_engine_index_name: "{{ zuul.project.short_name }}"
 search_engine_username: foo
 search_engine_password: bar
