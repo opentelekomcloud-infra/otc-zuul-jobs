@@ -1,9 +1,18 @@
 - job:
     name: zuul-jobs-test-ensure-sphinx-opensearch
-    description: Test ensure-sphinx-opensearch job
+    description: Test ensure-sphinx-opensearch role
     files:
       - roles/ensure-sphinx-opensearch
     run: test-playbooks/ensure-sphinx-opensearch.yaml
+    vars:
+      python_version: 3.9
+
+- job:
+    name: zuul-jobs-test-upload-doc-index-opensearch
+    description: Test upload-doc-index-opensearch role
+    files:
+      - roles/upload-doc-index-opensearch
+    run: test-playbooks/upload-doc-index-opensearch.yaml
     vars:
       python_version: 3.9
 
@@ -12,4 +21,7 @@
     check: &id001
       jobs:
         - zuul-jobs-test-ensure-sphinx-opensearch
+        # upload role is non voting, cause we test upload to fake url
+        - zuul-jobs-test-upload-doc-index-opensearch:
+            voting: false
     gate: *id001

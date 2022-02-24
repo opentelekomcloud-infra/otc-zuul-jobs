@@ -1,9 +1,9 @@
-gcc [test]
-
-# Required for openstacksdk
-python3-devel [test platform:rpm]
-python3-dev [test platform:dpkg platform:apk]
-
-# Required for subprocess32
-python-devel [test platform:rpm !platform:fedora !platform:centos-8]
-python-dev [test platform:dpkg platform:apk]
+# gcc [test]
+# 
+# # Required for openstacksdk
+# python3-devel [test platform:rpm]
+# python3-dev [test platform:dpkg platform:apk]
+# 
+# # Required for subprocess32
+# python-devel [test platform:rpm !platform:fedora !platform:centos-8]
+# python-dev [test platform:dpkg platform:apk]
