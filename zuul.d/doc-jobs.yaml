@@ -10,6 +10,7 @@
       tox_pdf_envlist: api-ref-pdf-docs
       tox_skip_pdf: false
       sphinx_build_dir: api-ref/build
+      sphinx_source_dir: api-ref/source
       sphinx_pdf_files:
         - "api-ref-{{ zuul.project.short_name }}.pdf"
     # We only publish the master (main) branch, so no need to run
@@ -29,6 +30,7 @@
       tox_pdf_envlist: umn-pdf-docs
       tox_skip_pdf: true
       sphinx_build_dir: umn/build
+      sphinx_source_dir: umn/source
       sphinx_pdf_files:
         - "umn-{{ zuul.project.short_name }}.pdf"
     # We only publish the master (main) branch, so no need to run
@@ -36,22 +38,3 @@
     branches:
       - master
       - main
-
-- job:
-    name: build-otc-sphinx-json
-    description: |
-      Build Sphinx-doc json output for feeding it as index into the Search
-      engine.
-
-      .. zuul:jobvar:: sphinx_install_package
-
-         Flag to indicate whether the project need to installed into the venv
-         when building json.
-    vars:
-      sphinx_builders: json
-    pre-run:
-      - playbooks/docs/pre.yaml
-    run:
-      - playbooks/docs/run.yaml
-    post-run:
-      - playbooks/docs/post.yaml
