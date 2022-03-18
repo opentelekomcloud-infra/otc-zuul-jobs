@@ -1,4 +1,5 @@
 packages:
+  - gif2png
   - latexmk
   - liberation-mono-fonts
   - liberation-sans-fonts
