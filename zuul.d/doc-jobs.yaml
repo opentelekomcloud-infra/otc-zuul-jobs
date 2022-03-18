@@ -28,7 +28,7 @@
     vars:
       tox_envlist: umn
       tox_pdf_envlist: umn-pdf-docs
-      tox_skip_pdf: true
+      tox_skip_pdf: false
       sphinx_build_dir: umn/build
       sphinx_source_dir: umn/source
       sphinx_pdf_files:
