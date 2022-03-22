@@ -1,56 +1,52 @@
-- name: Inspect sphinx build directory
-  find:
-    file_type: any
-    follow: true
-    paths: "{{ zuul_work_dir }}/{{ sphinx_build_dir }}"
-  register: sphinx_dir
+- name: Check for PDF file names
+  stat:
+    path: "{{ zuul_work_dir }}/{{ sphinx_build_dir }}/json"
+  register: json_dir_stat
 
-- name: Parse sphinx build directory
-  set_fact:
-    sphinx_dir: "{{ sphinx_dir.files | map(attribute='path') | map('regex_replace', '^.*/(.*)$', '\\1') | list }}"
+- block:
+    - name: Create temporary Json archive file
+      tempfile:
+        state: file
+        suffix: ".tar.gz"
+      register: json_archive
 
-- name: Create temporary Json archive file
-  tempfile:
-    state: file
-    suffix: ".tar.gz"
-  register: json_archive
+    - name: Archive Json
+      command: "tar -f {{ json_archive.path }} -C {{ zuul_work_dir }}/{{ sphinx_build_dir }}/json --exclude=.doctrees -cz ."
+      args:
+        warn: false
 
-- name: Archive Json
-  command: "tar -f {{ json_archive.path }} -C {{ zuul_work_dir }}/{{ sphinx_build_dir }}/json --exclude=.doctrees -cz ."
-  args:
-    warn: false
+    - name: Copy archive Json
+      copy:
+        dest: "{{ zuul_output_dir }}/logs/docs-json.tar.gz"
+        src: "{{ json_archive.path }}"
+        mode: 0644
+        remote_src: true
 
-- name: Copy archive Json
-  copy:
-    dest: "{{ zuul_output_dir }}/logs/docs-json.tar.gz"
-    src: "{{ json_archive.path }}"
-    mode: 0644
-    remote_src: true
+    - name: Create browseable Json directory
+      file:
+        path: "{{ zuul_output_dir }}/logs/docs-json"
+        state: directory
+        mode: 0755
 
-- name: Create browseable Json directory
-  file:
-    path: "{{ zuul_output_dir }}/logs/docs-json"
-    state: directory
-    mode: 0755
+    - name: Extract archive JSON
+      unarchive:
+        src: "{{ zuul_output_dir }}/logs/docs-json.tar.gz"
+        dest: "{{ zuul_output_dir }}/logs/docs-json"
+        remote_src: true
+        extra_opts:
+          - "--no-same-owner"
 
-- name: Extract archive JSON
-  unarchive:
-    src: "{{ zuul_output_dir }}/logs/docs-json.tar.gz"
-    dest: "{{ zuul_output_dir }}/logs/docs-json"
-    remote_src: true
-    extra_opts:
-      - "--no-same-owner"
-
-- name: Return artifact to Zuul
-  zuul_return:
-    data:
-      zuul:
-        artifacts:
-          - name: "Docs archive"
-            url: "docs-json.tar.gz"
-            metadata:
-              type: docs_archive_json
-          - name: "Docs json preview"
-            url: "docs-json/"
-            metadata:
-              type: docs_site_json
+    - name: Return artifact to Zuul
+      zuul_return:
+        data:
+          zuul:
+            artifacts:
+              - name: "Docs archive"
+                url: "docs-json.tar.gz"
+                metadata:
+                  type: docs_archive_json
+              - name: "Docs json preview"
+                url: "docs-json/"
+                metadata:
+                  type: docs_site_json
+  when: json_dir_stat.stat.isdir is defined and json_dir_stat.stat.isdir
