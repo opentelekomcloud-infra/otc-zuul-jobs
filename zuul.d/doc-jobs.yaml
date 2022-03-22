@@ -39,4 +39,25 @@
     # for changes on other branches.
     branches:
       - master
+
+- job:
+    name: build-otc-dev-guide
+    parent: otc-tox-docs
+    description: |
+      Build Developer Guide document. This is only run on master branch of a project.
+    timeout: 1800
+    vars:
+      tox_envlist: dg
+      tox_pdf_envlist: dg-pdf-docs
+      tox_skip_pdf: false
+      sphinx_build_dir: dg/build
+      sphinx_source_dir: dg/source
+      sphinx_pdf_files:
+        - "dg-{{ zuul.project.short_name }}.pdf"
+      opensearch_doc_category: "dev"
+    # We only publish the master (main) branch, so no need to run
+    # for changes on other branches.
+    branches:
+      - master
+      - main
       - main
