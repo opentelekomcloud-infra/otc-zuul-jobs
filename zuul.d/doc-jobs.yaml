@@ -39,6 +39,7 @@
     # for changes on other branches.
     branches:
       - master
+      - main
 
 - job:
     name: build-otc-dev-guide
@@ -59,5 +60,4 @@
     # for changes on other branches.
     branches:
       - master
-      - main
       - main
