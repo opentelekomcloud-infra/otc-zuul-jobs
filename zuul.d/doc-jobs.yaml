@@ -5,6 +5,7 @@
     description: |
       Build api-ref document. This is only run on master branch of a project.
     timeout: 1800
+    nodeset: ubuntu-focal
     vars:
       tox_envlist: api-ref
       tox_pdf_envlist: api-ref-pdf-docs
@@ -26,6 +27,7 @@
     description: |
       Build UMN document. This is only run on master branch of a project.
     timeout: 1800
+    nodeset: ubuntu-focal
     vars:
       tox_envlist: umn
       tox_pdf_envlist: umn-pdf-docs
@@ -47,6 +49,7 @@
     description: |
       Build Developer Guide document. This is only run on master branch of a project.
     timeout: 1800
+    nodeset: ubuntu-focal
     vars:
       tox_envlist: dg
       tox_pdf_envlist: dg-pdf-docs
