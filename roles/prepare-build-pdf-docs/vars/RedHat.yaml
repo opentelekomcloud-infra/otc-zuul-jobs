@@ -1,5 +1,5 @@
 packages:
-  - gif2png
+  - ImageMagick
   - latexmk
   - liberation-mono-fonts
   - liberation-sans-fonts

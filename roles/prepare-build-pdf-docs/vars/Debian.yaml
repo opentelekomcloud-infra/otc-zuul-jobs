@@ -1,0 +1,17 @@
+packages:
+  - imagemagick
+  - latexmk
+  - fonts-lmodern
+  - fonts-liberation
+  - texlive-latex-base
+  - texlive-latex-extra
+  - texlive-xetex
+  - texlive-fonts-recommended
+  - fonts-freefont-otf
+  # Required for tgtermes.sty style, this is a recommended package
+  # for texlive-fonts-recommended but it is not installed by default.
+  - tex-gyre
+  - cm-super
+  - xindy
+  # Required by sphinxcontrib-svg2pdfconverter to handle SVG images
+  - librsvg2-bin
