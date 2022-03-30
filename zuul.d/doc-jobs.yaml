@@ -14,7 +14,6 @@
       sphinx_source_dir: api-ref/source
       sphinx_pdf_files:
         - "api-ref-{{ zuul.project.short_name }}.pdf"
-      opensearch_doc_category: "api-ref"
     # We only publish the master (main) branch, so no need to run
     # for changes on other branches.
     branches:
@@ -36,7 +35,6 @@
       sphinx_source_dir: umn/source
       sphinx_pdf_files:
         - "umn-{{ zuul.project.short_name }}.pdf"
-      opensearch_doc_category: "umn"
     # We only publish the master (main) branch, so no need to run
     # for changes on other branches.
     branches:
@@ -58,7 +56,6 @@
       sphinx_source_dir: dg/source
       sphinx_pdf_files:
         - "dg-{{ zuul.project.short_name }}.pdf"
-      opensearch_doc_category: "dev"
     # We only publish the master (main) branch, so no need to run
     # for changes on other branches.
     branches:
