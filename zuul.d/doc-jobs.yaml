@@ -49,13 +49,13 @@
     timeout: 1800
     nodeset: ubuntu-focal
     vars:
-      tox_envlist: dg
-      tox_pdf_envlist: dg-pdf-docs
+      tox_envlist: dev-guide
+      tox_pdf_envlist: dev-guide-pdf-docs
       tox_skip_pdf: false
-      sphinx_build_dir: dg/build
-      sphinx_source_dir: dg/source
+      sphinx_build_dir: dev_guide/build
+      sphinx_source_dir: dev_guide/source
       sphinx_pdf_files:
-        - "dg-{{ zuul.project.short_name }}.pdf"
+        - "dev-guide-{{ zuul.project.short_name }}.pdf"
     # We only publish the master (main) branch, so no need to run
     # for changes on other branches.
     branches:
