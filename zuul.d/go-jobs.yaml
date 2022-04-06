@@ -45,3 +45,4 @@
     nodeset: fedora-pod
     vars:
       golangci_lint_version: 1.45.2
+      go_version: 1.18
