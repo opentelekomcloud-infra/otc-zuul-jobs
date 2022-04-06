@@ -44,4 +44,4 @@
     parent: golangci-lint
     nodeset: fedora-pod
     vars:
-      golangci_lint_version: 1.43.0
+      golangci_lint_version: 1.45.2
