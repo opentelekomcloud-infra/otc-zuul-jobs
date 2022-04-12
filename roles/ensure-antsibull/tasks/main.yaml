@@ -11,4 +11,4 @@
     name: "{{ antsibull_packages | union(doc_building_extra_packages) }}"
     chdir: "{{ zuul_work_dir }}"
     virtualenv: "{{ zuul_work_virtualenv }}"
-    state: latest
+    state: forcereinstall
