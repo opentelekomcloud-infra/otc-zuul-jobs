@@ -3,7 +3,7 @@
     name: golang-make
     parent: golang-go
     vars:
-      go_version: "1.18"
+      go_version: 1.18.1
     description: |
       Run Golang commands under make
     pre-run: playbooks/golang/make-pre.yaml
@@ -32,11 +32,11 @@
     name: goreleaser-build
     description: |
       Build Golang binaries with goreleaser.
-    nodeset: fedora-pod
+    nodeset: ubuntu-jammy
     pre-run: playbooks/golang/goreleaser-pre.yaml
     run: playbooks/golang/goreleaser-build.yaml
     vars:
-      go_version: "1.18"
+      go_version: 1.18.1
       goreleaser_args: "--snapshot --rm-dist --skip-publish --skip-sign"
 
 - job:
@@ -45,4 +45,4 @@
     nodeset: fedora-pod
     vars:
       golangci_lint_version: 1.45.2
-      go_version: 1.18
+      go_version: 1.18.1
