@@ -1,0 +1,30 @@
+- name: Check installed vault version
+  command: vault version
+  register: vault_installed_version
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ensure_gh_install_dir }}"
+  failed_when: false
+
+- name: Create temp directory
+  tempfile:
+    state: directory
+  register: archive_tempdir
+
+- name: Download gh checksums
+  uri:
+    url: "https://github.com/cli/cli/releases/download/v{{ ensure_gh_version }}/gh_{{ ensure_gh_version }}_checksums.txt"
+    return_content: true
+  register: gh_checksums
+
+- name: Download gh archive
+  get_url:
+    url: "{{ ensure_gh_download_uri }}"
+    dest: "{{ archive_tempdir.path }}/gh_{{ ensure_gh_version }}_{{ ensure_gh_os }}_{{ ensure_gh_arch }}.zip"
+    checksum: "sha256:{{ gh_checksums.content | regex_search('(?P<checksum>.*)\\b\\s+gh_'+ensure_gh_version+'_'+ensure_gh_os+'_'+ensure_gh_arch, '\\g<checksum>') }}"
+
+- name: Install gh
+  unarchive:
+    src: "{{ archive_tempdir.path }}/gh_{{ ensure_gh_version }}_{{ ensure_gh_os }}_{{ ensure_gh_arch }}.zip"
+    dest: "{{ ensure_gh_install_dir }}"
+    remote_src: yes
+  become: true
