@@ -3,3 +3,9 @@
     - name: Include ensure-gh
       include_role:
         name: ensure-gh
+
+    - name: Check the binary
+      stat:
+        path: /usr/local/bin/gh
+      register: gh_stat
+      failed_when: "not gh_stat.stat.exists"

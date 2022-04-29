@@ -22,9 +22,13 @@
     dest: "{{ archive_tempdir.path }}/gh_{{ ensure_gh_version }}_{{ ensure_gh_os }}_{{ ensure_gh_arch }}.zip"
     checksum: "sha256:{{ gh_checksums.content | regex_search('(?P<checksum>.*)\\b\\s+gh_'+ensure_gh_version+'_'+ensure_gh_os+'_'+ensure_gh_arch, '\\g<checksum>') }}"
 
+# Note gh archive looks like gh_{{version}}_{{os}}_{{arch}}/bin/gh,
+# thus use strip-components
 - name: Install gh
   unarchive:
     src: "{{ archive_tempdir.path }}/gh_{{ ensure_gh_version }}_{{ ensure_gh_os }}_{{ ensure_gh_arch }}.zip"
     dest: "{{ ensure_gh_install_dir }}"
     remote_src: yes
+    extra_opts:
+      - --strip-components=1
   become: true
