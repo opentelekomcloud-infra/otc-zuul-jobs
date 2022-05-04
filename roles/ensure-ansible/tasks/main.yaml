@@ -15,7 +15,7 @@
 
 - name: Install Ansible
   pip:
-    name: "{{ ensure_ansible_package_name|default('ansible-base', true) }}"
+    name: "{{ ensure_ansible_package_name|default('ansible-core', true) }}"
     version: "{{ ensure_ansible_version|default('latest', true) }}"
     state: "{{ ensure_ansible_state|default('present', true) }}"
     virtualenv: "{{ ensure_ansible_venv_path|default(omit, true) }}"
