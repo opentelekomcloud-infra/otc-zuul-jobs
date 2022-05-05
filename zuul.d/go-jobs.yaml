@@ -12,7 +12,6 @@
 - job:
     name: otc-golang-make
     parent: golang-make
-    nodeset: fedora-pod
     description: |
       Base job for running Golang jobs
 
@@ -42,7 +41,6 @@
 - job:
     name: otc-golangci-lint
     parent: golangci-lint
-    nodeset: fedora-pod
     vars:
       golangci_lint_version: 1.45.2
       go_version: 1.18.1
