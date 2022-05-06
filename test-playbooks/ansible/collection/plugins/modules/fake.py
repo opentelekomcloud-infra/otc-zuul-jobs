@@ -64,7 +64,7 @@ class FakeModule:
     def __init__(self):
         self.ansible = AnsibleModule(
             self.argument_spec,
-            self.module_kwargs)
+            **self.module_kwargs)
 
     @abc.abstractmethod
     def run(self):

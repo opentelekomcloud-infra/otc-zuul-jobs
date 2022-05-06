@@ -5,10 +5,9 @@ version: "1.0.1"
 readme: "README.md"
 authors:
   - fake author
-dependencies:
 license:
-    - "MIT"
+  - "MIT"
 tags:
-    - demo
-    - collection
+  - demo
+  - collection
 repository: "https://www.github.com/my_org/my_collection"

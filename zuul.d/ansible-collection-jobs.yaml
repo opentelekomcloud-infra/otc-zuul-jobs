@@ -4,7 +4,6 @@
     description: |
       Build ansible collection
     parent: unittests
-    nodeset: fedora-pod
     run: playbooks/ansible-collection/build.yaml
     vars:
       python_version: 3.9
@@ -14,7 +13,6 @@
     description: |
       Install ansible collection
     parent: unittests
-    nodeset: fedora-pod
     run: playbooks/ansible-collection/install.yaml
     vars:
       python_version: 3.9
@@ -24,7 +22,6 @@
     description: |
       Publish ansible collection
     parent: unittests
-    nodeset: fedora-pod
     run: playbooks/ansible-collection/build.yaml
     post-run: playbooks/ansible-collection/publish.yaml
     vars:
@@ -36,11 +33,10 @@
     abstract: true
     description: |
       Execute ansible-test for the collection
-    nodeset: fedora-pod
     pre-run: playbooks/ansible-test-base/pre.yaml
     run: playbooks/ansible-test-base/run.yaml
     vars:
-      python_version: 3.9
+      python_version: "3.10"
       ansible_test_collections: true
 
 - job:
@@ -63,8 +59,6 @@
     vars:
       ansible_test_test_command: "units"
       ansible_test_no_temp_unicode: true
-      ensure_ansible_package_name: ansible-base
-      ensure_ansible_version: 2.10.17
 
 - job:
     name: ansible-collection-test-integration
@@ -107,7 +101,6 @@
     description: |
       Run openstack collections linter tests using the 2.10 branch of ansible
     voting: true
-    nodeset: fedora-pod
     required-projects:
       - name: ansible/ansible
         override-checkout: stable-2.10
@@ -118,7 +111,6 @@
     description: |
       Run openstack collections linter tests using the 2.9 branch of ansible
     voting: true
-    nodeset: fedora-pod
     required-projects:
       - name: ansible/ansible
         override-checkout: stable-2.9
