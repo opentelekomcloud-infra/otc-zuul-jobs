@@ -1,0 +1,27 @@
+- name: Check installed pandoc version
+  command: pandoc version
+  register: pandoc_installed_version
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ensure_pandoc_install_dir }}"
+  failed_when: false
+
+- name: Create temp directory
+  tempfile:
+    state: directory
+  register: archive_tempdir
+
+- name: Download pandoc archive
+  get_url:
+    url: "{{ ensure_pandoc_download_uri }}"
+    dest: "{{ archive_tempdir.path }}/pandoc-{{ ensure_pandoc_version }}-{{ ensure_pandoc_os }}-{{ ensure_pandoc_arch }}.tar.gz"
+
+# Note pandoc archive looks like pandoc-{{version}}/bin/pandoc,
+# thus use strip-components
+- name: Install pandoc
+  unarchive:
+    src: "{{ archive_tempdir.path }}/pandoc-{{ ensure_pandoc_version }}-{{ ensure_pandoc_os }}-{{ ensure_pandoc_arch }}.tar.gz"
+    dest: "{{ ensure_pandoc_install_dir }}"
+    remote_src: yes
+    extra_opts:
+      - --strip-components=1
+  become: true

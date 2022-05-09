@@ -16,12 +16,20 @@
     vars:
       python_version: 3.9
 
+- job:
+    name: zuul-jobs-test-ensure-pandoc
+    description: Test ensure-pandoc job
+    files:
+      - roles/ensure-pandoc
+    run: test-playbooks/ensure-pandoc.yaml
+
 - project:
     merge-mode: squash-merge
     check: &id001
       jobs:
         - zuul-jobs-test-ensure-sphinx-opensearch
         # upload role is non voting, cause we test upload to fake url
+        - zuul-jobs-test-ensure-pandoc
         - zuul-jobs-test-upload-doc-index-opensearch:
             voting: false
     gate: *id001

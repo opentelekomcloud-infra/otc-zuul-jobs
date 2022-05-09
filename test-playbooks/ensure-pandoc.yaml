@@ -1,0 +1,11 @@
+- hosts: all
+  tasks:
+    - name: Include ensure-pandoc
+      include_role:
+        name: ensure-pandoc
+
+    - name: Check the binary
+      stat:
+        path: /usr/local/bin/pandoc
+      register: pandoc_stat
+      failed_when: "not pandoc_stat.stat.exists"

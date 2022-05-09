@@ -1,0 +1,5 @@
+ensure_pandoc_version: "2.18"
+ensure_pandoc_download_uri: "https://github.com/jgm/pandoc/releases/download/{{ ensure_pandoc_version }}/pandoc-{{ ensure_pandoc_version }}-{{ ensure_pandoc_os }}-{{ ensure_pandoc_arch }}.tar.gz"
+ensure_pandoc_os: "{{ ansible_system | lower }}"
+ensure_pandoc_arch: "{{ pandoc_arch_translation[ansible_architecture] }}"
+ensure_pandoc_install_dir: "/usr/local"
