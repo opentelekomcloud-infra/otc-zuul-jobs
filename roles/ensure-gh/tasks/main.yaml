@@ -1,4 +1,4 @@
-- name: Check installed vault version
+- name: Check installed gh version
   command: vault version
   register: vault_installed_version
   environment:
