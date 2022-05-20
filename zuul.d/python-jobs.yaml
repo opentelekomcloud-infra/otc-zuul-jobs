@@ -3,7 +3,7 @@
     name: otc-tox
     parent: tox
     abstract: true
-    nodeset: fedora-pod
+    nodeset: pod-fedora-latest
     description: |
       Base job for running tox jobs
 
@@ -84,7 +84,7 @@
     name: otc-tox-docs
     description: |
       Run tox -e docs in a pod
-    nodeset: fedora-pod
+    nodeset: pod-fedora-latest
     vars:
       tox_envlist: docs
       bindep_profile: compile doc
@@ -101,7 +101,7 @@
 - job:
     name: build-otc-releasenotes
     parent: build-reno-releasenotes
-    nodeset: fedora-pod
+    nodeset: pod-fedora-latest
     description: |
       Build releasenotes, with optional translation support, using reno.
     # Building translated releasenotes can take long for large repositories
