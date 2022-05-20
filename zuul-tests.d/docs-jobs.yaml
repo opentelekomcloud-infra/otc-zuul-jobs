@@ -1,12 +1,12 @@
 - job:
-    name: zuul-jobs-build-otc-doc
-    parent: build-otc-doc
-    description: Test build-otc-doc job
+    name: zuul-jobs-build-sphinx-docs
+    parent: build-sphinx-docs
+    description: Test build-sphinx-docs job
 
 - project:
     merge-mode: squash-merge
     check:
       jobs: &id001
-        - zuul-jobs-build-otc-doc
+        - zuul-jobs-build-sphinx-docs
     gate:
       jobs: *id001

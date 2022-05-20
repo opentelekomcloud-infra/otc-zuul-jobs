@@ -1,7 +1,7 @@
 Documentation Jobs
 ==================
 
-.. zuul:autojob:: build-otc-doc
+.. zuul:autojob:: build-sphinx-docs
 .. zuul:autojob:: build-otc-api-ref
 .. zuul:autojob:: build-otc-umn
 .. zuul:autojob:: build-otc-dev-guide

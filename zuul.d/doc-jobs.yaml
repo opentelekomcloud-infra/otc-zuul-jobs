@@ -1,6 +1,6 @@
 ---
 - job:
-    name: build-otc-doc
+    name: build-sphinx-docs
     description: |
       Build document with Sphinx without tox.
     timeout: 1800
