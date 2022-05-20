@@ -1,6 +1,6 @@
-- name: Check installed vault version
-  command: vault version
-  register: vault_installed_version
+- name: Check installed gh version
+  command: gh version
+  register: gh_installed_version
   environment:
     PATH: "{{ ansible_env.PATH }}:{{ ensure_gh_install_dir }}"
   failed_when: false
