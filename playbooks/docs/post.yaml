@@ -2,3 +2,4 @@
 - hosts: all
   roles:
     - fetch-sphinx-json
+    - fetch-sphinx-tarball

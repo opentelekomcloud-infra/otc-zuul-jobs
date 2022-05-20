@@ -1,5 +1,19 @@
 ---
 - job:
+    name: build-otc-doc
+    description: |
+      Build document with Sphinx without tox.
+    timeout: 1800
+    vars:
+      sphinx_build_dir: doc/build
+      sphinx_source_dir: doc/source
+      sphinx_pdf_files:
+        - "doc-{{ zuul.project.short_name }}.pdf"
+    pre-run: playbooks/docs/pre.yaml
+    run: playbooks/docs/run.yaml
+    post-run: playbooks/docs/post.yaml
+
+- job:
     name: build-otc-api-ref
     parent: otc-tox-docs
     description: |
