@@ -1,0 +1,26 @@
+- job:
+    name: propose-change
+    description: |
+      Propose project update (make PR with given changes).
+
+      Responds to these variables:
+
+      .. zuul:jobvar:: propose_repository_clone_url
+
+         Clone URL for the repository.
+
+      .. zuul:jobvar:: propose_git_provider
+
+         Provider where the repository is located (github or gitea).
+
+      .. zuul:jobvar:: propose_change_destination
+
+         Path in the repository to replace content.
+
+      .. zuul:jobvar:: propose_git_patch_location
+
+         Path to the patch file.
+
+    nodeset:
+      nodes: []
+    run: playbooks/propose/run.yaml
