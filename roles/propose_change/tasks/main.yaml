@@ -188,6 +188,12 @@
     - "diff_output.stdout|length > 0"
     - "propose_change_git_provider == 'gitea'"
 
+- name: Check reject comment file presence
+  ansible.builtin.stat:
+    path: "{{ propose_change_reject_file }}"
+  register: reject_stat
+  when: "propose_change_reject_file is defined"
+
 - name: Post information about failures to Gitea (if we can)
   ansible.builtin.uri:
     url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/issues/{{ pr_result.json.id }}"
@@ -202,3 +208,4 @@
     - "diff_output.stdout|length > 0"
     - "propose_change_git_provider == 'gitea'"
     - "pr_result is defined and pr_result.json is defined"
+    - "reject_stat is defined and reject_stat.stat is defined and reject_stat.stat.exists"
