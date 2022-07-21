@@ -1,0 +1,90 @@
+---
+- hosts: localhost
+  vars:
+    repo_checkout_path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test_repo"
+    propose_change_repo_clone_url: "https://{{ propose_change_git_baseurl }}/{{ propose_change_git_repo_name }}"
+  tasks:
+    - name: Configure git user name
+      ansible.builtin.command: "git config --global user.name 'OpenTelekomCloud Proposalbot'"
+
+    - name: Configure git user email
+      ansible.builtin.command: "git config --global user.email otcbot@otc-service.com"
+
+    - name: Clone test repo
+      ansible.builtin.git:
+        repo: "{{ propose_change_repo_clone_url }}"
+        dest: "{{ repo_checkout_path }}"
+
+    - name: Make simple change
+      ansible.builtin.copy:
+        dest: "{{ repo_checkout_path }}/README.md"
+        content: |
+          Fake readme
+
+    - name: Stage changes
+      ansible.builtin.command: "git add ."
+      args:
+        chdir: "{{ repo_checkout_path }}"
+
+    - name: Commit changes
+      ansible.builtin.command: "git commit -m 'test update'"
+      args:
+        chdir: "{{ repo_checkout_path }}"
+
+    - name: Generate patch
+      ansible.builtin.shell: "git format-patch --binary -1 --stdout > {{ propose_change_patch }}"
+      args:
+        chdir: "{{ repo_checkout_path }}"
+
+    - name: Make 2nd simple change
+      ansible.builtin.copy:
+        dest: "{{ repo_checkout_path }}/README.md"
+        content: |
+          Fake readme 2
+
+    - name: Stage changes
+      ansible.builtin.command: "git add ."
+      args:
+        chdir: "{{ repo_checkout_path }}"
+
+    - name: Commit changes
+      ansible.builtin.command: "git commit -m 'test update'"
+      args:
+        chdir: "{{ repo_checkout_path }}"
+
+    - name: Generate patch
+      ansible.builtin.shell: "git format-patch --binary -1 --stdout > {{ propose_change_patch }}2"
+      args:
+        chdir: "{{ repo_checkout_path }}"
+
+    - name: Propose
+      include_role:
+        name: propose_change
+      vars:
+        propose_change_patch_file: "{{ propose_change_patch }}"
+
+    - name: Propose another update
+      include_role:
+        name: propose_change
+      vars:
+        propose_change_patch_file: "{{ propose_change_patch }}2"
+
+    - name: Propose
+      include_role:
+        name: propose_change
+      vars:
+        propose_change_patch_file: "{{ propose_change_patch }}"
+        propose_change_force: true
+
+    - name: Make 3rd simple change
+      ansible.builtin.copy:
+        dest: "{{ repo_checkout_path }}/README.md"
+        content: |
+          Fake readme 3
+
+    - name: Propose change with local changes
+      include_role:
+        name: propose_change
+      vars:
+        propose_change_source_location: "{{ repo_checkout_path }}"
+        propose_change_repo_location: ""

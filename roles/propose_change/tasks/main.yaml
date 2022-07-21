@@ -1,0 +1,202 @@
+- name: Configure git user name
+  ansible.builtin.command: "git config --global user.name '{{ propose_change_user_name }}'"
+
+- name: Configure git user email
+  ansible.builtin.command: "git config --global user.email {{ propose_change_user_email }}"
+
+- name: Clone repo from Gitea
+  ansible.builtin.git:
+    repo: "https://{{ propose_change_secret.gitea_username }}:{{ propose_change_secret.gitea_password }}@{{ propose_change_git_baseurl }}/{{ propose_change_git_repo_name }}"
+    dest: "{{ propose_change_repo_checkout_location }}"
+  when: "propose_change_git_provider == 'gitea'"
+
+- name: Check patch presence
+  ansible.builtin.stat:
+    path: "{{ propose_change_patch_file }}"
+  register: patch_stat
+  when: "propose_change_patch_file is defined"
+
+- name: Check remote branch presence
+  ansible.builtin.command: "git branch -r -l origin/{{ propose_change_branch_name }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  register: remote_branch
+
+- name: Check local branch presence
+  ansible.builtin.command: "git branch -l {{ propose_change_branch_name }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  register: local_branch
+
+- name: Checkout existing remote branch (but not locally)
+  ansible.builtin.command: "git checkout -b {{ propose_change_branch_name }} --track origin/{{ propose_change_branch_name }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  when:
+    - "propose_change_branch_name in remote_branch.stdout"
+    - "propose_change_branch_name not in local_branch.stdout"
+
+- name: Create new branch (neither exists)
+  ansible.builtin.command: "git branch {{ propose_change_branch_name }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  when:
+    - "remote_branch is defined and remote_branch.stdout is defined"
+    - "propose_change_branch_name not in remote_branch.stdout"
+    - "local_branch is defined and local_branch.stdout is defined"
+    - "propose_change_branch_name not in local_branch.stdout"
+
+- name: Switch to target branch (be sure work on correct branch)
+  ansible.builtin.command: "git switch {{ propose_change_branch_name }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  when: "not propose_change_force"
+
+- name: Force create new branch
+  ansible.builtin.command: "git checkout -B {{ propose_change_branch_name }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  when: "propose_change_force"
+
+- name: Try to apply git patch
+  ansible.builtin.command: "git apply --reject --ignore-space-change {{ patch_stat.stat.path }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  failed_when: false
+  when:
+    - "patch_stat is defined and patch_stat.stat is defined"
+    - "patch_stat.stat.exists"
+
+- name: Find patch backup and reject files
+  ansible.builtin.find:
+    paths: "{{ propose_change_repo_checkout_location }}"
+    patterns: "^.*?\\.(?:rej)$"
+    use_regex: true
+    recurse: true
+  register: rej_files
+  when:
+    - "patch_stat is defined and patch_stat.stat is defined"
+    - "patch_stat.stat.exists"
+
+- name: Prepare patch remainder comment file
+  ansible.builtin.template:
+    dest: "{{ propose_change_reject_file }}"
+    src: "patch_remainder_content.txt.j2"
+    mode: "0755"
+  when:
+    - "patch_stat is defined and patch_stat.stat is defined"
+    - "patch_stat.stat.exists"
+    - "rej_files.matched > 0"
+
+- name: Construct patch remainder
+  ansible.builtin.shell: "cat {{ zj_item.path }} >> {{ propose_change_reject_file }}"
+  loop: "{{ rej_files.files }}"
+  loop_control:
+    loop_var: zj_item
+  when:
+    - "patch_stat is defined and patch_stat.stat is defined"
+    - "patch_stat.stat.exists"
+    - "rej_files.matched > 0"
+
+- name: Finish patch remainder comment file
+  ansible.builtin.shell: "echo '```' >> {{ propose_change_reject_file }}"
+  when:
+    - "patch_stat is defined and patch_stat.stat is defined"
+    - "patch_stat.stat.exists"
+    - "rej_files.matched > 0"
+
+- name: Drop all interim patch files
+  ansible.builtin.command: "find . \\( -name '*.orig' -or -name '*.rej' \\) -exec rm {} \\;"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  register: drop_failed
+  when:
+    - "patch_stat is defined and patch_stat.stat is defined"
+    - "patch_stat.stat.exists"
+    - "rej_files.matched > 0"
+
+- name: Copy files from local changes
+  ansible.builtin.command: "rsync -r --exclude '.git' {{ propose_change_source_location }}/{{ propose_change_repo_location }} {{ propose_change_repo_checkout_location }}/{{ propose_change_repo_location }}"
+  when:
+    - "propose_change_patch_file is not defined or not patch_stat.stat.exists"
+    - "propose_change_source_location is defined"
+
+- name: Stage files
+  command: "git add ."
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+
+- name: Perform git diff to see changes
+  ansible.builtin.command: "git diff --staged"
+  register: diff_output
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+
+# Maybe put some reference in the commit message
+- name: Commit files
+  ansible.builtin.command: "git commit -m 'Update content'"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  when:
+    - "diff_output.stdout | length > 0"
+
+- name: Prepare push flags
+  ansible.builtin.set_fact:
+    propose_change_push_options: "{{ propose_change_push_options }} --force"
+  when: "propose_change_force"
+
+- name: Push changes
+  ansible.builtin.command: "git push -u origin {{ propose_change_branch_name }} {{ propose_change_push_options }}"
+  args:
+    chdir: "{{ propose_change_repo_checkout_location }}"
+  when:
+    - "diff_output.stdout | length > 0"
+
+- name: Check PR Body file
+  ansible.builtin.stat:
+    path: "{{ propose_change_pr_body_file }}"
+  register: propose_change_pr_body_stat
+  when:
+    - "propose_change_pr_body_file is defined"
+
+- name: Generate PR text
+  ansible.builtin.template:
+    dest: "{{ propose_change_pr_body_file }}"
+    src: "pr_body.txt.j2"
+  when:
+    - "diff_output.stdout | length > 0"
+    - "propose_change_pr_body_file is defined"
+    - "propose_change_pr_body_stat is not defined or not propose_change_pr_body_stat.stat.exists"
+
+- name: Try opening PR for Gitea
+  ansible.builtin.uri:
+    url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/pulls"
+    headers:
+      Authorization: "token {{ propose_change_secret.gitea_token }}"
+    method: "POST"
+    body_format: "json"
+    body:
+      title: "{{ propose_change_pr_title }}"
+      body: "{{ lookup('ansible.builtin.file', propose_change_pr_body_file) }}"
+      head: "{{ propose_change_branch_name }}"
+      base: "{{ propose_change_base_branch_name | default('main') }}"
+    status_code: [201, 409]
+  register: "pr_result"
+  when:
+    - "diff_output.stdout|length > 0"
+    - "propose_change_git_provider == 'gitea'"
+
+- name: Post information about failures to Gitea (if we can)
+  ansible.builtin.uri:
+    url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/issues/{{ pr_result.json.id }}"
+    headers:
+      Authorization: "token {{ propose_change_secret.gitea_token }}"
+    method: "POST"
+    body_format: "json"
+    body:
+      body: "{{ lookup('ansible.builtin.file', propose_change_reject_file) }}"
+    status_code: [201, 409]
+  when:
+    - "diff_output.stdout|length > 0"
+    - "propose_change_git_provider == 'gitea'"
+    - "pr_result is defined and pr_result.json is defined"

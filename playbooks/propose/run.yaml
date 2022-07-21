@@ -1,0 +1,6 @@
+---
+- hosts: localhost
+  tasks:
+    - name: Propose change
+      include_role:
+        name: propose_change

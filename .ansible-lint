@@ -18,5 +18,7 @@ skip_list:
   - no-changed-when  # Commands should not change things if nothing needs doing
   - no-tabs  # Most files should not contain tabs
   - role-name  # Role name does not match ``^[a-z][a-z0-9_]+$`` pattern
+  - command-instead-of-module  # Using command rather than module
+  - git-latest  # Git checkouts must contain explicit version
 use_default_rules: true
 verbosity: 1

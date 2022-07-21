@@ -1,0 +1,22 @@
+- job:
+    name: zuul-jobs-propose-change-gitea
+    #    parent: propose-change
+    vars:
+      # propose_change_repo_clone_url: "https://gitea.eco.tsi-dev.otc-service.com/infra/test.git"
+      propose_change_git_provider: "gitea"
+      propose_change_git_baseurl: "gitea.eco.tsi-dev.otc-service.com"
+      propose_change_git_repo_name: "infra/test"
+      propose_change_patch: "~/propose.patch"
+    run: test-playbooks/propose.yaml
+    secrets:
+      secret: propose_change_test
+      name: propose_change_secret
+      pass-to-parent: true
+
+- project:
+    merge-mode: squash-merge
+    check-post:
+      jobs: &id001
+        - zuul-jobs-propose-change-gitea
+    gate:
+      jobs: *id001
