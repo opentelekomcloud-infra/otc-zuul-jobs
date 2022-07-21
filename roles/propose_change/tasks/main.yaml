@@ -8,6 +8,7 @@
   ansible.builtin.git:
     repo: "https://{{ propose_change_secret.gitea_username }}:{{ propose_change_secret.gitea_password }}@{{ propose_change_git_baseurl }}/{{ propose_change_git_repo_name }}"
     dest: "{{ propose_change_repo_checkout_location }}"
+    version: "HEAD"
   when: "propose_change_git_provider == 'gitea'"
 
 - name: Check patch presence
@@ -163,6 +164,7 @@
   ansible.builtin.template:
     dest: "{{ propose_change_pr_body_file }}"
     src: "pr_body.txt.j2"
+    mode: "0755"
   when:
     - "diff_output.stdout | length > 0"
     - "propose_change_pr_body_file is defined"
