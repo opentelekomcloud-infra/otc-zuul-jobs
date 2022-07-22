@@ -10,3 +10,5 @@ propose_change_user_email: "otcbot@otc-service.com"
 propose_change_force: true
 propose_change_push_options: ""
 propose_change_repo_location: ""
+propose_change_main_branch_name: "main"
+propose_change_git_ssh_key: "{{ ansible_user_dir }}/.ssh/git_ssh_key"
