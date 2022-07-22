@@ -12,30 +12,15 @@
     - "propose_change_patch_file is not defined"
     - "propose_change_source_location is defined and propose_change_repo_location is defined"
 
-- name: Proceed with change proposal
+- name: Proceed with change proposal for {{ propose_change_repo_location | default('.') }} of {{ propose_change_git_repo_name }}
+
   block:
-    - name: Configure git user name
-      ansible.builtin.command: "git config --global user.name '{{ propose_change_user_name }}'"
-
-    - name: Configure git user email
-      ansible.builtin.command: "git config --global user.email {{ propose_change_user_email }}"
-
-    - name: Write git SSH key
-      ansible.builtin.copy:
-        dest: "{{ propose_change_git_ssh_key }}"
-        content: "{{ propose_change_secret.gitea_sshkey }}"
-        mode: "0600"
-      register: ssh_key
-      when:
-        - "propose_change_git_provider == 'gitea'"
-        - "propose_change_secret.gitea_sshkey is defined"
-        - "propose_change_git_cloneurl is defined"
-
     - name: Clone repo from Gitea (HTTPS)
       ansible.builtin.git:
         repo: "https://{{ propose_change_secret.gitea_username }}:{{ propose_change_secret.gitea_password }}@{{ propose_change_git_baseurl }}/{{ propose_change_git_repo_name }}"
         dest: "{{ propose_change_repo_checkout_location }}"
         version: "HEAD"
+        force: true
       when:
         - "propose_change_git_provider == 'gitea'"
         - "propose_change_git_cloneurl is not defined"
@@ -46,9 +31,9 @@
         dest: "{{ propose_change_repo_checkout_location }}"
         version: "HEAD"
         accept_hostkey: true
-        key_file: "{{ propose_change_git_ssh_key }}"
+        key_file: "{{ propose_change_git_ssh_key | default(omit) }}"
+        force: true
       when:
-        - "propose_change_git_provider == 'gitea'"
         - "propose_change_git_cloneurl is defined"
 
     - name: Check remote branch presence
@@ -228,14 +213,5 @@
         - "propose_change_git_provider == 'gitea'"
         - "pr_result is defined and pr_result.json is defined and pr_result.json.id is defined"
         - "reject_stat is defined and reject_stat.stat is defined and reject_stat.stat.exists"
-
-    - name: Drop SSH Key
-      ansible.builtin.file:
-        path: "{{ propose_change_git_ssh_key }}"
-        state: "absent"
-      when:
-        - "propose_change_git_provider == 'gitea'"
-        - "propose_change_secret.gitea_sshkey is defined"
-        - "ssh_key is defined"
 
   when: "(patch_stat is defined and patch_stat.stat is defined and patch_stat.stat.exists) or (source_stat is defined and source_stat.stat is defined and source_stat.stat.exists)"
