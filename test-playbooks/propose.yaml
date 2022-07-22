@@ -3,12 +3,23 @@
   vars:
     repo_checkout_path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/test_repo"
     propose_change_repo_clone_url: "https://{{ propose_change_git_baseurl }}/{{ propose_change_git_repo_name }}"
+    propose_change_git_ssh_key: "{{ ansible_user_dir }}/.ssh/git_ssh_key"
+    git_ssh_key_content: "{{ propose_change_secret.gitea_sshkey }}"
   tasks:
     - name: Configure git user name
       ansible.builtin.command: "git config --global user.name 'OpenTelekomCloud Proposalbot'"
 
     - name: Configure git user email
       ansible.builtin.command: "git config --global user.email otcbot@otc-service.com"
+
+    - name: Write git SSH key
+      ansible.builtin.copy:
+        dest: "{{ propose_change_git_ssh_key }}"
+        content: "{{ git_ssh_key_content }}"
+        mode: "0600"
+      register: ssh_key
+      when:
+        - "propose_change_secret.gitea_sshkey is defined"
 
     - name: Clone test repo
       ansible.builtin.git:
@@ -89,3 +100,10 @@
         propose_change_git_cloneurl: "ssh://git@gitea.eco.tsi-dev.otc-service.com:2222/infra/test.git"
         propose_change_source_location: "{{ repo_checkout_path }}"
         propose_change_repo_location: ""
+
+    - name: Drop SSH Key
+      ansible.builtin.file:
+        path: "{{ propose_change_git_ssh_key }}"
+        state: "absent"
+      when:
+        - "propose_change_git_ssh_key is defined"
