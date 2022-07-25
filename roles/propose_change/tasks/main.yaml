@@ -19,7 +19,7 @@
       ansible.builtin.git:
         repo: "https://{{ propose_change_secret.gitea_username }}:{{ propose_change_secret.gitea_password }}@{{ propose_change_git_baseurl }}/{{ propose_change_git_repo_name }}"
         dest: "{{ propose_change_repo_checkout_location }}"
-        version: "HEAD"
+        version: "{{ propose_change_main_branch_name }}"
         force: true
       when:
         - "propose_change_git_provider == 'gitea'"
@@ -29,7 +29,7 @@
       ansible.builtin.git:
         repo: "{{ propose_change_git_cloneurl }}"
         dest: "{{ propose_change_repo_checkout_location }}"
-        version: "HEAD"
+        version: "{{ propose_change_main_branch_name }}"
         accept_hostkey: true
         key_file: "{{ propose_change_git_ssh_key | default(omit) }}"
         force: true
@@ -212,6 +212,15 @@
         - "diff_output.stdout|length > 0"
         - "propose_change_git_provider == 'gitea'"
         - "pr_result is defined and pr_result.json is defined and pr_result.json.id is defined"
+        - "reject_stat is defined and reject_stat.stat is defined and reject_stat.stat.exists"
+
+    - name: Warn Zuul about failures
+      zuul_return:
+        data:
+          zuul:
+            warnings: "There has been conflicts proposing update with patch file"
+      when:
+        - "diff_output.stdout|length > 0"
         - "reject_stat is defined and reject_stat.stat is defined and reject_stat.stat.exists"
 
   when: "(patch_stat is defined and patch_stat.stat is defined and patch_stat.stat.exists) or (source_stat is defined and source_stat.stat is defined and source_stat.stat.exists)"
