@@ -5,8 +5,6 @@ propose_change_pr_body_file: "{{ ansible_user_dir }}/pr_body.txt"
 propose_change_pr_label: "autoPR"
 propose_change_reject_file: "{{ ansible_user_dir }}/pr_rej"
 propose_change_repo_checkout_location: "{{ ansible_user_dir }}/propose_repo"
-propose_change_user_name: "OpenTelekomCloud Proposal Bot"
-propose_change_user_email: "otcbot@otc-service.com"
 propose_change_force: true
 propose_change_push_options: ""
 propose_change_repo_location: ""
