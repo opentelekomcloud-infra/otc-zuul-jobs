@@ -136,7 +136,7 @@
         - "rej_files.matched > 0"
 
     - name: Copy files from local changes
-      ansible.builtin.command: "rsync -az --exclude '.git' {{ propose_change_source_location }}/{{ propose_change_repo_location }}/ {{ propose_change_repo_checkout_location }}/{{ propose_change_repo_location }}"
+      ansible.builtin.command: "rsync -az --delete --exclude '.git' {{ propose_change_source_location }}/{{ propose_change_repo_location }}/ {{ propose_change_repo_checkout_location }}/{{ propose_change_repo_location }}"
       when:
         - "propose_change_patch_file is not defined or not patch_stat.stat.exists"
         - "propose_change_source_location is defined"
