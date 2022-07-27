@@ -97,7 +97,7 @@
       include_role:
         name: propose_change
       vars:
-        propose_change_git_cloneurl: "ssh://git@gitea.eco.tsi-dev.otc-service.com:2222/infra/test.git"
+        propose_change_git_cloneurl: "ssh://git@gitea.eco.tsi-dev.otc-service.com:2222/{{ propose_change_git_repo_name }}.git"
         propose_change_source_location: "{{ repo_checkout_path }}"
         propose_change_repo_location: ""
 

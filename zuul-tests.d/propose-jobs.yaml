@@ -5,7 +5,7 @@
       # propose_change_repo_clone_url: "https://gitea.eco.tsi-dev.otc-service.com/infra/test.git"
       propose_change_git_provider: "gitea"
       propose_change_git_baseurl: "gitea.eco.tsi-dev.otc-service.com"
-      propose_change_git_repo_name: "infra/test"
+      propose_change_git_repo_name: "test_org/test"
       propose_change_patch: "~/propose.patch"
     run: test-playbooks/propose.yaml
     secrets:
