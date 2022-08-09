@@ -1,20 +1,26 @@
-- username: '{{ refstack_credentials.test_adminuser1_user_name }}'
-  user_id: '{{ refstack_credentials.test_adminuser1_user_id }}'
-  project_id: '{{ refstack_credentials.test_adminuser1_project_id }}'
-  password: '{{ refstack_credentials.test_adminuser1_user_password }}'
-  domain_name: {{ refstack_credentials.test_domain_name }}
-  user_domain_name: {{ refstack_credentials.test_user_domain_name }} 
+- username: '{{ refstack_admin.secret.username }}'
+  user_id: '{{ refstack_admin.secret.user_id }}'
+  project_id: '{{ refstack_admin.secret.project_id }}'
+  password: '{{ refstack_admin.secret.password }}'
+  domain_name: {{ refstack_admin.secret.domain_name }}
+  user_domain_name: {{ refstack_admin.secret.user_domain_name }}
   roles:
     - 'reselleradmin'
 
-{% for num in range(tempest_count_users) %}
-- username: '{{ refstack_credentials['test_poweruser' + (num + 1)|string + '_user_name'] }}'
-  user_id: '{{ refstack_credentials['test_poweruser' + (num + 1)|string + '_user_id'] }}'
-  project_id: '{{ refstack_credentials['test_project' + (num + 1)|string + '_id'] }}'
-  password: '{{ refstack_credentials['test_poweruser' + (num + 1)|string + '_user_password'] }}'
-  domain_name: {{ refstack_credentials.test_domain_name }}
-  user_domain_name: {{ refstack_credentials.test_user_domain_name }} 
+- username: '{{ refstack_power1.secret.username }}'
+  user_id: '{{ refstack_power1.secret.user_id }}'
+  project_id: '{{ refstack_power1.secret.project_id }}'
+  password: '{{ refstack_power1.secret.password }}'
+  domain_name: {{ refstack_power1.secret.domain_name }}
+  user_domain_name: {{ refstack_power1.secret.user_domain_name }}
   roles:
     - 'power_user'
 
-{% endfor %}
+- username: '{{ refstack_power2.secret.username }}'
+  user_id: '{{ refstack_power2.secret.user_id }}'
+  project_id: '{{ refstack_power2.secret.project_id }}'
+  password: '{{ refstack_power2.secret.password }}'
+  domain_name: {{ refstack_power2.secret.domain_name }}
+  user_domain_name: {{ refstack_power2.secret.user_domain_name }}
+  roles:
+    - 'power_user'
