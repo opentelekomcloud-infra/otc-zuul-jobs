@@ -1,4 +1,4 @@
-- name: Check {{ organization }} deneral data file
+- name: Check {{ organization }} general data file
   ansible.builtin.stat:
     path: "{{ (gitcontrol_root_dir + '/' + organization + '/data.yaml') }}"
   register: org_data
@@ -11,24 +11,28 @@
 
 - name: Apply {{ organization }} members
   opentelekomcloud.gitcontrol.github_org_members:
-    token: "{{ github_token }}"
+    token: "{{ api_token }}"
     organization: "{{ organization }}"
     members: "{{ org.members }}"
     exclusive: "{{ org.exclusive | default(True) }}"
   when:
     - "org is defined"
+    - "git_type == 'github'"
+    - "api_token is defined"
     - "org.members is defined"
   register: members
 
 - name: Apply {{ organization }} teams
   opentelekomcloud.gitcontrol.github_org_teams:
-    token: "{{ github_token }}"
+    token: "{{ api_token }}"
     organization: "{{ organization }}"
     teams: "{{ org.teams | default([]) }}"
     exclusive: "{{ org.exclusive | default(True) }}"
   when:
     - "org is defined"
     - "org.teams is defined"
+    - "git_type == 'github'"
+    - "api_token is defined"
   register: teams
 
 - name: Find {{ organization }} repositories data
@@ -41,6 +45,7 @@
 - include_tasks: "process_repository_file.yaml"
   vars:
     data: "{{ lookup('file', zj_repository_file.path) | from_yaml  }}"
+    type: "{{ org.type | default('github') }}"
   loop: "{{ repository_data.files }}"
   loop_control:
     loop_var: "zj_repository_file"

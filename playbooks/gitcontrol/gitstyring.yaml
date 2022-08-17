@@ -1,7 +1,7 @@
 ---
 - hosts: localhost
   tasks:
-    - name: Fetch organization tokens
+    - name: Fetch GitHub organization tokens
       no_log: true
       check_mode: false
       ansible.builtin.uri:
@@ -18,8 +18,22 @@
         body_format: "json"
       register: "org_tokens"
       loop: "{{ gitcontrol_organizations }}"
+      when:
+        - "git_type == 'github'"
 
-    - name: Restructure data
+    - name: Fetch simple git api token
+      no_log: true
+      check_mode: false
+      ansible.builtin.uri:
+        url: "{{ vault.vault_addr }}/v1/{{ vault.vault_token_path }}"
+        headers:
+          "X-Vault-Token": "{{ vault.vault_token }}"
+        method: "GET"
+      register: "vault_response"
+      when:
+        - "git_type != 'github'"
+
+    - name: Restructure Org token data
       no_log: true
       set_fact:
         orgs: "{{
@@ -34,16 +48,38 @@
       loop: "{{ org_tokens.results }}"
       loop_control:
         label: "{{ item.item }}"
+      when:
+        - "org_tokens is defined"
+        - "item.json is defined"
+
+    - name: Restructure plain token data
+      no_log: true
+      set_fact:
+        orgs: "{{
+          (orgs | default({})) |
+          combine({
+            item: {
+              'token': vault_response.json.data.data.token,
+              'lease_id': vault_response.json.lease_id
+            }
+          })
+        }}"
+      loop: "{{ gitcontrol_organizations }}"
+      loop_control:
+        label: "{{ item }}"
+      when:
+        - "vault_response is defined"
+        - "vault_response.json is defined"
 
     - name: Apply configuration
       include_role:
         name: gitcontrol
       vars:
         organization: "{{ item.key }}"
-        github_token: "{{ item.value.token }}"
+        api_token: "{{ item.value.token }}"
       loop: "{{ orgs | dict2items }}"
 
-    - name: Revoke GitHub token lease
+    - name: Revoke token lease
       check_mode: false
       no_log: true
       uri:
@@ -56,3 +92,7 @@
         body_format: "json"
         status_code: 204
       loop: "{{ orgs | dict2items }}"
+      when:
+        - "item.value is defined"
+        - "item.value.lease_id is defined"
+        - "item.value.lease_id | length > 0"
