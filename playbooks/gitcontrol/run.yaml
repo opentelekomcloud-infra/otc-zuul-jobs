@@ -34,6 +34,8 @@
             vault_token_path: "{{ zuul_vault.vault_token_path }}"
           gitcontrol_organizations: "{{ gitcontrol_organizations }}"
           gitcontrol_root_dir: "{{ gitcontrol_root_dir }}"
+          git_type: "{{ gitcontrol_git_type | default('github') }}"
+          api_url: "{{ gitcontrol_api_url | default(omit) }}"
 
     - name: Construct execution command
       set_fact:
