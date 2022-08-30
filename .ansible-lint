@@ -1,5 +1,5 @@
 exclude_paths:
-  - test-playbooks/  # TODO(ssbarnea): remove skip in follow-up
+  - test-playbooks/
   - zuul.d/secrets.yaml
 parseable: true
 quiet: false
