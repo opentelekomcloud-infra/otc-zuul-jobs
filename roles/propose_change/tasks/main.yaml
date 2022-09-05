@@ -135,6 +135,15 @@
         - "patch_stat.stat.exists"
         - "rej_files.matched > 0"
 
+    - name: Ensure target dir exists
+      ansible.builtin.file:
+        path: "{{ propose_change_repo_checkout_location }}/{{ propose_change_repo_location }}"
+        state: "directory"
+        mode: "0755"
+      when:
+        - "propose_change_patch_file is not defined or not patch_stat.stat.exists"
+        - "propose_change_source_location is defined"
+
     - name: Copy files from local changes
       ansible.builtin.command: "rsync -az --delete --exclude '.git' {{ propose_change_source_location }}/{{ propose_change_repo_location }}/ {{ propose_change_repo_checkout_location }}/{{ propose_change_repo_location }}"
       when:
