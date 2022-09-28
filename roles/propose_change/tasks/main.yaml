@@ -191,7 +191,7 @@
         method: "POST"
         body_format: "json"
         body:
-          title: "{{ propose_change_pr_title }}"
+          title: "{{ propose_change_pr_title[0:80] }}"
           body: "{{ propose_change_pr_body | default(lookup('ansible.builtin.template', 'pr_body.txt.j2')) }}"
           head: "{{ propose_change_branch_name }}"
           base: "{{ propose_change_base_branch_name | default('main') }}"
