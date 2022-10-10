@@ -1,5 +1,3 @@
-#!/usr/bin/env python3
-#
 # Copyright 2014 Rackspace Australia
 # Copyright 2018-2019 Red Hat, Inc
 #
