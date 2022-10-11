@@ -1,6 +1,6 @@
 ---
 - project:
     merge-mode: squash-merge
-    default-branch: master
+    default-branch: main
     templates:
       - publish-otc-docs-pti
