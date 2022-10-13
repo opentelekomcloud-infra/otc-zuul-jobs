@@ -201,6 +201,22 @@
         - "diff_output.stdout|length > 0"
         - "propose_change_git_provider == 'gitea'"
 
+    - name: Request reviews
+      ansible.builtin.uri:
+        url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/pulls/{{ pr_result.json.id }}/requested_reviewers"
+        headers:
+          Authorization: "token {{ propose_change_secret.gitea_token }}"
+        method: "POST"
+        body_format: "json"
+        body:
+          reviewers: "{{ propose_change_reviewers | default(omit) }}"
+          team_reviewers: "{{ propose_change_team_reviewers | default(omit) }}"
+        status_code: [201, 404, 409, 422]
+      when:
+        - "propose_change_git_provider == 'gitea'"
+        - "pr_result is defined and pr_result.json is defined and pr_result.json.id is defined"
+        - "propose_change_reviewers is defined or propose_change_team_reviewers is defined"
+
     - name: Check reject comment file presence
       ansible.builtin.stat:
         path: "{{ propose_change_reject_file }}"

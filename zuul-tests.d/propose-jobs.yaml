@@ -7,6 +7,7 @@
       propose_change_git_baseurl: "gitea.eco.tsi-dev.otc-service.com"
       propose_change_git_repo_name: "test_org/test"
       propose_change_patch: "~/propose.patch"
+      propose_change_reviewers: "test"
     run: test-playbooks/propose.yaml
     secrets:
       secret: propose_change_test
