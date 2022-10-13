@@ -24,6 +24,7 @@
     secrets:
       - secret: zuul_jobs_vault
         name: zuul_vault
+        pass-to-parent: true
 
 - project:
     merge-mode: squash-merge
