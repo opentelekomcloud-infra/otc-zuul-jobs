@@ -8,10 +8,32 @@
       tox_environment:
         ANSIBLE_ROLES_PATH: ~/src/opendev.org/zuul/zuul-jobs/roles:~/src/github.com/opentelekomcloud-infra/otc-zuul-jobs/roles
 
+- job:
+    name: zuul-jobs-project-cleanup
+    parent: project-cleanup
+    description: Test project-cleanup role
+    required-projects:
+      - zuul/zuul-jobs
+    pre-run: playbooks/functest/pre.yaml
+    post-run: playbooks/functest/post.yaml
+    vars:
+      project_cleanup_cloud: "functional_user"
+      project_cleanup_filters:
+        created_at: "2000-00-00"
+      functest_cloud: "cloud_41245_de_functest1"
+    secrets:
+      - secret: zuul_jobs_vault
+        name: vault_data
+
 - project:
     merge-mode: squash-merge
     check:
-      jobs: &id001
+      jobs:
         - zuul-jobs-tox-linters
+    check-post:
+      jobs:
+        - zuul-jobs-project-cleanup
     gate:
-      jobs: *id001
+      jobs:
+        - zuul-jobs-tox-linters
+        - zuul-jobs-project-cleanup

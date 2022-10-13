@@ -1,0 +1,4 @@
+- name: Perform project cleanup
+  project_cleanup:
+    cloud: "{{ project_cleanup_cloud }}"
+    filters: "{{ project_cleanup_filters | default(omit) }}"

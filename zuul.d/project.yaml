@@ -1,4 +1,11 @@
 ---
+- job:
+    name: project-cleanup
+    description: |
+      Perform OpenStack Project Cleanup to cleanup resources
+    pre-run: playbooks/project_cleanup/pre.yaml
+    run: playbooks/project_cleanup/run.yaml
+
 - project:
     merge-mode: squash-merge
     default-branch: main
