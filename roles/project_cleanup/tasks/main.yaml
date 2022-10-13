@@ -1,4 +1,6 @@
 - name: Perform project cleanup
+  vars:
+    ansible_python_interpreter: "{{ python_interpreter | default(omit) }}"
   project_cleanup:
     cloud: "{{ project_cleanup_cloud }}"
     filters: "{{ project_cleanup_filters | default(omit) }}"
