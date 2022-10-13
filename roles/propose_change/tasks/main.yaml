@@ -215,7 +215,7 @@
       when:
         - "propose_change_git_provider == 'gitea'"
         - "pr_result is defined and pr_result.json is defined and pr_result.json.id is defined"
-        - "propose_change_reviewers is defined or propose_change_team_reviewers is defined }}"
+        - "propose_change_reviewers is defined or propose_change_team_reviewers is defined"
 
     - name: Check reject comment file presence
       ansible.builtin.stat:
