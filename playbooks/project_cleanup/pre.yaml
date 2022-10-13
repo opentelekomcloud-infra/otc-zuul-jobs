@@ -1,0 +1,12 @@
+---
+- hosts: all
+  roles:
+    - ensure-pip
+
+  tasks:
+    - name: Install dependencies
+      ansible.builtin.pip:
+        name:
+          - openstacksdk
+        virtualenv: "{{ ansible_user_dir }}/.venv"
+        virtualenv_command: "{{ ensure_pip_virtualenv_command }}"
