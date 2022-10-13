@@ -7,7 +7,7 @@
     vault_role_name: "{{ vault_data.vault_role_name }}"
 
   roles:
-    #- role: create-vault-approle-secret
+    # - role: create-vault-approle-secret
 
     - role: create-vault-approle-token
       vault_role_id: "{{ vault_data.vault_role_id }}"
