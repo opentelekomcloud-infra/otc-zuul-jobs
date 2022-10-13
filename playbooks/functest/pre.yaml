@@ -4,7 +4,7 @@
     vault_token: "{{ lookup('file', zuul_base_vault_token_path) }}"
     vault_secret_dest: "{{ zuul.executor.work_root }}/.approle-secret"
     vault_token_dest: "{{ zuul.executor.work_root }}/.approle-token"
-    vault_role_name: "{{ vault_data.vault_role_name }}"
+    vault_role_name: "dummy"
 
   roles:
     # - role: create-vault-approle-secret
