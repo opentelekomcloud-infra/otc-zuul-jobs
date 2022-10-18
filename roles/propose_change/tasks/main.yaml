@@ -15,7 +15,7 @@
 - name: Proceed with change proposal for {{ propose_change_repo_location | default('.') }} of {{ propose_change_git_repo_name }}
 
   block:
-    - name: Clone repo from Gitea (HTTPS)
+    - name: "Clone repo from Gitea (HTTPS) - {{ propose_change_git_repo_name }}"
       ansible.builtin.git:
         repo: "https://{{ propose_change_secret.gitea_username }}:{{ propose_change_secret.gitea_password }}@{{ propose_change_git_baseurl }}/{{ propose_change_git_repo_name }}"
         dest: "{{ propose_change_repo_checkout_location }}"
@@ -25,7 +25,7 @@
         - "propose_change_git_provider == 'gitea'"
         - "propose_change_git_cloneurl is not defined"
 
-    - name: Clone repo from Gitea (knowing cloneurl)
+    - name: "Clone repo from Gitea (knowing cloneurl) - {{ propose_change_git_repo_name }}"
       ansible.builtin.git:
         repo: "{{ propose_change_git_cloneurl }}"
         dest: "{{ propose_change_repo_checkout_location }}"
@@ -183,7 +183,7 @@
       when:
         - "diff_output.stdout | length > 0"
 
-    - name: Try opening PR for Gitea
+    - name: "Try opening PR for Gitea {{ propose_change_git_repo_name }}"
       ansible.builtin.uri:
         url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/pulls"
         headers:
@@ -203,7 +203,7 @@
 
     - name: Request reviews
       ansible.builtin.uri:
-        url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/pulls/{{ pr_result.json.id }}/requested_reviewers"
+        url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/pulls/{{ pr_result.json.number }}/requested_reviewers"
         headers:
           Authorization: "token {{ propose_change_secret.gitea_token }}"
         method: "POST"
@@ -225,7 +225,7 @@
 
     - name: Post information about failures to Gitea (if we can)
       ansible.builtin.uri:
-        url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/issues/{{ pr_result.json.id }}"
+        url: "https://{{ propose_change_git_baseurl }}/api/v1/repos/{{ propose_change_git_repo_name }}/issues/{{ pr_result.json.number }}"
         headers:
           Authorization: "token {{ propose_change_secret.gitea_token }}"
         method: "POST"
