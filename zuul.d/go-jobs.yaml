@@ -42,5 +42,5 @@
     name: otc-golangci-lint
     parent: golangci-lint
     vars:
-      golangci_lint_version: 1.45.2
-      go_version: 1.18.1
+      golangci_lint_version: 1.50.0
+      go_version: 1.19.1
