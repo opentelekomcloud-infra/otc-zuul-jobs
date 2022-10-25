@@ -3,7 +3,7 @@
     name: golang-make
     parent: golang-go
     vars:
-      go_version: 1.18.1
+      go_version: 1.19.1
     description: |
       Run Golang commands under make
     pre-run: playbooks/golang/make-pre.yaml
@@ -42,5 +42,5 @@
     name: otc-golangci-lint
     parent: golangci-lint
     vars:
-      golangci_lint_version: 1.45.2
-      go_version: 1.18.1
+      golangci_lint_version: 1.50.0
+      go_version: 1.19.1
