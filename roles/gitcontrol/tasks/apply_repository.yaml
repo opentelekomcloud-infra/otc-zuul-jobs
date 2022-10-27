@@ -52,6 +52,7 @@
     allow_merge_commit: "{{ repo.allow_merge_commit | default(omit) }}"
     allow_rebase_merge: "{{ repo.allow_rebase_merge | default(omit) }}"
     allow_auto_merge: "{{ repo.allow_auto_merge | default(omit) }}"
+    allow_update_branch: "{{ repo.allow_update_branch | default(omit) }}"
     delete_branch_on_merge: "{{ repo.delete_branch_on_merge | default(omit) }}"
     default_branch: "{{ repo.default_branch | default(omit) }}"
     topics: "{{ repo.topics | default(omit) }}"
