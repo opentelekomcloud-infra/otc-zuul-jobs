@@ -73,7 +73,7 @@
       when: "not propose_change_force"
 
     - name: Force create new branch
-      ansible.builtin.command: "git checkout -B {{ propose_change_branch_name }}"
+      ansible.builtin.command: "git checkout -B {{ propose_change_branch_name }} {{ propose_change_main_branch_name }}"
       args:
         chdir: "{{ propose_change_repo_checkout_location }}"
       when: "propose_change_force"
