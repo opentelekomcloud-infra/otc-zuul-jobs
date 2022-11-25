@@ -1,4 +1,22 @@
 ---
+- name: Setup --exclude for tests
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --exclude {{ zj_item }}"
+  loop: "{{ ansible_test_exclude_tests|list }}"
+  loop_control:
+    loop_var: zj_item
+  when:
+    - ansible_test_exclude_tests is defined
+    
+- name: Setup --include for tests
+  set_fact:
+    ansible_test_options: "{{ ansible_test_options }} --include {{ zj_item }}"
+  loop: "{{ ansible_test_include_tests|list }}"
+  loop_control:
+    loop_var: zj_item
+  when:
+    - ansible_test_include_tests is defined
+    
 - name: Setup --skip-tags for test_options
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --skip-tags {{ ansible_test_skip_tags }}"
@@ -16,7 +34,7 @@
   when:
     - ansible_test_skip_tests is defined
     - ansible_test_test_command == 'sanity'
-
+    
 - name: Setup --no-temp-unicode for test_options
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --no-temp-unicode"
