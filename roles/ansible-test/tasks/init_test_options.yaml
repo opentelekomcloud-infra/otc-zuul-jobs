@@ -7,7 +7,7 @@
     loop_var: zj_item
   when:
     - ansible_test_exclude_tests is defined
-    
+
 - name: Setup --include for tests
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --include {{ zj_item }}"
@@ -16,7 +16,7 @@
     loop_var: zj_item
   when:
     - ansible_test_include_tests is defined
-    
+
 - name: Setup --skip-tags for test_options
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --skip-tags {{ ansible_test_skip_tags }}"
