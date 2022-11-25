@@ -34,7 +34,7 @@
   when:
     - ansible_test_skip_tests is defined
     - ansible_test_test_command == 'sanity'
-    
+
 - name: Setup --no-temp-unicode for test_options
   set_fact:
     ansible_test_options: "{{ ansible_test_options }} --no-temp-unicode"
