@@ -3,7 +3,7 @@
     name: build-sphinx-docs
     description: |
       Build document with Sphinx without tox.
-    timeout: 1800
+    timeout: 3600
     vars:
       sphinx_build_dir: doc/build
       sphinx_source_dir: doc/source
