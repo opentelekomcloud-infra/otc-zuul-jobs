@@ -27,6 +27,11 @@
     path: "{{ antsibull_docs_dir }}"
     mode: "0755"
 
+- name: Remove generated environment_variables.rst
+  file:
+    state: "absent"
+    path: "{{ antsibull_docs_tmp_dir }}/environment_variables.rst"
+
 # We want that local content takes precedence. Therefore apply local on top of
 # generated and copy back
 - name: Apply local doc content on top of generated
