@@ -16,7 +16,7 @@
 
         - name: Drop irrelevant data from json output
           ansible.builtin.file:
-            path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/doc/build/json/{{ item }}"
+            path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/{{ sphinx_build_dir | default('doc/build') }}/json/{{ item }}"
             state: "absent"
           loop:
             - "_images"
