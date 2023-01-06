@@ -13,4 +13,13 @@
           vars:
             sphinx_builders: json
             zuul_work_virtualenv: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/.tox/{{ tox_envlist }}"
+
+        - name: Drop irrelevant data from json output
+          ansible.builtin.file:
+            path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/doc/build/json/{{ item }}"
+            state: "absent"
+          loop:
+            - "_images"
+            - "_static"
+            - "_sources"
       ignore_errors: yes
