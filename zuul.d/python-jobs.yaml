@@ -97,6 +97,7 @@
     # OTC Docs may take 30 min only to push 26000
     # files into VM
     timeout: 3600
+    post-timeout: 3600
 
 - job:
     name: build-otc-releasenotes
