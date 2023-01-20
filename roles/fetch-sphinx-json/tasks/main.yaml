@@ -1,4 +1,4 @@
-- name: Check for PDF file names
+- name: Check for json output presence
   stat:
     path: "{{ zuul_work_dir }}/{{ sphinx_build_dir }}/json"
   register: json_dir_stat
