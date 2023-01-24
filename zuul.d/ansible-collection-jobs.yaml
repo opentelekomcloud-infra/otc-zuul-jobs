@@ -36,7 +36,7 @@
     pre-run: playbooks/ansible-test-base/pre.yaml
     run: playbooks/ansible-test-base/run.yaml
     vars:
-      python_version: "3.10"
+      python_version: "3.9"
       ansible_test_collections: true
 
 - job:
