@@ -50,7 +50,7 @@
         - name: Dump extra_vars
           copy:
             dest: "{{ extra_vars_tmp.path }}"
-            content: "{{ extra_vars | to_nice_yaml }}"
+            content: "{{ extra_vars | to_nice_yaml }}"  # noqa jinja
             mode: "0600"
 
         - name: Log execution header

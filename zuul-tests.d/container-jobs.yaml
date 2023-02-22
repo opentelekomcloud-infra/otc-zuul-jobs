@@ -7,7 +7,7 @@
     files:
       - playbooks/simpleton/*
       - roles/simpleton/*
-      - zuul.d/dockerized-jobs.yaml
+      - zuul.d/container-jobs.yaml
     vars:
       simple_env:
         LI: "leeee"
@@ -17,10 +17,24 @@
       simple_run:
         - cat package.json
 
+- job:
+    name: zuul-jobs-test-build-container-image
+    parent: otc-build-container-image
+    files:
+      - playbooks/container-image/*
+      - zuul.d/container-jobs.yaml
+      - zuul-test.d/container-jobs.yaml
+    vars:
+      container_images:
+        - context: test-playbooks/container/docker
+          repository: fake/fake
+          tags: ['latest']
+
 - project:
     merge-mode: squash-merge
     check: &id001
       jobs:
         - zuul-jobs-test-simpleton:
             voting: false
+        - zuul-jobs-test-build-container-image
     gate: *id001

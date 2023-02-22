@@ -28,11 +28,13 @@
 
     - name: Save data for later revocation
       delegate_to: localhost
-      ansible.builtin.copy:
-        dest: "{{ zuul.executor.work_root }}/.{{ zuul.build }}.functest"
+      vars:
         content:
           cloud_creds:
             lease_id: "{{ vault_data.json.lease_id }}"
+      ansible.builtin.copy:
+        dest: "{{ zuul.executor.work_root }}/.{{ zuul.build }}.functest"
+        content: "{{ content | to_json }}"
         mode: "0440"
 
     - name: Include deploy-clouds-config role
