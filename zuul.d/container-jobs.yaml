@@ -26,3 +26,31 @@
     attempts: 1
     pre-run: playbooks/simpleton/pre.yaml
     run: playbooks/simpleton/run.yaml
+
+- job:
+    name: otc-build-docker-image
+    parent: build-docker-image
+    nodeset: ubuntu-jammy
+    timeout: 2700
+    description: |
+      Base job for running build of docker images
+
+- job:
+    name: otc-build-container-image
+    description: |
+      Build a container image.
+
+      .. include:: ../../playbooks/container-image/README.rst
+    nodeset: ubuntu-jammy
+    pre-run: playbooks/container-image/pre.yaml
+    run: playbooks/container-image/run.yaml
+
+- job:
+    name: otc-upload-container-image
+    parent: otc-build-container-image
+    description: |
+      Build and upload a container image.
+
+      .. include:: ../../playbooks/container-image/README.rst
+      .. include:: ../../playbooks/container-image/credentials.rst
+    post-run: playbooks/container-image/upload.yaml

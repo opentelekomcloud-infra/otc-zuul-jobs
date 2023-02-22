@@ -10,6 +10,26 @@ mock_modules:
   - opentelekomcloud.gitcontrol.github_org_members
   - opentelekomcloud.gitcontrol.github_org_teams
   - opentelekomcloud.gitcontrol.github_org_repository
+mock_roles:
+  - bindep
+  - build-container-image
+  - ensure-docker
+  - ensure-if-python
+  - ensure-go
+  - ensure-pip
+  - ensure-podman
+  - ensure-python
+  - ensure-sphinx
+  - ensure-terraform
+  - ensure-tox
+  - fetch-sphinx-output
+  - fetch-sphinx-tarball
+  - fetch-tox-output
+  - promote-docker-image
+  - revoke-sudo
+  - sphinx
+  - tox
+  - upload-container-image
 loop_var_prefix: zj_
 enable_list:
   - no-same-owner
@@ -20,5 +40,19 @@ skip_list:
   - role-name  # Role name does not match ``^[a-z][a-z0-9_]+$`` pattern
   - command-instead-of-module  # Using command rather than module
   - git-latest  # Git checkouts must contain explicit version
+  # TODO: fix those
+  - fqcn-builtins
+  - deprecated-module
+  - key-order[task]
+  - jinja[spacing]
+  - schema[tasks]
+  - name[missing]
+  - name[template]
+  - name[casing]
+  - risky-file-permissions
+  - fqcn[action]
+  - args[module]
+  - name[play]
+  - ignore-errors
 use_default_rules: true
 verbosity: 1

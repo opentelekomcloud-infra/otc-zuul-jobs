@@ -107,11 +107,3 @@
       Build releasenotes, with optional translation support, using reno.
     # Building translated releasenotes can take long for large repositories
     timeout: 3600
-
-- job:
-    name: otc-build-docker-image
-    parent: build-docker-image
-    nodeset: ubuntu-focal
-    timeout: 2700
-    description: |
-      Base job for running build of docker images
