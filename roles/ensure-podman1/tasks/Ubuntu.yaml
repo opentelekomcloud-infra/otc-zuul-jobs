@@ -1,0 +1,27 @@
+- name: Add kubic project repository
+  include_role:
+    name: ensure-package-repositories
+  vars:
+    repositories_keys:
+      - url: "https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/Release.key"
+    repositories_list:
+      - repo: "deb https://download.opensuse.org/repositories/devel:/kubic:/libcontainers:/stable/xUbuntu_{{ ansible_distribution_version }}/ /"
+
+- name: Install podman
+  package:
+    name:
+      - podman
+      - uidmap
+      - slirp4netns
+      - fuse-overlayfs
+      - containernetworking-plugins
+    state: present
+  become: yes
+
+# NOTE(pabelanger): Remove default registries.conf file, so we can manage it
+# ourself. It could have v1 syntax, which doesn't work with v2.
+- name: Remove /etc/containers/registries.conf
+  become: true
+  file:
+    state: absent
+    path: /etc/containers/registries.conf

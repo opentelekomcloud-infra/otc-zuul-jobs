@@ -1,0 +1,15 @@
+- name: Update apt cache
+  ansible.builtin.apt:
+    update_cache: yes
+  become: yes
+
+- name: Install podman
+  package:
+    name:
+      - podman
+      - uidmap
+      - slirp4netns
+      - fuse-overlayfs
+      - containernetworking-plugins
+    state: present
+  become: yes

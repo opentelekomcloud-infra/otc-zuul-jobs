@@ -1,0 +1,28 @@
+- name: Find distribution installation
+  include_tasks: "{{ zj_distro_os }}"
+  with_first_found:
+    - "{{ ansible_distribution }}-{{ ansible_distribution_version }}.yaml"
+    - "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yaml"
+    - "{{ ansible_distribution }}.yaml"
+    - "{{ ansible_os_family }}.yaml"
+    - "default.yaml"
+  loop_control:
+    loop_var: zj_distro_os
+
+- name: Fetch podman version
+  command: podman version
+  register: podman_ver
+
+- name: Print podman version installed
+  debug:
+    msg: "Podman version: {{ podman_ver.stdout }}"
+
+- name: Validate podman engine
+  when: ensure_podman_validate
+  # on purpose to verify that non-root user can call docker/podman
+  become: false
+  shell: |
+    podman version
+    podman info
+    podman ps
+  changed_when: false

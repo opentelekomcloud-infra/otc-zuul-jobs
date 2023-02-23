@@ -1,0 +1,53 @@
+- name: Check for results.json
+  stat:
+    path: "{{ zuul.executor.result_data_file }}"
+  register: result_json_stat
+  delegate_to: localhost
+
+# This can be removed if we add this functionality to Zuul directly
+- name: Load information from zuul_return
+  set_fact:
+    buildset_registry: "{{ (lookup('file', zuul.executor.result_data_file) | from_json)['secret_data']['buildset_registry'] }}"
+  when:
+    - buildset_registry is not defined
+    - result_json_stat.stat.exists
+    - result_json_stat.stat.size > 0
+    - "'buildset_registry' in (lookup('file', zuul.executor.result_data_file) | from_json).get('secret_data')"
+  no_log: true
+
+- name: Build container images
+  include_tasks: build.yaml
+  loop: "{{ container_images }}"
+  loop_control:
+    loop_var: zj_image
+
+# Docker, and therefore skopeo and podman, don't understand docker
+# push [1234:5678::]:5000/image/path:tag so we set up /etc/hosts with
+# a registry alias name to support ipv6 and 4.
+- name: Configure /etc/hosts for buildset_registry to workaround not understanding ipv6 addresses
+  become: yes
+  lineinfile:
+    path: /etc/hosts
+    state: present
+    regex: "^{{ buildset_registry.host }}\tzuul-jobs.buildset-registry$"
+    line: "{{ buildset_registry.host }}\tzuul-jobs.buildset-registry"
+    insertafter: EOF
+  when: buildset_registry is defined and buildset_registry.host | ipaddr
+
+- name: Set buildset_registry alias variable when using ip
+  set_fact:
+    buildset_registry_alias: zuul-jobs.buildset-registry
+  when: buildset_registry is defined and buildset_registry.host | ipaddr
+
+- name: Set buildset_registry alias variable when using name
+  set_fact:
+    buildset_registry_alias: "{{ buildset_registry.host }}"
+  when: buildset_registry is defined and not ( buildset_registry.host | ipaddr )
+
+# Push each image.
+- name: Push image to buildset registry
+  when: buildset_registry is defined
+  include_tasks: push.yaml
+  loop: "{{ container_images }}"
+  loop_control:
+    loop_var: zj_image

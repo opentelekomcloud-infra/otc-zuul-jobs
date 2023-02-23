@@ -1,0 +1,60 @@
+- name: Check sibling directory
+  stat:
+    path: '{{ zuul_work_dir }}/{{ zj_image.context }}/.zuul-siblings'
+  register: _dot_zuul_siblings
+
+# This should have been cleaned up; multiple builds may specify
+# different siblings to include so we need to start fresh.
+- name: Check for clean build
+  assert:
+    that: not _dot_zuul_siblings.stat.exists
+
+- name: Create sibling source directory
+  file:
+    path: '{{ zuul_work_dir }}/{{ zj_image.context }}/.zuul-siblings'
+    state: directory
+    mode: 0755
+  when: zj_image.siblings is defined
+
+- name: Copy sibling source directories
+  command:
+    cmd: 'cp --parents -r {{ zj_sibling }} {{ ansible_user_dir }}/{{ zuul_work_dir }}/{{ zj_image.context }}/.zuul-siblings'
+    chdir: '~/src'
+  loop: '{{ zj_image.siblings }}'
+  loop_control:
+    loop_var: zj_sibling
+  when: zj_image.siblings is defined
+
+- name: Set container filename arg
+  set_fact:
+    containerfile: "{{ zj_image.container_filename | default(container_filename) | default('') }}"
+
+- name: Build a container image
+  vars:
+    tag_prefix: "{{ ('change_' + zuul.change) if (zuul.change is defined) else zuul.pipeline }}_"
+    image_name: "{{ (zj_image.registry + '/' + zj.image.repository) if (zj_image.registry is defined) else zj_image.repository }}"
+  command: >-
+    {{ container_command }} build {{ zj_image.path | default('.') }} {% if containerfile %}-f {{ containerfile }}{% endif %}
+    {% if container_command == 'podman' -%}
+      --cgroup-manager cgroupfs
+    {% endif -%}
+    {% if zj_image.target | default(false) -%}
+      --target {{ zj_image.target }}
+    {% endif -%}
+    {% for build_arg in zj_image.build_args | default([]) -%}
+      --build-arg {{ build_arg }}
+    {% endfor -%}
+    {% if zj_image.siblings | default(false) -%}
+      --build-arg "ZUUL_SIBLINGS={{ zj_image.siblings | join(' ') }}"
+    {% endif -%}
+    {% for tag in zj_image.tags | default(['latest']) -%}
+      --tag {{ image_name }}:{{ tag_prefix }}{{ tag }}
+      --tag {{ image_name }}:{{ tag }}
+    {% endfor -%}
+  args:
+    chdir: "{{ zuul_work_dir }}/{{ zj_image.context }}"
+
+- name: Cleanup sibling source directory
+  file:
+    path: '{{ zuul_work_dir }}/{{ zj_image.context }}/.zuul-siblings'
+    state: absent

@@ -1,0 +1,23 @@
+- name: Add project atomic PPA repository
+  include_role:
+    name: ensure-package-repositories
+  vars:
+    repositories_list:
+      - repo: ppa:projectatomic/ppa
+
+- name: Install podman
+  package:
+    name:
+      - podman
+      - uidmap
+      - slirp4netns
+    state: present
+  become: yes
+
+# NOTE(pabelanger): Remove default registries.conf file, so we can manage it
+# ourself. It could have v1 syntax, which doesn't work with v2.
+- name: Remove /etc/containers/registries.conf
+  become: true
+  file:
+    state: absent
+    path: /etc/containers/registries.conf

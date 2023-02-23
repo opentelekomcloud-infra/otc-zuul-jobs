@@ -1,11 +1,3 @@
 - hosts: all
-  tasks:
-    - name: Update APT cache to let install podman  # noqa no-handler
-      become: true
-      ansible.builtin.apt:
-        update_cache: yes
-      failed_when: false
-
-- hosts: all
   roles:
-    - ensure-podman
+    - ensure-podman1

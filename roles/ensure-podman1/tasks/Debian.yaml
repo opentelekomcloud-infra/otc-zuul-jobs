@@ -1,0 +1,9 @@
+- name: Install podman
+  package:
+    name:
+      - podman
+      - uidmap
+      - slirp4netns
+      - containernetworking-plugins
+    state: present
+  become: yes

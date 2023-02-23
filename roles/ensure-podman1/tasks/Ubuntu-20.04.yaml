@@ -1,0 +1,3 @@
+- name: Not supported
+  fail:
+    msg: Ubuntu 20.04 not supported due to no known source of podman packages.

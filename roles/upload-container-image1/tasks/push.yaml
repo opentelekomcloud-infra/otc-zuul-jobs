@@ -1,0 +1,37 @@
+- name: Create tempfile for password
+  tempfile:
+    state: file
+  register: _password_tmp
+
+- name: Populate tempfile
+  copy:
+    content: "{{ container_registry_credentials[zj_image.registry].password }}"
+    dest: "{{ _password_tmp.path }}"
+    mode: 0600
+
+- name: Log in to registry
+  block:
+    - name: Log in to registry
+      shell: "cat {{ _password_tmp.path }} | {{ container_command }} login -u {{ container_registry_credentials[zj_image.registry].username }} --password-stdin {{ zj_image.registry }}"
+
+  always:
+    - name: Remove password from disk
+      command: "shred {{ _password_tmp.path }}"
+
+- name: Publish images
+  block:
+    - name: Upload tag to registry
+      vars:
+        promote_tag_prefix: "{{ ('change_' + zuul.change) if (zuul.change is defined) else zuul.pipeline }}_"
+      command: "{{ container_command }} push {{ zj_image.registry | ternary(zj_image.registry + '/', '' ) }}{ zj_image.repository }}:{{ upload_container_image_promote | ternary(promote_tag_prefix, '') }}{{ zj_image_tag }}"
+      loop: "{{ zj_image.tags | default(['latest']) }}"
+      loop_control:
+        loop_var: zj_image_tag
+      register: result
+      until: result.rc == 0
+      retries: 3
+      delay: 30
+
+  always:
+    - name: Log out of registry
+      command: "{{ container_command }} logout {{ zj_image.registry }}"
