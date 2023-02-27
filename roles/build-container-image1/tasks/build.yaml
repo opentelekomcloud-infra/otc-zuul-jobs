@@ -32,7 +32,7 @@
 - name: Build a container image
   vars:
     tag_prefix: "{{ ('change_' + zuul.change) if (zuul.change is defined) else zuul.pipeline }}_"
-    image_name: "{{ (zj_image.registry + '/' + zj.image.repository) if (zj_image.registry is defined) else zj_image.repository }}"
+    image_name: "{{ (zj_image.registry + '/' + zj_image.repository) if (zj_image.registry is defined) else zj_image.repository }}"
   command: >-
     {{ container_command }} build {{ zj_image.path | default('.') }} {% if containerfile %}-f {{ containerfile }}{% endif %}
     {% if container_command == 'podman' -%}
