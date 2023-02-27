@@ -1,0 +1,15 @@
+- name: Verify repository names
+  when: |
+    container_registry_credentials is defined
+    and zj_image.registry not in container_registry_credentials
+  loop: "{{ container_images }}"
+  loop_control:
+    loop_var: zj_image
+  fail:
+    msg: "{{ zj_image.registry }} credentials not found"
+
+- name: Upload image to container registry
+  loop: "{{ container_images }}"
+  loop_control:
+    loop_var: zj_image
+  include_tasks: push.yaml
