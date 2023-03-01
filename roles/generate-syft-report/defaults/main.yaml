@@ -1,0 +1,4 @@
+generate_syft_report_executable: "/usr/local/bin/syft"
+generate_syft_report_command: "packages"
+generate_syft_report_format: "cyclonedx-xml"
+generate_syft_report_path: "{{ ansible_user }}/{{ zuul.project.src_dir }}/syft-sbom.xml"

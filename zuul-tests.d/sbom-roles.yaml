@@ -1,0 +1,14 @@
+- job:
+    name: zuul-jobs-test-generate-syft-report
+    description: Test generate-syft-report role
+    files:
+      - roles/generate-syft-report
+    pre-run: test-playbooks/sbom/pre.yaml
+    run: test-playbooks/sbom/generate-syft-report.yaml
+
+- project:
+    merge-mode: squash-merge
+    check: &id001
+      jobs:
+        - zuul-jobs-test-generate-syft-report
+    gate: *id001
