@@ -1,6 +1,6 @@
 Upload one or more container images.
 
-.. include:: ../../roles/build-container-image/common.rst
+.. include:: ../../roles/build-container-image1/common.rst
 
 .. zuul:rolevar:: upload_container_image_promote
    :type: bool

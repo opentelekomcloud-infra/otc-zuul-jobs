@@ -1,0 +1,8 @@
+- name: Build container image SBOMs
+  include_tasks: sbom.yaml
+  loop: "{{ container_images }}"
+  loop_control:
+    loop_var: zj_image
+  vars:
+    image_name: "{{ (zj_image.registry + '/' + zj_image.repository) if (zj_image.registry is defined) else zj_image.repository }}"
+  when: "build_container_image_sbom"

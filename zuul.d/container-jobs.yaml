@@ -42,8 +42,12 @@
 
       .. include:: ../../playbooks/container-image/README.rst
     nodeset: ubuntu-jammy
-    pre-run: playbooks/container-image/pre.yaml
+    pre-run:
+      - playbooks/container-image/pre.yaml
+      - playbooks/sbom/pre.yaml
     run: playbooks/container-image/run.yaml
+    post-run:
+      - playbooks/sbom/run-for-image.yaml
 
 - job:
     name: otc-upload-container-image
