@@ -1,0 +1,12 @@
+- name: Check installed {{ ensure_base_name }} version
+  ansible.builtin.command: "{{ ensure_base_name }} version"
+  register: ensure_base_installed_version
+  environment:
+    PATH: "{{ ansible_env.PATH }}:{{ ensure_base_install_dir }}"
+  failed_when: false
+
+- name: Skip if correct version of {{ ensure_base_name }} is installed
+  ansible.builtin.include_tasks: install.yaml
+  when:
+    - ensure_base_installed_version.rc != 0 or
+      ensure_base_version != (ensure_base_installed_version.stdout|regex_replace(ensure_base_version_pattern, '\\g<version>'))
