@@ -1,0 +1,2 @@
+- name: Generate SBOM for artifact with syft
+  ansible.builtin.command: "{{ generate_syft_report_executable }} {{ generate_syft_report_command }} {{ generate_syft_report_artifact_path }} -o {{ generate_syft_report_format }} --file {{ generate_syft_report_path }}"

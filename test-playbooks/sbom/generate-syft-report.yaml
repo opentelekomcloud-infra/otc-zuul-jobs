@@ -1,0 +1,20 @@
+- hosts: all
+  vars:
+    sbom_path: "{{ ansible_user }}/{{ zuul.project.src_dir }}/syft-sbom.xml"
+  tasks:
+    - name: Inspect docker image
+      ansible.builtin.import_role:
+        name: generate-syft-report
+      vars:
+        generate_syft_report_artifact_path: "docker.io/busybox:latest"
+        generate_syft_report_path: "{{ sbom_path }}"
+
+    - name: Read report
+      ansible.builtin.slurp:
+        src: "{{ sbom_path }}"
+      register: sbom
+      failed_when: "'content' not in sbom"
+
+    - name: Output sbom
+      ansible.builtin.debug:
+        msg: "{{ sbom['content'] | b64decode }}"

@@ -5,3 +5,4 @@ Roles
 
    ansible-roles
    documentation-roles
+   misc-roles
