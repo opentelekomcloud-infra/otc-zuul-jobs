@@ -7,9 +7,22 @@
     --format oci-archive
     -o {{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.tar.gz
 
-- name: Build a container image SBOM
+- name: Build a container image BOM
   ansible.builtin.command: >-
     {{ container_sbom_command }}
     {{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.tar.gz
     --name {{ image_name }}:{{ zj_image.tags | default(['latest']) | last }}
-    -o cyclonedx-xml={{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.sbom.xml
+    -o cyclonedx-xml={{ bom_path }}
+  register: bom
+
+- name: Save BOM data into fact variable
+  ansible.builtin.set_fact:
+    zuul_bom_results: >-
+      {{
+        (zuul_bom_results | default([])) + [{
+          'project_name': image_name,
+          'project_version': (zj_image.tags | default(['latest']) | last),
+          'bom_path': bom_path
+        }]
+      }}
+    cacheable: true
