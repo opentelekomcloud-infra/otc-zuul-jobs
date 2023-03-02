@@ -1,0 +1,11 @@
+- hosts: all
+  tasks:
+    - name: Include ensure-syft
+      include_role:
+        name: ensure-syft
+
+    - name: Check the binary
+      stat:
+        path: /usr/local/bin/syft
+      register: bin_stat
+      failed_when: "not bin_stat.stat.exists"

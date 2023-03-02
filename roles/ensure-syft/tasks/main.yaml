@@ -1,0 +1,8 @@
+- name: Import ensure-base role
+  ansible.builtin.import_role:
+    name: ensure-base
+  vars:
+    ensure_base_name: "syft"
+    ensure_base_github_owner: "anchore"
+    ensure_base_github_repo: "syft"
+    ensure_base_version: "{{ ensure_syft_version | default(omit) }}"

@@ -1,0 +1,30 @@
+- name: Create temp directory
+  ansible.builtin.tempfile:
+    state: directory
+  register: ensure_base_archive_tempdir
+
+- name: Get GitHub release info
+  ansible.builtin.uri:
+    url: "{{ ensure_base_release_info_url_prefix }}/{{ (ensure_base_version == 'latest') | ternary(ensure_base_version, ensure_base_tag) }}"
+    headers:
+      accept: "application/json"
+  register: ensure_base_release_info
+
+- name: Download {{ ensure_base_name }} checksums
+  ansible.builtin.uri:
+    url: "{{ ensure_base_download_prefix }}/{{ ensure_base_release_info.json.tag_name }}/{{ ensure_base_name }}_{{ ensure_base_release_info.json.tag_name | regex_replace('^v', '') }}_checksums.txt"
+    return_content: true
+  register: ensure_base_checksums
+
+- name: Download {{ ensure_base_name }} archive
+  ansible.builtin.get_url:
+    url: "{{ ensure_base_download_prefix }}/{{ ensure_base_release_info.json.tag_name }}/{{ ensure_base_name }}_{{ ensure_base_release_info.json.tag_name | regex_replace('^v', '') }}_{{ ensure_base_os }}_{{ ensure_base_arch }}.tar.gz"
+    dest: "{{ ensure_base_archive_tempdir.path }}/{{ ensure_base_name }}_{{ ensure_base_release_info.json.tag_name | regex_replace('^v', '') }}_{{ ensure_base_os }}_{{ ensure_base_arch }}.tar.gz"
+    checksum: "sha256:{{ ensure_base_checksums.content | regex_search('(?P<checksum>.*)\\b\\s+'+ensure_base_name+'_'+(ensure_base_release_info.json.tag_name | regex_replace('^v',''))+'_'+ensure_base_os+'_'+ensure_base_arch, '\\g<checksum>') }}"
+
+- name: Install {{ ensure_base_name }}
+  ansible.builtin.unarchive:
+    src: "{{ ensure_base_archive_tempdir.path }}/{{ ensure_base_name }}_{{ ensure_base_release_info.json.tag_name | regex_replace('^v', '') }}_{{ ensure_base_os }}_{{ ensure_base_arch }}.tar.gz"
+    dest: "{{ ensure_base_install_dir }}"
+    remote_src: yes
+  become: true
