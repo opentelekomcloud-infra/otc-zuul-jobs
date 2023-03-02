@@ -20,7 +20,7 @@
   ansible.builtin.get_url:
     url: "{{ ensure_base_download_prefix }}/{{ ensure_base_release_info.json.tag_name }}/{{ ensure_base_name }}_{{ ensure_base_release_info.json.tag_name | regex_replace('^v', '') }}_{{ ensure_base_os }}_{{ ensure_base_arch }}.tar.gz"
     dest: "{{ ensure_base_archive_tempdir.path }}/{{ ensure_base_name }}_{{ ensure_base_release_info.json.tag_name | regex_replace('^v', '') }}_{{ ensure_base_os }}_{{ ensure_base_arch }}.tar.gz"
-    checksum: "sha256:{{ ensure_base_checksums.content | regex_search('(?P<checksum>.*)\\b\\s+'+ensure_base_name+'_'+(ensure_base_release_info.json.tag_name | regex_replace('^v',''))+'_'+ensure_base_os+'_'+ensure_base_arch, '\\g<checksum>') }}"
+    checksum: "sha256:{{ ensure_base_checksums.content | regex_search('(?P<checksum>.*)\\b\\s+'+ensure_base_name+'_'+(ensure_base_release_info.json.tag_name | regex_replace('^v',''))+'_'+ensure_base_os+'_'+ensure_base_arch+'.tar.gz', '\\g<checksum>') }}"
 
 - name: Install {{ ensure_base_name }}
   ansible.builtin.unarchive:
