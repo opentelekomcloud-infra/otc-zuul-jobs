@@ -1,0 +1,4 @@
+---
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+dependencytrack_credentials: {}
+bom_artifacts: []

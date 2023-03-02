@@ -1,0 +1,18 @@
+- name: Read {{ zj_item.name }}
+  ansible.builtin.slurp:
+    src: "{{ zj_item.bom_path }}"
+  register: "item_sbom"
+
+- name: Upload {{ zj_item.name }} BOM
+  ansible.builtin.uri:
+    url: "{{ dependencytrack_credentials.base_url }}/api/v1/bom"
+    headers:
+      X-API-Key: "{{ dependencytrack_credentials.api_key}}"
+    method: "PUT"
+    body_format: "json"
+    body:
+      projectName: "{{ zj_item.project_name | default(omit) }}"
+      projectId: "{{ zj_item.project_id | default(omit) }}"
+      projectVersion: "{{ zj_item.project_version | default(omit) }}"
+      autoCreate: "{{ zj_item.auto_create | default(true) }}"
+      bom: "{{ item_sbom['content'] }}"

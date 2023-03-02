@@ -5,4 +5,5 @@
     loop_var: zj_image
   vars:
     image_name: "{{ (zj_image.registry + '/' + zj_image.repository) if (zj_image.registry is defined) else zj_image.repository }}"
+    bom_path: "{{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.sbom.xml"
   when: "build_container_image_sbom"

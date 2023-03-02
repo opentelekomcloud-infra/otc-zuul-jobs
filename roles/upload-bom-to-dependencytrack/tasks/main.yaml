@@ -1,0 +1,7 @@
+---
+- name: Upload BOM
+  ansible.builtin.include_tasks: upload.yaml
+  loop: "{{ bom_artifacts }}"
+  loop_control:
+    loop_var: "zj_item"
+  when: "dependencytrack_credentials is defined"
