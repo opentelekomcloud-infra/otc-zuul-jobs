@@ -1,0 +1,30 @@
+- name: Check for sbom presence
+  ansible.builtin.find:
+    path: "{{ zuul_work_dir }}"
+    patterns: "{{ fetch_sbom_glob }}"
+  register: sboms_found
+
+- block:
+    - name: Fetch sbom file to job artifacts
+      ansible.builtin.copy:
+        dest: "{{ zuul_output_dir }}/logs/"
+        src: "{{ zj_item.path }}"
+        mode: 0644
+        remote_src: true
+      loop: "{{ sboms_found.files }}"
+      loop_control:
+        loop_var: zj_item
+
+    - name: Return artifact to Zuul
+      zuul_return:
+        data:
+          zuul:
+            artifacts:
+              - name: "sbom: {{ zj_item.path | basename }}"
+                url: "{{ zj_item.path | basename }}"
+                metadata:
+                  type: sbom
+      loop: "{{ sboms_found.files }}"
+      loop_control:
+        loop_var: zj_item
+  when: sboms_found.matched > 0

@@ -1,0 +1,15 @@
+# Syft is currently not really capable to scan local image withoud
+# re-downloading them. In order to workaround this we should export
+# image into oci-archive.
+- name: Save container image as local oci archive
+  ansible.builtin.command: >-
+    podman save {{ image_name }}:{{ zj_image.tags | default(['latest']) | last }}
+    --format oci-archive
+    -o {{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.tar.gz
+
+- name: Build a container image SBOM
+  ansible.builtin.command: >-
+    {{ container_sbom_command }}
+    {{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.tar.gz
+    --name {{ image_name }}:{{ zj_image.tags | default(['latest']) | last }}
+    -o cyclonedx-xml={{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.sbom.xml

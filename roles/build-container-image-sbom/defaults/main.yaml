@@ -1,0 +1,3 @@
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+build_container_image_sbom: true
+container_sbom_command: "/usr/local/bin/syft"

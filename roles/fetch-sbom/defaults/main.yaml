@@ -1,0 +1,4 @@
+---
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+zuul_output_dir: "{{ ansible_user_dir }}/zuul-output"
+fetch_sbom_glob: "*.sbom.xml"

@@ -27,6 +27,7 @@
     vars:
       container_images:
         - context: test-playbooks/container/docker
+          registry: quay.io
           repository: fake/fake
           tags: ['latest']
 

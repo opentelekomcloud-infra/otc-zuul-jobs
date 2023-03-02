@@ -1,0 +1,4 @@
+- hosts: all
+  roles:
+    - build-container-image-sbom
+    - fetch-sbom

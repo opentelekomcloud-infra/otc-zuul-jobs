@@ -1,5 +1,4 @@
 Generate SBOM with Syft
-=======================
 
 **Role Variables**
 
