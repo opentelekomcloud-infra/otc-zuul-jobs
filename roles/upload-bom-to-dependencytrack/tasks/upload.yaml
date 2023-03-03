@@ -1,9 +1,9 @@
-- name: Read {{ zj_item.name }}
+- name: Read {{ zj_item.project_name }} BOM
   ansible.builtin.slurp:
     src: "{{ zj_item.bom_path }}"
   register: "item_sbom"
 
-- name: Upload {{ zj_item.name }} BOM
+- name: Upload { zj_item.project_name }} BOM to Dependencytrack
   ansible.builtin.uri:
     url: "{{ dependencytrack_credentials.base_url }}/api/v1/bom"
     headers:
