@@ -13,6 +13,7 @@ packages:
   - texlive-needspace
   - texlive-parskip
   - texlive-polyglossia
+  - texlive-pdetex
   - texlive-tabulary
   - texlive-tex-gyre
   - texlive-titlesec
