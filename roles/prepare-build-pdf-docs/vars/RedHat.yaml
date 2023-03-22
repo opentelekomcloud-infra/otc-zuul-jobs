@@ -4,6 +4,7 @@ packages:
   - liberation-mono-fonts
   - liberation-sans-fonts
   - liberation-serif-fonts
+  - texlive-babel-english
   - texlive-capt-of
   - texlive-cmap
   - texlive-fncychap
