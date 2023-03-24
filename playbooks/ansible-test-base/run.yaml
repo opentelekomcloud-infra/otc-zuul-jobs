@@ -13,4 +13,4 @@
       vars:
         ansible_test_venv_path: "{{ ensure_ansible_root_dir }}"
         ansible_test_ansible_path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}"
-        ansible_test_python: "{{ python_version }}"
+        # ansible_test_python: "{{ python_version }}"
