@@ -3,6 +3,7 @@
     parent: ansible-collection-build
     description: Test ansible-collection-build job
     files:
+      - playbooks/ansible-test-base/*
       - playbooks/ansible-collection/*
       - roles/ansible-collection-build/*
       - test-playbooks/ansible/collection
@@ -15,6 +16,7 @@
     parent: ansible-collection-install
     description: Test ansible-collection-build job
     files:
+      - playbooks/ansible-test-base/*
       - playbooks/ansible-collection/*
       - roles/ansible-collection-install/*
       - test-playbooks/ansible/collection
@@ -27,6 +29,7 @@
     parent: ansible-collection-test-sanity
     description: Test ansible-collection-test-sanity job
     files:
+      - playbooks/ansible-test-base/*
       - roles/ansible-test-base/*
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
@@ -40,6 +43,7 @@
     parent: ansible-collection-test-units
     description: Test ansible-collection-test-sanity job
     files:
+      - playbooks/ansible-test-base/*
       - roles/ansible-test-base/*
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
@@ -53,6 +57,7 @@
     parent: ansible-collection-test-integration
     description: Test ansible-collection-test-integration job
     files:
+      - playbooks/ansible-test-base/*
       - roles/ansible-test-base/*
       - test-playbooks/ansible/collection
       - zuul.d/ansible-collection-jobs.yaml
@@ -68,6 +73,7 @@
     parent: ansible-collection-docs
     description: Test ansible-collection-docs job
     files:
+      - playbooks/ansible-test-base/*
       - playbooks/ansible-collection/*
       - roles/ansible-collection-docs/*
       - test-playbooks/ansible/collection
