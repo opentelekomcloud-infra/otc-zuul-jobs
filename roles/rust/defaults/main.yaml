@@ -1,0 +1,3 @@
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+rust_cargo_executable: "cargo"
+rust_cargo_command: "build"
