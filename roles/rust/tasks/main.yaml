@@ -1,4 +1,4 @@
 - name: Execute cargo command
-  ansible.builtin.command: "{{ zuul_cargo_executable }} {{ rust_cargo_command }}"
+  ansible.builtin.command: "{{ rust_cargo_executable }} {{ rust_cargo_command }}"
   args:
     chdir: "{{ zuul_work_dir  }}"
