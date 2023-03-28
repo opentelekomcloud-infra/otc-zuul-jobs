@@ -54,5 +54,6 @@ skip_list:
   - args[module]
   - name[play]
   - ignore-errors
+  - risky-shell-pipe
 use_default_rules: true
 verbosity: 1

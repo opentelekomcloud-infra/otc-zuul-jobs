@@ -1,0 +1,28 @@
+- job:
+    name: rust
+    parent: unittests
+    description: |
+      Run given commands in a Rust project.
+
+      .. zuul:jobvar:: rust_cargo_command
+        :type: str
+
+        Command passed to cargo
+    pre-run: playbooks/rust/pre.yaml
+    run: playbooks/rust/run.yaml
+
+- job:
+    name: rust-build
+    parent: rust
+    description: |
+      Perform "cargo build" command.
+    vars:
+      rust_cargo_command: build
+
+- job:
+    name: rust-test
+    parent: rust
+    description: |
+      Perform "cargo test" command.
+    vars:
+      rust_cargo_command: test
