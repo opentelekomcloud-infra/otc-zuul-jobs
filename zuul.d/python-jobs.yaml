@@ -58,7 +58,7 @@
     vars:
       tox_envlist: py310
       python_version: "3.10"
-      
+
 - job:
     name: otc-tox-py3
     parent: otc-tox
@@ -67,7 +67,7 @@
     irrelevant-files: *common-irrelevant-files
     vars:
       tox_envlist: py3
-      
+
 - job:
     name: otc-tox-pep8
     parent: otc-tox
