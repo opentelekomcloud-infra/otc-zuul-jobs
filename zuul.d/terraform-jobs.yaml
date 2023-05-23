@@ -7,3 +7,11 @@
       Base job for running terraform fmt command
     pre-run: playbooks/terraform/terraform-pre.yaml
     run: playbooks/terraform/terraform-run.yaml
+
+- job:
+    name: otc-terraform-module-publish
+    parent: unittests
+    nodeset: fedora-pod
+    description: |
+      Base job for running command for publishing public module
+    run: playbooks/terraform/terraform-module-run.yaml

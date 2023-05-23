@@ -1,0 +1,25 @@
+- name: Create tmp dir
+  file:
+    dest: {{ tmp_dir }}
+    state: directory
+    recurse: true
+
+- name: Deploy data.json
+  template:
+    src: data.json.j2
+    dest: /tmp/tfmodule/data.json
+    mode: 0644
+
+- name: Publish a module
+  ansible.builtin.uri:
+    url: https://app.terraform.io/api/v2/organizations/my-organization/registry-modules
+    headers:
+      Content-Type: application/vnd.api+json
+      Authorization: "Bearer {{ GITHUB_TOKEN }}"
+    method: POST
+    body: "{{ lookup('ansible.builtin.file','{{ tmp_dir }}/data.json') }}"
+    force_basic_auth: true
+    status_code: 201
+    body_format: json
+  environment:
+    GITHUB_TOKEN: "{{ goreleaser_github_token.token | default(omit) }}"
