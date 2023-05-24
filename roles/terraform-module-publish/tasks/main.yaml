@@ -18,14 +18,9 @@
       Content-Type: application/vnd.api+json
       Authorization: "Bearer {{ token }}"
     method: POST
-    src: "src/github.com/opentelekomcloud/terraform-opentelekomcloud-project-factory/tmp/tfmodule/data.json"
+    src: "/{{ tf_modules_tmp_dir }}/data.json"
     force_basic_auth: true
     status_code: 201
   vars:
     token: "{{ goreleaser_github_token.token | default(omit) }}"
   register: result
-
-- name: Print return information from the previous task
-  ansible.builtin.debug:
-    var: result
-    verbosity: 4
