@@ -11,10 +11,6 @@
     mode: 0644
   register: deploy
 
-- name: Fail
-  ansible.builtin.fail:
-    msg: "{{ deploy }}"
-
 - name: Publish a module
   ansible.builtin.uri:
     url: https://app.terraform.io/api/v2/organizations/my-organization/registry-modules
@@ -22,10 +18,9 @@
       Content-Type: application/vnd.api+json
       Authorization: "Bearer {{ token }}"
     method: POST
-    body: "{{ lookup('ansible.builtin.file','{{ tf_modules_tmp_dir }}/data.json') }}"
+    src: "{{ tf_modules_tmp_dir }}/data.json"
     force_basic_auth: true
     status_code: 201
-    body_format: json
   vars:
     token: "{{ goreleaser_github_token.token | default(omit) }}"
   register: result
