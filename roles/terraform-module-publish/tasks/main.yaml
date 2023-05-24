@@ -5,7 +5,7 @@
     recurse: true
 
 - name: Deploy data.json
-  template:
+  ansible.builtin.template:
     src: data.json.j2
     dest: "{{ tf_modules_tmp_dir }}/data.json"
     mode: 0644
