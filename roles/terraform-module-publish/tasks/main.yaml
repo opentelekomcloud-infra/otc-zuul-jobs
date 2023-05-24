@@ -17,7 +17,7 @@
     recurse: yes
   register: finded
 
-  - name: Example using fail and when together
+- name: Example using fail and when together
   ansible.builtin.fail:
     msg: "{{ finded }}"
 
