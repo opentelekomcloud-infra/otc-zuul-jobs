@@ -8,8 +8,7 @@
   ansible.builtin.template:
     src: data.json.j2
     dest: "{{ tf_modules_tmp_dir }}/data.json"
-    mode: 0644
-  register: deploy
+    mode: "0644"
 
 - name: Publish a module
   ansible.builtin.uri:
