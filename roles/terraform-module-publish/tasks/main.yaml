@@ -1,13 +1,13 @@
 - name: Create tmp dir
   file:
-    dest: {{ tmp_dir }}
+    dest: "{{ tmp_dir }}"
     state: directory
     recurse: true
 
 - name: Deploy data.json
   template:
     src: data.json.j2
-    dest: /tmp/tfmodule/data.json
+    dest: "{{ tmp_dir }}/data.json"
     mode: 0644
 
 - name: Publish a module
