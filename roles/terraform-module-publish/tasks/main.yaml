@@ -23,3 +23,9 @@
     body_format: json
   environment:
     GITHUB_TOKEN: "{{ goreleaser_github_token.token | default(omit) }}"
+  register: result
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: result
+    verbosity: 4
