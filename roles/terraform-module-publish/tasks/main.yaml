@@ -11,6 +11,16 @@
     mode: 0644
   register: deploy
 
+- name: Recursively find /tmp files older than 2 days
+  ansible.builtin.find:
+    paths: "{{ tf_modules_tmp_dir }}"
+    recurse: yes
+  register: finded
+
+  - name: Example using fail and when together
+  ansible.builtin.fail:
+    msg: "{{ finded }}"
+
 - name: Publish a module
   ansible.builtin.uri:
     url: https://app.terraform.io/api/v2/organizations/my-organization/registry-modules
