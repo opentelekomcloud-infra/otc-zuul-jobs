@@ -9,6 +9,12 @@
     src: data.json.j2
     dest: "{{ tf_modules_tmp_dir }}/data.json"
     mode: 0644
+  register: deploy
+
+- name: Print return information from the previous task
+  ansible.builtin.debug:
+    var: deploy
+    verbosity: 4
 
 - name: Publish a module
   ansible.builtin.uri:
