@@ -15,14 +15,14 @@
     url: https://app.terraform.io/api/v2/organizations/my-organization/registry-modules
     headers:
       Content-Type: application/vnd.api+json
-      Authorization: "Bearer {{ GITHUB_TOKEN }}"
+      Authorization: "Bearer {{ token }}"
     method: POST
     body: "{{ lookup('ansible.builtin.file','{{ tmp_dir }}/data.json') }}"
     force_basic_auth: true
     status_code: 201
     body_format: json
-  environment:
-    GITHUB_TOKEN: "{{ goreleaser_github_token.token | default(omit) }}"
+  vars:
+    token: "{{ goreleaser_github_token.token | default(omit) }}"
   register: result
 
 - name: Print return information from the previous task
