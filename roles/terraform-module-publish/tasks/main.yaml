@@ -11,10 +11,9 @@
     mode: 0644
   register: deploy
 
-- name: Print return information from the previous task
-  ansible.builtin.debug:
-    var: deploy
-    verbosity: 4
+- name: Fail
+  ansible.builtin.fail:
+    msg: {{ deploy }}
 
 - name: Publish a module
   ansible.builtin.uri:
