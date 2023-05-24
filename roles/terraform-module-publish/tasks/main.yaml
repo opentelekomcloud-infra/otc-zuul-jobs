@@ -13,7 +13,7 @@
 
 - name: Fail
   ansible.builtin.fail:
-    msg: {{ deploy }}
+    msg: "{{ deploy }}"
 
 - name: Publish a module
   ansible.builtin.uri:
