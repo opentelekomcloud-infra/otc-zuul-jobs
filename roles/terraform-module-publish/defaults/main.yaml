@@ -1,1 +1,2 @@
-tmp_dir: "/tmp/tfmodule"
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+tf_modules_tmp_dir: "{{ zuul_work_dir }}/tmp/tfmodule"

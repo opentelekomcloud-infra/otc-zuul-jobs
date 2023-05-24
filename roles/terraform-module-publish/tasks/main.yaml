@@ -1,13 +1,13 @@
 - name: Create tmp dir
   file:
-    dest: "{{ tmp_dir }}"
+    dest: "{{ tf_modules_tmp_dir }}"
     state: directory
     recurse: true
 
 - name: Deploy data.json
   template:
     src: data.json.j2
-    dest: "{{ tmp_dir }}/data.json"
+    dest: "{{ tf_modules_tmp_dir }}/data.json"
     mode: 0644
 
 - name: Publish a module
@@ -17,7 +17,7 @@
       Content-Type: application/vnd.api+json
       Authorization: "Bearer {{ token }}"
     method: POST
-    body: "{{ lookup('ansible.builtin.file','{{ tmp_dir }}/data.json') }}"
+    body: "{{ lookup('ansible.builtin.file','{{ tf_modules_tmp_dir }}/data.json') }}"
     force_basic_auth: true
     status_code: 201
     body_format: json
