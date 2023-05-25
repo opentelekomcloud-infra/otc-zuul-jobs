@@ -1,18 +1,6 @@
-# - name: Create tmp dir
-#   file:
-#     dest: "{{ tf_modules_tmp_dir }}"
-#     state: directory
-#     recurse: true
-
-# - name: Deploy data.json
-#   ansible.builtin.template:
-#     src: data.json.j2
-#     dest: "{{ tf_modules_tmp_dir }}/data.json"
-#     mode: "0644"
-
 - name: Publish a module
   ansible.builtin.uri:
-    url: https://app.terraform.io/api/v2/organizations/my-organization/registry-modules
+    url: https://app.terraform.io/api/v2/organizations/opentelekomcloud/registry-modules
     headers:
       Content-Type: application/vnd.api+json
       Authorization: "Bearer {{ tf_modules_token }}"
