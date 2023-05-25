@@ -1,25 +1,32 @@
-- name: Create tmp dir
-  file:
-    dest: "{{ tf_modules_tmp_dir }}"
-    state: directory
-    recurse: true
+# - name: Create tmp dir
+#   file:
+#     dest: "{{ tf_modules_tmp_dir }}"
+#     state: directory
+#     recurse: true
 
-- name: Deploy data.json
-  ansible.builtin.template:
-    src: data.json.j2
-    dest: "{{ tf_modules_tmp_dir }}/data.json"
-    mode: "0644"
+# - name: Deploy data.json
+#   ansible.builtin.template:
+#     src: data.json.j2
+#     dest: "{{ tf_modules_tmp_dir }}/data.json"
+#     mode: "0644"
 
 - name: Publish a module
   ansible.builtin.uri:
     url: https://app.terraform.io/api/v2/organizations/my-organization/registry-modules
     headers:
       Content-Type: application/vnd.api+json
-      Authorization: "Bearer {{ token }}"
+      Authorization: "Bearer {{ goreleaser_github_token.token | default(omit) }"
     method: POST
-    src: "/{{ tf_modules_tmp_dir }}/data.json"
     force_basic_auth: true
     status_code: 201
-  vars:
-    token: "{{ goreleaser_github_token.token | default(omit) }}"
+    body_format: json
+    body:
+      data:
+        type: "registry-modules"
+        attributes:
+          name: "{{ module_name | default("project-factory", true) }}"
+          namespace: "opentelekomcloud"
+          provider: "opentelekomcloud"
+          registry-name: "public"
+          no-code: true
   register: result
