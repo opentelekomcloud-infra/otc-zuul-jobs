@@ -30,3 +30,7 @@
           registry-name: "public"
           no-code: true
   register: result
+
+- name: Request result
+  ansible.builtin.fail:
+    msg: {{ result }}
