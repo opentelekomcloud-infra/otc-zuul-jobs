@@ -33,4 +33,4 @@
 
 - name: Request result
   ansible.builtin.fail:
-    msg: {{ result }}
+    msg: "{{ result }}"
