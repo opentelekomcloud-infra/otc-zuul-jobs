@@ -15,7 +15,7 @@
     url: https://app.terraform.io/api/v2/organizations/my-organization/registry-modules
     headers:
       Content-Type: application/vnd.api+json
-      Authorization: "Bearer {{ goreleaser_github_token.token | default(omit) }"
+      Authorization: "Bearer {{ tf_modules_token }}"
     method: POST
     force_basic_auth: true
     status_code: 201
