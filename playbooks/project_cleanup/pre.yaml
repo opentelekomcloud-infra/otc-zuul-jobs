@@ -8,5 +8,6 @@
       ansible.builtin.pip:
         name:
           - openstacksdk
+          - six
         virtualenv: "{{ ansible_user_dir }}/.venv"
         virtualenv_command: "{{ ensure_pip_virtualenv_command }}"
