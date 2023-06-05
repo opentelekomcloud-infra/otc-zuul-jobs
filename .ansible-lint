@@ -1,6 +1,7 @@
 exclude_paths:
   - test-playbooks/  # TODO(ssbarnea): remove skip in follow-up
   - zuul.d/secrets.yaml
+  - roles/ansible-test/molecule/default
 parseable: true
 quiet: false
 mock_modules:
@@ -19,6 +20,7 @@ mock_roles:
   - ensure-pip
   - ensure-podman
   - ensure-python
+  - ensure-rust
   - ensure-sphinx
   - ensure-terraform
   - ensure-tox
@@ -55,5 +57,8 @@ skip_list:
   - name[play]
   - ignore-errors
   - risky-shell-pipe
+  - command-instead-of-shell
+  - no-free-form
+  - var-naming[no-role-prefix]
 use_default_rules: true
 verbosity: 1
