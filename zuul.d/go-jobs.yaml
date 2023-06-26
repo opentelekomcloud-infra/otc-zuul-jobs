@@ -3,7 +3,7 @@
     name: golang-make
     parent: golang-go
     vars:
-      go_version: 1.19.1
+      go_version: 1.20.4
     description: |
       Run Golang commands under make
     pre-run: playbooks/golang/make-pre.yaml
@@ -35,12 +35,12 @@
     pre-run: playbooks/golang/goreleaser-pre.yaml
     run: playbooks/golang/goreleaser-build.yaml
     vars:
-      go_version: 1.18.1
+      go_version: 1.20.4
       goreleaser_args: "--snapshot --rm-dist --skip-publish --skip-sign"
 
 - job:
     name: otc-golangci-lint
     parent: golangci-lint
     vars:
-      golangci_lint_version: 1.50.0
-      go_version: 1.19.1
+      golangci_lint_version: 1.53.3
+      go_version: 1.20.4
