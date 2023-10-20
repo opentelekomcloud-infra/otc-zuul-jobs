@@ -7,11 +7,3 @@
       Base job for running terraform fmt command
     pre-run: playbooks/terraform/terraform-pre.yaml
     run: playbooks/terraform/terraform-run.yaml
-
-- job:
-    name: otc-terraform-visualize
-    nodeset: ubuntu-jammy
-    description: |
-      Build visualization for latest terraform examples
-    pre-run: playbooks/terraform/terraform-pre.yaml
-    run: playbooks/terraform/terraform-visualize-run.yaml
