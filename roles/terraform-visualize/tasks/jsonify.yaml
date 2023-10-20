@@ -1,11 +1,11 @@
 ---
-  - name: Terraform plan.json
-    command: "{{ terraform_executable }} show -json plan.out"
-    args:
-      chdir: "{{ zuul_examples_dir }}/{{ item }}"
-    register: result
+- name: Terraform plan.json
+  command: "{{ terraform_executable }} show -json plan.out"
+  args:
+    chdir: "{{ zuul_examples_dir }}/{{ item }}"
+  register: result
 
-  - name: Saving data to local file
-    ansible.builtin.copy:
-      content: "{{  result.stdout }}"
-      dest: "{{ zuul_examples_dir }}/{{ item }}/plan.json"
+- name: Saving data to local file
+  ansible.builtin.copy:
+    content: "{{  result.stdout }}"
+    dest: "{{ zuul_examples_dir }}/{{ item }}/plan.json"
