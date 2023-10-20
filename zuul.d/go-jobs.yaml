@@ -50,5 +50,5 @@
     nodeset: ubuntu-jammy
     description: |
       Build visualization for latest terraform examples
-    pre-run: playbooks/terraform/terraform-pre.yaml
+    pre-run: playbooks/terraform/terraform-visualize-pre.yaml
     run: playbooks/terraform/terraform-visualize-run.yaml
