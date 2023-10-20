@@ -48,6 +48,8 @@
 - name: convert plan to json
   include_tasks: jsonify.yaml
   loop: "{{ folders }}"
+  loop_control:
+      loop_var: folder
 
 - name: Install npm
   package:
