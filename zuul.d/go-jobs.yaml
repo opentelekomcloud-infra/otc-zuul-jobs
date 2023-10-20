@@ -47,7 +47,6 @@
 
 - job:
     name: otc-terraform-visualize
-    nodeset: ubuntu-jammy
     description: |
       Build visualization for latest terraform examples
     pre-run: playbooks/terraform/terraform-visualize-pre.yaml
