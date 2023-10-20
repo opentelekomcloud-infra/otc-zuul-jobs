@@ -1,0 +1,9 @@
+---
+terraform_executable: "{{ ansible_user_dir }}/.local/bin/terraform"
+terraform_provider_repo: "https://github.com/opentelekomcloud/terraform-provider-opentelekomcloud.git"
+terraform_devel_path: "/tmp/provider"
+terraform_git_version: "devel"
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+zuul_examples_dir: "{{ zuul.project.src_dir }}/examples"
+current_list: []
+devel_list: []
