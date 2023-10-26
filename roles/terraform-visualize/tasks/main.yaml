@@ -55,7 +55,7 @@
   include_tasks: jsonify.yaml
   loop: "{{ folders }}"
   loop_control:
-    loop_var: folder
+    loop_var: zj_item
 
 - name: Install npm
   package:
