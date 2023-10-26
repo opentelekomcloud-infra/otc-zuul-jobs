@@ -45,6 +45,8 @@
   command: "{{ terraform_executable }} plan -out plan.out"
   args:
     chdir: "{{ zuul_examples_dir }}/{{ zj_item }}"
+  environment:
+    "{{ viz_env | default(omit) }}"
   loop: "{{ folders }}"
   loop_control:
     loop_var: zj_item
