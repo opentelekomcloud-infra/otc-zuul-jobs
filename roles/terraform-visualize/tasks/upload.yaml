@@ -9,4 +9,4 @@
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
   environment:
-    OS_CLOUD: functest_cloud
+    "{{ viz_env | default(omit) }}"
