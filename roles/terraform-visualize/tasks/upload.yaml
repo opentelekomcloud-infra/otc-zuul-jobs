@@ -4,16 +4,8 @@
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
 
-- name: Terraform plan obs upload
-  command: "{{ terraform_executable }} plan -var='bucket={{ bucket_name }}' -var='key={{ zj_item }}' -var='folder_path={{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report' -var='index_path={{ zuul_examples_dir }}/modules/main_page'"
-  args:
-    chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
-  environment:
-    "{{ viz_env | default(omit) }}"
-
-
 - name: Terraform upload files to obs
-  command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='key={{ zj_item }}' -var='folder_path={{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report' -var='index_path={{ zuul_examples_dir }}/modules/main_page'"
+  command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='key={{ zj_item }}' -var='folder_path={{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report'"
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
   environment:
