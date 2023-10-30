@@ -4,6 +4,13 @@
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
 
+- command: "ls {{ zuul_examples_dir }}/modules/main_page/"
+  register: dir_out
+
+- debug:
+    var: "{{item}}"
+  with_items: dir_out.stdout_lines
+
 - name: Index file lookup
   debug:
     msg: "{{ lookup('file', '{{ zuul_examples_dir }}/modules/main_page/index.html') }}"
