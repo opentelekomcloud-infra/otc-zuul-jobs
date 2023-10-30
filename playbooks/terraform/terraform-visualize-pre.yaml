@@ -1,0 +1,6 @@
+---
+- hosts: all
+  roles:
+    - role: ensure-terraform
+      vars:
+        terraform_version: 1.6.2
