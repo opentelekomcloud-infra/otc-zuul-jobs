@@ -7,3 +7,9 @@ zuul_work_dir: "{{ zuul.project.src_dir }}"
 zuul_examples_dir: "{{ zuul.project.src_dir }}/examples"
 current_list: []
 devel_list: []
+bucket_name: "tf-viz-pages"
+insert_after: '<p class="navbar_github_main" hidden>HIDDEN</p>'
+insert_line: |
+  <a class="navbar_githubLink_main" href="/{{ zj_item }}/index.html">
+  <p class="navbar_github_main">{{ zj_item | upper }} GRAPH</p>
+  </a>

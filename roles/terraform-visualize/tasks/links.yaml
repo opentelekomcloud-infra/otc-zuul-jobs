@@ -1,0 +1,16 @@
+---
+- name: Check if link is already defined
+  ansible.builtin.lineinfile:
+    state: absent
+    path: "{{ zuul_examples_dir }}/modules/main_page/index.html"
+    search_string: "{{ zj_item }}"
+  check_mode: true
+  changed_when: false
+  register: check
+
+- name: Add link to index.html
+  ansible.builtin.lineinfile:
+    dest: "{{ zuul_examples_dir }}/modules/main_page/index.html"
+    insertafter: "{{ insert_after }}"
+    line: "{{ insert_line }}"
+  when: check.found == 0

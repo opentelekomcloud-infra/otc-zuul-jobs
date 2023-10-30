@@ -75,3 +75,15 @@
   loop: "{{ folders }}"
   loop_control:
     loop_var: zj_item
+
+- name: Process links in main index.html
+  include_tasks: links.yaml
+  loop: "{{ folders }}"
+  loop_control:
+    loop_var: zj_item
+
+- name: Upload to obs
+  include_tasks: upload.yaml
+  loop: "{{ folders }}"
+  loop_control:
+    loop_var: zj_item
