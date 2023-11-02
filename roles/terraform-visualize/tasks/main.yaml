@@ -18,7 +18,7 @@
 
 - name: Get runtime
   set_fact:
-    main_page: "{{ runtime.content | from_yaml }}"
+    runtime_list: "{{ runtime.content | from_yaml }}"
 
 - name: Initialize terraform
   ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false"
