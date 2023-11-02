@@ -11,6 +11,15 @@
   ansible.builtin.command: "ls {{ zuul_examples_dir }}/modules/obs_upload"
   register: dir_out
 
+- name: Slurp runtime file
+  ansible.builtin.slurp:
+    src: "{{ zuul_examples_dir }}/runtime.yaml"
+  register: runtime
+
+- name: Get runtime
+  set_fact:
+    main_page: "{{ runtime.content | from_yaml }}"
+
 - name: Initialize terraform
   ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false"
   args:

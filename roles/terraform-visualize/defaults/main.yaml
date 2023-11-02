@@ -13,4 +13,4 @@ insert_line: |
   <a class="navbar_githubLink_main" href="/{{ zj_item }}/index.html">
   <p class="navbar_github_main">{{ zj_item | upper }} GRAPH</p>
   </a>
-runtime_list: "{{ lookup('file','{{ zuul_examples_dir }}/runtime.yaml') | from_yaml }}"
+#runtime_list: "{{ lookup('file','{{ zuul_examples_dir }}/runtime.yaml') | from_yaml }}"
