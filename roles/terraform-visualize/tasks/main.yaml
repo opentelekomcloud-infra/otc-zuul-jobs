@@ -1,4 +1,12 @@
 ---
+- command: "ls {{ zuul_examples_dir }}"
+  register: dir_out
+
+- debug: var={{ zj_item }}
+  loop: "{{ dir_out.stdout_lines }}"
+  loop_control:
+    loop_var: zj_item
+
 - name: Initialize terraform
   ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false"
   args:
