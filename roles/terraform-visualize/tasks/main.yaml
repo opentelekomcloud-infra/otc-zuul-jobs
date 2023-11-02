@@ -1,11 +1,15 @@
 ---
-- command: "ls {{ zuul_examples_dir }}"
+- name: "ls {{ zuul_examples_dir }}"
+  ansible.builtin.command: "ls {{ zuul_examples_dir }}"
   register: dir_out
 
-- debug: var={{ zj_item }}
-  loop: "{{ dir_out.stdout_lines }}"
-  loop_control:
-    loop_var: zj_item
+- name: "ls {{ zuul_examples_dir }}/modules/main_page"
+  ansible.builtin.command: "ls {{ zuul_examples_dir }}/modules/main_page"
+  register: dir_out
+
+- name: "ls {{ zuul_examples_dir }}/modules/obs_upload"
+  ansible.builtin.command: "ls {{ zuul_examples_dir }}/modules/obs_upload"
+  register: dir_out
 
 - name: Initialize terraform
   ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false"
@@ -57,7 +61,7 @@
     loop_var: zj_item
 
 - name: Initialize terraform for upload main page
-  command: "{{ terraform_executable }} init -no-color -input=false"
+  ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false"
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
 
@@ -72,7 +76,7 @@
     main_page: "{{ found.files | map(attribute='path') | join(',') }}"
 
 - name: Terraform main page files to obs
-  command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='index_files={{ main_page }}'"
+  ansible.builtin.command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='index_files={{ main_page }}'"
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
   environment:
