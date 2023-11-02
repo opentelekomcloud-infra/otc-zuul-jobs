@@ -1,98 +1,77 @@
 ---
-- name: Find all directories in current examples
-  ansible.builtin.find:
-    paths: "{{ zuul_examples_dir }}"
-    recurse: no
-    file_type: directory
-    excludes: 'modules, examples'
-  register: new
-
-- name: Set list of folders in current repo
-  ansible.builtin.set_fact:
-    current_list: "{{ current_list + new.files|map(attribute='path')|map('basename') }}"
-
-- name: Git checkout master
-  ansible.builtin.git:
-    repo: "{{ terraform_provider_repo }}"
-    dest: "{{ terraform_devel_path }}"
-    version: "{{ terraform_git_version }}"
-
-- name: Find all directories in devel examples
-  ansible.builtin.find:
-    paths: "{{ terraform_devel_path }}/examples"
-    recurse: no
-    file_type: directory
-    excludes: 'modules, examples'
-  register: devel
-
-- name: Set list of folders in devel repo
-  ansible.builtin.set_fact:
-    devel_list: "{{ devel_list + devel.files|map(attribute='path')|map('basename') }}"
-
-- name: Make list of added folders
-  ansible.builtin.set_fact:
-    folders: "{{ current_list | difference(devel_list) }}"
-
 - name: Initialize terraform
-  command: "{{ terraform_executable }} init -no-color -input=false"
+  ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false"
   args:
     chdir: "{{ zuul_examples_dir }}/{{ zj_item }}"
-  loop: "{{ folders }}"
+  loop: "{{ runtime_list.folders }}"
   loop_control:
     loop_var: zj_item
 
 - name: Terraform plan.out
-  command: "{{ terraform_executable }} plan -out plan.out"
+  ansible.builtin.command: "{{ terraform_executable }} plan -out plan.out"
   args:
     chdir: "{{ zuul_examples_dir }}/{{ zj_item }}"
   environment:
     "{{ viz_env | default(omit) }}"
-  loop: "{{ folders }}"
+  loop: "{{ runtime_list.folders }}"
   loop_control:
     loop_var: zj_item
 
 - name: convert plan to json
   include_tasks: jsonify.yaml
-  loop: "{{ folders }}"
+  loop: "{{ runtime_list.folders }}"
   loop_control:
     loop_var: zj_item
 
 - name: Install npm
-  package:
+  ansible.builtin.package:
     name:
       - npm
     state: present
   become: yes
 
 - name: Install terraform-visual/cli
-  command: "npm install -g @terraform-visual/cli"
+  ansible.builtin.command: "npm install -g @terraform-visual/cli"
   become: yes
 
 - name: Terraform make visualization
-  command: "terraform-visual --plan plan.json"
+  ansible.builtin.command: "terraform-visual --plan plan.json"
   args:
     chdir: "{{ zuul_examples_dir }}/{{ zj_item }}"
-  loop: "{{ folders }}"
+  loop: "{{ runtime_list.folders }}"
   loop_control:
     loop_var: zj_item
 
 - name: Process links in main index.html
   include_tasks: links.yaml
-  loop: "{{ folders }}"
+  loop: "{{ runtime_list.folders }}"
   loop_control:
     loop_var: zj_item
 
-- name: Initialize terraform for obs
+- name: Initialize terraform for upload main page
   command: "{{ terraform_executable }} init -no-color -input=false"
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
 
-- name: Terraform upload files to obs
-  command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='key={{ zj_item }}' -var='folder_path={{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report'"
+- name: Recursively find main page files
+  ansible.builtin.find:
+    paths: "{{ zuul_examples_dir }}/modules/main_page"
+    recurse: yes
+  register: found
+
+- name: Get files
+  set_fact:
+    main_page: "{{ found.files | map(attribute='path') | join(',') }}"
+
+- name: Terraform main page files to obs
+  command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='index_files={{ main_page }}'"
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
   environment:
-    "{{ viz_env | default(omit) }}"
-  loop: "{{ folders }}"
+    OS_CLOUD: functest_cloud
+
+- name: Upload visualize files
+  include_tasks: upload.yaml
+  loop: "{{ runtime_list.folders }}"
   loop_control:
     loop_var: zj_item

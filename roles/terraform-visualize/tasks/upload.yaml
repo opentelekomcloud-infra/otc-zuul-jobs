@@ -1,0 +1,28 @@
+---
+- name: Copy terraform files to /tmp
+  ansible.builtin.copy:
+    src: "{{ zuul_examples_dir }}/modules/obs_upload/upload.tf"
+    dest: "/tmp/{{ zj_item }}/"
+    mode: '0755'
+
+- name: Initialize terraform
+  command: "{{ terraform_executable }} init -no-color -input=false"
+  args:
+    chdir: "/tmp/{{ zj_item }}"
+
+- name: Recursively find visualize files
+  ansible.builtin.find:
+    paths: "{{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report"
+    recurse: yes
+  register: found
+
+- name: Get files
+  set_fact:
+    files: "{{ found.files | map(attribute='path') | join(',') }}"
+
+- name: Terraform upload files to obs
+  command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='key={{ zj_item }}' -var='module_files={{ files }}'"
+  args:
+    chdir: "/tmp/{{ zj_item }}"
+  environment:
+    OS_CLOUD: functest_cloud
