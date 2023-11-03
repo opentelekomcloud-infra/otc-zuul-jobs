@@ -16,9 +16,6 @@
     src: "{{ zuul_examples_dir }}/runtime.yaml"
   register: runtime
 
-- debug:
-   msg: "{{ runtime }}"
-
 - name: Get runtime
   set_fact:
     runtime_list: "{{ runtime.content | b64decode | from_yaml }}"
@@ -79,7 +76,7 @@
 
 - name: Recursively find main page files
   ansible.builtin.find:
-    paths: "{{ zuul_examples_dir }}/modules/main_page"
+    paths: "/tmp/main_page/"
     recurse: yes
   register: found
 
