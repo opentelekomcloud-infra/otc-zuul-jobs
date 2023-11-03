@@ -2,6 +2,7 @@
 - name: Copy terraform files to /tmp
   ansible.builtin.copy:
     src: "{{ zuul_examples_dir }}/modules/obs_upload/upload.tf"
+    remote_src: true
     dest: "/tmp/{{ zj_item }}/"
     mode: '0755'
 
