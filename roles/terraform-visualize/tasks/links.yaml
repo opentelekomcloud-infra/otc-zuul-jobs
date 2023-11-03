@@ -17,5 +17,5 @@
 
 - name: Saving data to local file
   ansible.builtin.copy:
-    src: "{{ zuul_examples_dir }}/modules/main_page/"
+    remote_src: "{{ zuul_examples_dir }}/modules/main_page/"
     dest: "/tmp/main_page/"
