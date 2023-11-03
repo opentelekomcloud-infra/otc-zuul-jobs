@@ -19,7 +19,7 @@
 
 - name: Recursively find visualize files
   ansible.builtin.find:
-    paths: "/tmp/viz/{{ zj_item }}"
+    paths: "/tmp/viz/{{ zj_item }}/terraform-visual-report"
     recurse: yes
   register: found
 
