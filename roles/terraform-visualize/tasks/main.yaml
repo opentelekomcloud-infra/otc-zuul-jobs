@@ -1,16 +1,4 @@
 ---
-- name: "ls {{ zuul_examples_dir }}"
-  ansible.builtin.command: "ls {{ zuul_examples_dir }}"
-  register: dir_out
-
-- name: "ls {{ zuul_examples_dir }}/modules/main_page"
-  ansible.builtin.command: "ls {{ zuul_examples_dir }}/modules/main_page"
-  register: dir_out
-
-- name: "ls {{ zuul_examples_dir }}/modules/obs_upload"
-  ansible.builtin.command: "ls {{ zuul_examples_dir }}/modules/obs_upload"
-  register: dir_out
-
 - name: Slurp runtime file
   ansible.builtin.slurp:
     src: "{{ zuul_examples_dir }}/runtime.yaml"

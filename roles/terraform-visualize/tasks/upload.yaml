@@ -13,9 +13,13 @@
 
 - name: Copy visual report files to /tmp
   ansible.builtin.copy:
-    src: "{{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report/"
+    src: "{{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report"
     remote_src: true
     dest: "/tmp/viz/{{ zj_item }}/"
+
+- name: "ls /tmp/viz/{{ zj_item }}/"
+  ansible.builtin.command: "ls /tmp/viz/{{ zj_item }}/"
+  register: dir_out
 
 - name: Recursively find visualize files
   ansible.builtin.find:
