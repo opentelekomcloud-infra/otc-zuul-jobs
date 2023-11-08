@@ -67,11 +67,12 @@
 - name: Run aksk python script
   ansible.builtin.script: aksk.py --cloud functest_cloud
   args:
-    executable: python3
+    executable: python
   register: credential
 
-- debug:
-    msg: "{{ credential }}"
+- name: Debug
+  debug:
+    msg: "{{ credential.stderr }}"
 
 - name: Set temporary AK/SK
   set_fact:
