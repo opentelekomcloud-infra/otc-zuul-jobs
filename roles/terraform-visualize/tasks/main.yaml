@@ -70,6 +70,9 @@
     executable: python3
   register: credential
 
+- debug:
+    msg: "{{ credential }}"
+
 - name: Set temporary AK/SK
   set_fact:
     access: "{{ credential.stdout.split(' ')[0] }}"
