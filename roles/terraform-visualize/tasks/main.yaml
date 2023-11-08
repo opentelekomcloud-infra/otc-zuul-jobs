@@ -26,7 +26,7 @@
   loop_control:
     loop_var: zj_item
 
-- name: convert plan to json
+- name: Convert plan to json
   include_tasks: jsonify.yaml
   loop: "{{ runtime_list.folders }}"
   loop_control:
@@ -65,7 +65,7 @@
       - openstacksdk
 
 - name: Run aksk python script
-  ansible.builtin.script: "aksk.py --cloud=functest_cloud"
+  ansible.builtin.script: aksk.py --cloud functest_cloud
   args:
     executable: python3
   register: credential
