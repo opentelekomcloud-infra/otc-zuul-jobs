@@ -65,7 +65,6 @@
       - openstacksdk
 
 - name: Get temporary ak sk for 900 seconds
-  delegate_to: localhost
   os_temp_aksk:
     cloud: functest_cloud
   register: credential

@@ -48,12 +48,45 @@ def main():
     )
 
     p = module.params
-    os_config = openstack.config.loader.OpenStackConfig()
-    cloud = os_config.get_one(cloud=p.get('cloud'))
 
-    iam_session = cloud.get_session()
-    auth_url = iam_session.get_endpoint(service_type='identity')
-    os_token = iam_session.get_token()
+    try:
+        os_config = openstack.config.loader.OpenStackConfig()
+    except:
+        module.fail(
+            changed=False,
+            msg=f"OS CONFIG: {os_config}"
+        )
+
+    try:
+        cloud = os_config.get_one(cloud=p.get('cloud'))
+    except:
+        module.fail(
+            changed=False,
+            msg=f"CLOUD: {cloud}"
+        )
+
+    try:
+        iam_session = cloud.get_session()
+    except:
+        module.fail(
+            changed=False,
+            msg=f"IAM SESSION: {iam_session}"
+        )
+
+    try:
+        auth_url = iam_session.get_endpoint(service_type='identity')
+    except:
+        module.fail(
+            changed=False,
+            msg=f"AUTH URL: {auth_url}"
+        )
+    try:
+        os_token = iam_session.get_token()
+    except:
+        module.fail(
+            changed=False,
+            msg=f"OS TOKEN: {os_token}"
+        )
 
     v30_url = auth_url.replace('/v3', '/v3.0')
     token_url = f'{v30_url}/OS-CREDENTIAL/securitytokens'
