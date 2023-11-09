@@ -64,15 +64,14 @@
       - requests
       - openstacksdk
 
-- name: Run aksk python script
-  ansible.builtin.script: aksk.py --cloud functest_cloud
-  args:
-    executable: python
+- name: Get temporary ak sk for 900 seconds
+  os_temp_aksk:
+    cloud: functest_cloud
   register: credential
 
 - name: Debug
   debug:
-    msg: "{{ credential.stderr }}"
+    msg: "{{ credential }}"
 
 - name: Set temporary AK/SK
   set_fact:
