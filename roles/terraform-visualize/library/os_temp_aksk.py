@@ -49,6 +49,7 @@ def main():
 
     p = module.params
     iam_session = openstack.config.loader.OpenStackConfig().get_one(cloud=p.get('cloud')).get_session()
+    module.exit_json(msg=f"{iam_session}")
     auth_url = iam_session.get_endpoint(service_type='identity')
     module.exit_json(msg=f"{auth_url}")
 
