@@ -18,10 +18,9 @@ __metaclass__ = type
 Utility to create temporary ak/sk
 """
 
-import openstack
 import requests
 import requests.exceptions
-
+from openstack.config import OpenStackConfig
 from ansible.module_utils.basic import AnsibleModule
 
 
@@ -48,7 +47,16 @@ def main():
     )
 
     p = module.params
-    iam_session = openstack.config.loader.OpenStackConfig().get_one(cloud=p.get('cloud')).get_session()
+    os_config = OpenStackConfig()
+    module.exit_json(msg=f"{os_config.config_filename}\n"
+                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['auth_url']}\n"
+                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['user_domain_name']}\n"
+                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['project_name']}\n"
+                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['username']}\n")
+
+    cloud = os_config.get_one(cloud=p.get('cloud'))
+
+    iam_session = cloud.get_session()
     module.exit_json(msg=f"domain id: {iam_session.auth.auth_ref.project_domain_id}\n"
                          f"domain name: {iam_session.auth.auth_ref.project_domain_name}\n"
                          f"project id: {iam_session.auth.auth_ref.project_id}\n"
