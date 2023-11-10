@@ -44,19 +44,14 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             cloud=dict(required=True, type='raw', no_log=True),
+            auth_url=dict(type='raw', no_log=True, default='https://iam.eu-de.otc.t-systems.com/v3'),
         )
     )
 
     p = module.params
     iam_session = openstack.config.loader.OpenStackConfig().get_one(cloud=p.get('cloud')).get_session()
-    module.exit_json(msg=f"{iam_session}")
-    auth_url = iam_session.get_endpoint(service_type='identity')
-    module.exit_json(msg=f"{auth_url}")
-
     os_token = iam_session.get_token()
-    module.exit_json(msg=f"{os_token}")
-
-    v30_url = auth_url.replace('/v3', '/v3.0')
+    v30_url = p.get('auth_url').replace('/v3', '/v3.0')
     token_url = f'{v30_url}/OS-CREDENTIAL/securitytokens'
 
     auth_headers = {'X-Auth-Token': os_token}
