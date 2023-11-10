@@ -57,9 +57,8 @@ def main():
         resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['project_name'])
     if 'username' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
         resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['username'])
-
     module.exit_json(msg=f"{os_config.config_filename}\n"
-                         f"{resp}\n")
+                         f"{[i for i in resp]}\n")
 
     cloud = os_config.get_one(cloud=p.get('cloud'))
 
