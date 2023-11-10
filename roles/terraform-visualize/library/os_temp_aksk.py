@@ -48,37 +48,14 @@ def main():
 
     p = module.params
     os_config = OpenStackConfig()
-    resp = []
-    if 'auth_url' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
-        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['auth_url'])
-    if 'user_domain_name' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
-        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['user_domain_name'])
-    if 'project_name' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
-        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['project_name'])
-    if 'username' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
-        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['username'])
+    resp = [os_config.cloud_config['clouds']['functest_cloud']['auth'].keys()]
     module.exit_json(msg=f"{os_config.config_filename}\n"
                          f"{[i for i in resp]}\n")
 
     cloud = os_config.get_one(cloud=p.get('cloud'))
-
     iam_session = cloud.get_session()
-    module.exit_json(msg=f"domain id: {iam_session.auth.auth_ref.project_domain_id}\n"
-                         f"domain name: {iam_session.auth.auth_ref.project_domain_name}\n"
-                         f"project id: {iam_session.auth.auth_ref.project_id}\n"
-                         f"project name: {iam_session.auth.auth_ref.project_name}\n"
-                         f"project scoped: {iam_session.auth.auth_ref.project_scoped}\n"
-                         f"username: {iam_session.auth.auth_ref.username}\n"
-                         f"user domain id: {iam_session.auth.auth_ref.user_domain_id}\n"
-                         f"user domain name: {iam_session.auth.auth_ref.user_domain_name}\n"
-                         f"user id: {iam_session.auth.auth_ref.user_id}\n"
-                         f"scoped: {iam_session.auth.auth_ref.scoped}\n")
     auth_url = iam_session.get_endpoint(service_type='identity')
-    module.exit_json(msg=f"{auth_url}")
-
     os_token = iam_session.get_token()
-    module.exit_json(msg=f"{os_token}")
-
     v30_url = auth_url.replace('/v3', '/v3.0')
     token_url = f'{v30_url}/OS-CREDENTIAL/securitytokens'
 
