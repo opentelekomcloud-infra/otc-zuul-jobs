@@ -48,11 +48,18 @@ def main():
 
     p = module.params
     os_config = OpenStackConfig()
+    resp = []
+    if 'auth_url' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
+        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['auth_url'])
+    if 'user_domain_name' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
+        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['user_domain_name'])
+    if 'project_name' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
+        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['project_name'])
+    if 'username' in os_config.cloud_config['clouds']['functest_cloud']['auth']:
+        resp.append(os_config.cloud_config['clouds']['functest_cloud']['auth']['username'])
+
     module.exit_json(msg=f"{os_config.config_filename}\n"
-                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['auth_url']}\n"
-                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['user_domain_name']}\n"
-                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['project_name']}\n"
-                         f"{os_config.cloud_config['clouds']['functest_cloud']['auth']['username']}\n")
+                         f"{resp}\n")
 
     cloud = os_config.get_one(cloud=p.get('cloud'))
 
