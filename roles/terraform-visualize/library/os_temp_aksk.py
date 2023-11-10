@@ -48,18 +48,12 @@ def main():
 
     p = module.params
     os_config = OpenStackConfig()
-    resp = [os_config.cloud_config['clouds']['functest_cloud']['auth'].keys()]
-    module.exit_json(msg=f"{os_config.config_filename}\n"
-                         f"{[i for i in resp]}\n")
+    auth = os_config.cloud_config['clouds'][p.get('cloud')]['auth']
 
-    cloud = os_config.get_one(cloud=p.get('cloud'))
-    iam_session = cloud.get_session()
-    auth_url = iam_session.get_endpoint(service_type='identity')
-    os_token = iam_session.get_token()
-    v30_url = auth_url.replace('/v3', '/v3.0')
+    v30_url = auth['auth_url'].replace('/v3', '/v3.0')
     token_url = f'{v30_url}/OS-CREDENTIAL/securitytokens'
 
-    auth_headers = {'X-Auth-Token': os_token}
+    auth_headers = {'X-Auth-Token': auth['token']}
 
     response = requests.post(token_url, headers=auth_headers, json=_session_token_request())
     if response.status_code != 201:
