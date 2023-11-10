@@ -44,14 +44,28 @@ def main():
     module = AnsibleModule(
         argument_spec=dict(
             cloud=dict(required=True, type='raw', no_log=True),
-            auth_url=dict(type='raw', no_log=True, default='https://iam.eu-de.otc.t-systems.com/v3'),
         )
     )
 
     p = module.params
     iam_session = openstack.config.loader.OpenStackConfig().get_one(cloud=p.get('cloud')).get_session()
+    module.exit_json(msg=f"domain id: {iam_session.auth.auth_ref.project_domain_id}\n"
+                         f"domain name: {iam_session.auth.auth_ref.project_domain_name}\n"
+                         f"project id: {iam_session.auth.auth_ref.project_id}\n"
+                         f"project name: {iam_session.auth.auth_ref.project_name}\n"
+                         f"project scoped: {iam_session.auth.auth_ref.project_scoped}\n"
+                         f"username: {iam_session.auth.auth_ref.username}\n"
+                         f"user domain id: {iam_session.auth.auth_ref.user_domain_id}\n"
+                         f"user domain name: {iam_session.auth.auth_ref.user_domain_name}\n"
+                         f"user id: {iam_session.auth.auth_ref.user_id}\n"
+                         f"scoped: {iam_session.auth.auth_ref.scoped}\n")
+    auth_url = iam_session.get_endpoint(service_type='identity')
+    module.exit_json(msg=f"{auth_url}")
+
     os_token = iam_session.get_token()
-    v30_url = p.get('auth_url').replace('/v3', '/v3.0')
+    module.exit_json(msg=f"{os_token}")
+
+    v30_url = auth_url.replace('/v3', '/v3.0')
     token_url = f'{v30_url}/OS-CREDENTIAL/securitytokens'
 
     auth_headers = {'X-Auth-Token': os_token}
