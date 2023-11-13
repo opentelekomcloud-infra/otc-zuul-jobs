@@ -11,8 +11,9 @@
   args:
     chdir: "/tmp/{{ zj_item }}"
   environment:
-    AWS_ACCESS_KEY_ID: "{{ access }}"
-    AWS_SECRET_ACCESS_KEY: "{{ secret }}"
+    AWS_ACCESS_KEY_ID: "{{ aksk.credential.access }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aksk.credential.secret }}"
+    AWS_SESSION_TOKEN: "{{ aksk.credential.securitytoken }}"
 
 - name: Copy visual report files to /tmp
   ansible.builtin.copy:

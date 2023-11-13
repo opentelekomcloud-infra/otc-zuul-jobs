@@ -67,16 +67,16 @@
 - name: Get temporary ak sk for 900 seconds
   os_temp_aksk:
     cloud: functest_cloud
-  register: credential
+  register: aksk
 
 - name: Initialize terraform for upload main page
   ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false -backend-config='bucket={{ backend_bucket }}' -backend-config='key=main' -backend-config='region={{ backend_region }}'"
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
   environment:
-    AWS_ACCESS_KEY_ID: "{{ credential.access }}"
-    AWS_SECRET_ACCESS_KEY: "{{ credential.secret }}"
-    AWS_SESSION_TOKEN: "{{ credential.securitytoken }}"
+    AWS_ACCESS_KEY_ID: "{{ aksk.credential.access }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aksk.credential.secret }}"
+    AWS_SESSION_TOKEN: "{{ aksk.credential.securitytoken }}"
 
 - name: Recursively find main page files
   ansible.builtin.find:
