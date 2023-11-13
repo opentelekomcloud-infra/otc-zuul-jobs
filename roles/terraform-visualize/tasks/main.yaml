@@ -69,7 +69,7 @@
     cloud: functest_cloud
   register: aksk
 
-- name: Initialize terraform for upload main page
+- name: Initialize terraform to upload main page
   ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false -backend-config='bucket={{ backend_bucket }}' -backend-config='key=main/{{ state_name }}' -backend-config='region={{ backend_region }}'"
   args:
     chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
