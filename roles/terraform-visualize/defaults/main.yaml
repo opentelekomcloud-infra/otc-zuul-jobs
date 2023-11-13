@@ -10,3 +10,4 @@ insert_line: |
   </a>
 backend_bucket: "tf-viz-state"
 backend_region: "eu-de"
+state_name: "terraform.tfstate"
