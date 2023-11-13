@@ -51,3 +51,5 @@
       Build visualization for latest terraform examples
     pre-run: playbooks/terraform/terraform-visualize-pre.yaml
     run: playbooks/terraform/terraform-visualize-run.yaml
+    vars:
+      terraform_version: 1.6.3
