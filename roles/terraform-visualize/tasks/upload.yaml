@@ -13,7 +13,7 @@
   environment:
     AWS_ACCESS_KEY_ID: "{{ aksk.credential.access }}"
     AWS_SECRET_ACCESS_KEY: "{{ aksk.credential.secret }}"
-    AWS_SESSION_TOKEN: "{{ aksk.credential.securitytoken }}"
+    AWS_SESSION_TOKEN: "{{ aksk.credential.security_token }}"
 
 - name: Copy visual report files to /tmp
   ansible.builtin.copy:
