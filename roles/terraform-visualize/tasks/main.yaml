@@ -69,6 +69,9 @@
     cloud: functest_cloud
   register: aksk
 
+- debug:
+    msg: {{ aksk }}
+
 - name: Initialize terraform for upload main page
   ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false -backend-config='bucket={{ backend_bucket }}' -backend-config='key=main' -backend-config='region={{ backend_region }}'"
   args:
