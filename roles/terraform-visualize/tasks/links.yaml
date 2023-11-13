@@ -14,3 +14,9 @@
     insertafter: "{{ insert_after }}"
     line: "{{ insert_line }}"
   when: check.found == 0
+
+- name: Saving data to local file
+  ansible.builtin.copy:
+    src: "{{ zuul_examples_dir }}/modules/main_page/"
+    remote_src: true
+    dest: "/tmp/main_page/"

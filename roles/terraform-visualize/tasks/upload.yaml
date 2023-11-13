@@ -1,12 +1,46 @@
 ---
+- name: Copy terraform files to /tmp
+  ansible.builtin.copy:
+    src: "{{ zuul_examples_dir }}/modules/obs_upload/upload.tf"
+    remote_src: true
+    dest: "/tmp/{{ zj_item }}/"
+    mode: '0755'
+
 - name: Initialize terraform
-  command: "{{ terraform_executable }} init -no-color -input=false"
+  ansible.builtin.command: "{{ terraform_executable }} init -no-color -input=false -backend-config='bucket={{ backend_bucket }}' -backend-config='key={{ zj_item }}/{{ state_name }}' -backend-config='region={{ backend_region }}'"
   args:
-    chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
+    chdir: "/tmp/{{ zj_item }}"
+  environment:
+    AWS_ACCESS_KEY_ID: "{{ aksk.credential.access }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aksk.credential.secret }}"
+    AWS_SESSION_TOKEN: "{{ aksk.credential.securitytoken }}"
+
+- name: Copy visual report files to /tmp
+  ansible.builtin.copy:
+    src: "{{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report"
+    remote_src: true
+    dest: "/tmp/viz/{{ zj_item }}/"
+
+- name: "ls /tmp/viz/{{ zj_item }}/"
+  ansible.builtin.command: "ls /tmp/viz/{{ zj_item }}/"
+  register: dir_out
+
+- name: Recursively find visualize files
+  ansible.builtin.find:
+    paths: "/tmp/viz/{{ zj_item }}/terraform-visual-report"
+    recurse: yes
+  register: found
+
+- name: Get files
+  set_fact:
+    files: "{{ found.files | map(attribute='path') | join(',') }}"
 
 - name: Terraform upload files to obs
-  command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='key={{ zj_item }}' -var='folder_path={{ zuul_examples_dir }}/{{ zj_item }}/terraform-visual-report' -var='index_path={{ zuul_examples_dir }}/modules/main_page'"
+  ansible.builtin.command: "{{ terraform_executable }} apply -auto-approve -var='bucket={{ bucket_name }}' -var='key={{ zj_item }}' -var='module_files={{ files }}'"
   args:
-    chdir: "{{ zuul_examples_dir }}/modules/obs_upload"
+    chdir: "/tmp/{{ zj_item }}"
   environment:
-    "{{ viz_env | default(omit) }}"
+    OS_CLOUD: functest_cloud
+    AWS_ACCESS_KEY_ID: "{{ aksk.credential.access }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aksk.credential.secret }}"
+    AWS_SESSION_TOKEN: "{{ aksk.credential.securitytoken }}"
