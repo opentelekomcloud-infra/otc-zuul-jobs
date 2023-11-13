@@ -76,7 +76,7 @@
   environment:
     AWS_ACCESS_KEY_ID: "{{ aksk.credential.access }}"
     AWS_SECRET_ACCESS_KEY: "{{ aksk.credential.secret }}"
-    AWS_SESSION_TOKEN: "{{ aksk.credential.security_token }}"
+    AWS_SESSION_TOKEN: "{{ aksk.credential.securitytoken }}"
 
 - name: Recursively find main page files
   ansible.builtin.find:
