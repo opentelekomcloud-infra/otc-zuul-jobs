@@ -41,3 +41,6 @@
     chdir: "/tmp/{{ zj_item }}"
   environment:
     OS_CLOUD: functest_cloud
+    AWS_ACCESS_KEY_ID: "{{ aksk.credential.access }}"
+    AWS_SECRET_ACCESS_KEY: "{{ aksk.credential.secret }}"
+    AWS_SESSION_TOKEN: "{{ aksk.credential.securitytoken }}"
