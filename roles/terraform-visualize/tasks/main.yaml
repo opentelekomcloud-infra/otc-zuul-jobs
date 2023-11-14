@@ -50,7 +50,7 @@
   loop: "{{ runtime_list.folders }}"
   loop_control:
     loop_var: zj_item
-  no_log: true
+#  no_log: true
 
 - name: Process links in main index.html
   include_tasks: links.yaml
