@@ -4,7 +4,7 @@
   args:
     chdir: "{{ zuul_examples_dir }}/{{ zj_item }}"
   register: result
-  no_log: true
+#  no_log: true
 
 - name: Saving data to local file
   ansible.builtin.copy:
