@@ -8,6 +8,15 @@
   changed_when: false
   register: check
 
+- name: Slurp main.tf file
+  ansible.builtin.slurp:
+    src: "{{ zuul_examples_dir }}/{{ zj_item }}/main.tf"
+  register: hcl
+
+- name: Get runtime
+  set_fact:
+    hcl_content: "{{ hcl.content | b64decode }}"
+
 - name: Add link to index.html
   ansible.builtin.lineinfile:
     dest: "{{ zuul_examples_dir }}/modules/main_page/index.html"

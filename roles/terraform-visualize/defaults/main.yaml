@@ -5,9 +5,21 @@ zuul_examples_dir: "{{ zuul.project.src_dir }}/examples"
 bucket_name: "tf-viz-pages"
 insert_after: '<p class="navbar_github_main" hidden>HIDDEN</p>'
 insert_line: |
-  <a class="navbar_githubLink_main" href="/{{ zj_item }}/index.html">
-  <p class="navbar_github_main">{{ zj_item | upper }} GRAPH</p>
-  </a>
+  <div class="row">
+  <div class="index_container_main">
+  <a class="links_main" href="/{{ zj_item }}/index.html">{{ zj_item | upper }} GRAPH</a>
+  </div>
+  <div class="index_container_main">
+  <details>
+  <summary>
+  SHOW CODE
+  </summary>
+  <pre>
+  {{ hcl_content }}
+  </pre>
+  </details>
+  </div>
+  </div>
 backend_bucket: "tf-viz-state"
 backend_region: "eu-de"
 state_name: "terraform.tfstate"
