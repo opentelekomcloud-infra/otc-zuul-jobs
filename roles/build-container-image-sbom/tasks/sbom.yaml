@@ -11,7 +11,7 @@
   ansible.builtin.command: >-
     {{ container_sbom_command }}
     {{ zuul_work_dir }}/{{ image_name | regex_replace('/', '_') }}.tar.gz
-    --name {{ image_name }}:{{ zj_image.tags | default(['latest']) | last }}
+    --source-name {{ image_name }}:{{ zj_image.tags | default(['latest']) | last }}
     -o cyclonedx-xml={{ bom_path }}
   register: bom
 
