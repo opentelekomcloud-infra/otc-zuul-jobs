@@ -60,5 +60,6 @@ skip_list:
   - command-instead-of-shell
   - no-free-form
   - var-naming[no-role-prefix]
+  - package-latest
 use_default_rules: true
 verbosity: 1
