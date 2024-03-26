@@ -11,5 +11,5 @@
       - slirp4netns
       - fuse-overlayfs
       - containernetworking-plugins
-    state: present
+    state: latest
   become: yes
