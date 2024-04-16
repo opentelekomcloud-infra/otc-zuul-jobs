@@ -16,7 +16,7 @@
       - fuse-overlayfs
       - containernetworking-plugins
     state: present
-  become: yes
+  become: true
 
 # NOTE(pabelanger): Remove default registries.conf file, so we can manage it
 # ourself. It could have v1 syntax, which doesn't work with v2.
@@ -25,3 +25,14 @@
   file:
     state: absent
     path: /etc/containers/registries.conf
+
+- name: Create containers config dir
+  file:
+    path: '{{ ansible_user_dir }}/.config/containers'
+    state: directory
+- name: Force cgroup manager to cgroupfs for Ubuntu
+  copy:
+    content: |
+      [engine]
+      cgroup_manager = "cgroupfs"
+    dest: '{{ ansible_user_dir }}/.config/containers/containers.conf'
