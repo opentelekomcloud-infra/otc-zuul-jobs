@@ -9,7 +9,7 @@
       # This enables container network dns resolution:
       - golang-github-containernetworking-plugin-dnsname
     state: present
-  become: yes
+  become: true
 
 - name: Create containers config dir
   file:
@@ -19,5 +19,5 @@
   copy:
     content: |
       [engine]
-      cgroup_manager = "cgroupfs"      
+      cgroup_manager = "cgroupfs"
     dest: '{{ ansible_user_dir }}/.config/containers/containers.conf'
