@@ -37,4 +37,4 @@ release:
     owner: opentelekomcloud
     name: fake
 changelog:
-  skip: true
+  disable: true
