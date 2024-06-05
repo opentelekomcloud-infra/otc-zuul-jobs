@@ -66,4 +66,4 @@
       failed_when: "false"
 
     - name: Process and fetch subunit results
-      include: process.yaml
+      include_tasks: process.yaml
