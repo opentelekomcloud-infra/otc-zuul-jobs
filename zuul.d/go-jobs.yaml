@@ -36,7 +36,7 @@
     run: playbooks/golang/goreleaser-build.yaml
     vars:
       go_version: 1.20.4
-      goreleaser_args: "--snapshot --clean --skip-publish --skip-sign"
+      goreleaser_args: "--snapshot --clean --skip=publish --skip=sign"
 
 - job:
     name: otc-golangci-lint
