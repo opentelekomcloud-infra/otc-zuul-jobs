@@ -47,8 +47,8 @@
     vars:
       ansible_test_test_command: "sanity"
       ansible_test_skip_tests:
-        - metaclass-boilerplate
-        - future-import-boilerplate
+        # - metaclass-boilerplate
+        # - future-import-boilerplate
 
 - job:
     name: ansible-collection-test-units
