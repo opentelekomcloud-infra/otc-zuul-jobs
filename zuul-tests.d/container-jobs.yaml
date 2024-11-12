@@ -23,7 +23,6 @@
     files:
       - playbooks/container-image/*
       - roles/build-container-image*
-      - roles/fetch-sbom/*
       - zuul.d/container-jobs.yaml
       - zuul-test.d/container-jobs.yaml
     vars:
