@@ -44,12 +44,12 @@
     nodeset: ubuntu-jammy
     pre-run:
       - playbooks/container-image/pre.yaml
-      - playbooks/sbom/pre.yaml
+      # - playbooks/sbom/pre.yaml
     run:
       - playbooks/container-image/run.yaml
-      - playbooks/sbom/run-for-image.yaml
-    post-run:
-      - playbooks/sbom/post.yaml
+    #   - playbooks/sbom/run-for-image.yaml
+    # post-run:
+    #   - playbooks/sbom/post.yaml
 
 - job:
     name: otc-upload-container-image
