@@ -12,8 +12,6 @@
 
     - name: Archive Json
       command: "tar -f {{ json_archive.path }} -C {{ zuul_work_dir }}/{{ sphinx_build_dir }}/json --exclude=.doctrees -cz ."
-      args:
-        warn: false
 
     - name: Copy archive Json
       copy:
