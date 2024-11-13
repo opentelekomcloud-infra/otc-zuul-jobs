@@ -11,11 +11,7 @@
       register: json_archive
 
     - name: Archive Json
-      archive:
-        path: "{{ zuul_work_dir }}/{{ sphinx_build_dir }}/json"
-        dest: "{{ json_archive.path }}"
-        format: gz
-        exclude_path: .doctrees
+      command: "tar -f {{ json_archive.path }} -C {{ zuul_work_dir }}/{{ sphinx_build_dir }}/json --exclude=.doctrees -cz ."
 
     - name: Copy archive Json
       copy:
