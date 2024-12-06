@@ -1,15 +1,5 @@
 - hosts: all
   tasks:
-    - name: Check if there are any PDF files
-      debug:
-        msg: "No PDF files found!"
-      when: hostvars[inventory_hostname]['sphinx_pdf_files'] | length == 0
-
-    - name: Debug Sphinx PDF files
-      debug:
-        msg: "Sphinx PDF Files: {{ hostvars[inventory_hostname]['sphinx_pdf_files'] }}"
-      when: hostvars[inventory_hostname]['sphinx_pdf_files'] | length > 0
-
     - name: Fetch tox output
       include_role:
         name: fetch-tox-output
