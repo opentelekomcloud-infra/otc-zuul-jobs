@@ -40,4 +40,4 @@
 
     - name: Set fact for sphinx_pdf_files or an empty list
       set_fact:
-        sphinx_pdf_files: "{{ pdf_files.files | map(attribute='path') | map('basename') | list if pdf_files is defined else [] }}"
+        sphinx_pdf_files: "{{ pdf_files.files | default([]) | map(attribute='path') | map('basename') | list }}"
