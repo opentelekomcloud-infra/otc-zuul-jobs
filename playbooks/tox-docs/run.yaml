@@ -23,3 +23,21 @@
             - "_static"
             - "_sources"
       ignore_errors: yes
+
+    # Collect PDF files
+    - name: Ensure the PDF directory exists
+      stat:
+        path: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/doc/build/pdf/"
+      register: pdf_dir
+
+    - name: Find all PDF files if the directory exists
+      find:
+        paths: "{{ ansible_user_dir }}/{{ zuul.project.src_dir }}/doc/build/pdf/"
+        patterns: "*.pdf"
+        file_type: file
+      when: pdf_dir.stat.exists
+      register: pdf_files
+
+    - name: Set fact for sphinx_pdf_files or an empty list
+      set_fact:
+        sphinx_pdf_files: "{{ pdf_files.files | map(attribute='path') | map('basename') | list if pdf_files is defined else [] }}"

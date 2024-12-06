@@ -1,5 +1,25 @@
 - hosts: all
-  roles:
-    - fetch-tox-output
-    - fetch-sphinx-tarball
-    - fetch-sphinx-json
+  tasks:
+    - name: Check if there are any PDF files
+      debug:
+        msg: "No PDF files found!"
+      when: hostvars[inventory_hostname]['sphinx_pdf_files'] | length == 0
+
+    - name: Debug Sphinx PDF files
+      debug:
+        msg: "Sphinx PDF Files: {{ hostvars[inventory_hostname]['sphinx_pdf_files'] }}"
+      when: hostvars[inventory_hostname]['sphinx_pdf_files'] | length > 0
+
+    - name: Fetch tox output
+      include_role:
+        name: fetch-tox-output
+
+    - name: Fetch sphinx tarball
+      include_role:
+        name: fetch-sphinx-tarball
+      vars:
+        sphinx_pdf_files: "{{ hostvars[inventory_hostname]['sphinx_pdf_files'] }}"
+
+    - name: Fetch sphinx JSON
+      include_role:
+        name: fetch-sphinx-json
