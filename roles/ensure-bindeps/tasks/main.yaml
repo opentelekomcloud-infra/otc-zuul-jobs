@@ -1,0 +1,10 @@
+- name: Check if bindep.txt exists
+  stat:
+    path: "{{ zuul_work_dir }}/bindep.txt"
+  register: bindep_file_stat
+
+- name: Download bindep.txt from remote source if not present
+  get_url:
+    url: "https://raw.githubusercontent.com/opentelekomcloud/otcdocstheme/main/bindep.txt"
+    dest: "{{ zuul_work_dir }}/bindep.txt"
+  when: not bindep_file_stat.stat.exists
