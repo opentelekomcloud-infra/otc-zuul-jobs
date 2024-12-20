@@ -1,0 +1,2 @@
+zuul_work_dir: "{{ zuul.project.src_dir }}"
+bindep_download_url: "https://raw.githubusercontent.com/opentelekomcloud/otcdocstheme/main/bindep.txt"
