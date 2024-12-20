@@ -5,6 +5,6 @@
 
 - name: Download bindep.txt from remote source if not present
   get_url:
-    url: "https://raw.githubusercontent.com/opentelekomcloud/otcdocstheme/main/bindep.txt"
+    url: "{{ bindep_download_url }}"
     dest: "{{ zuul_work_dir }}/bindep.txt"
   when: not bindep_file_stat.stat.exists
