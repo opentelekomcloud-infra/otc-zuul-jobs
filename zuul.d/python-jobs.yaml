@@ -60,6 +60,16 @@
       python_version: "3.10"
 
 - job:
+    name: otc-tox-py311
+    parent: otc-tox
+    description: |
+      Run tox -e py311 in a pod
+    irrelevant-files: *common-irrelevant-files
+    vars:
+      tox_envlist: py311
+      python_version: "3.11"
+
+- job:
     name: otc-tox-py3
     parent: otc-tox
     description: |
