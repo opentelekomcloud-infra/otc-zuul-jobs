@@ -1,0 +1,3 @@
+collections:
+  - source: git+https://github.com/opentelekomcloud/ansible-collection-gitcontrol.git
+    type: git
