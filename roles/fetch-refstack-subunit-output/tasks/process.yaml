@@ -1,5 +1,5 @@
 - name: Find subunit2html
-  include: find-subunit-html.yaml
+  include_tasks: find-subunit-html.yaml
 
 - name: Generate testr_results.html file
   command: "{{ subunit_html_command }} ./testrepository.subunit testr_results.html"
