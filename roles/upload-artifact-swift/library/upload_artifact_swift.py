@@ -48,7 +48,7 @@ def main():
             src=dict(required=True, type='str'),
             public=dict(type='bool', default=True),
             read_acl=dict(type='str'),
-            delete_after=dict(type='str', default='0'),
+            delete_after=dict(type='int', default=0),
         )
     )
 
@@ -77,8 +77,8 @@ def main():
                 "Content-Type": "application/gzip",
                 "Accept": "application/json"
             }
-            if int(p["delete_after"]) > 0:
-                headers["X-Delete-After"] = p["delete_after"]
+            if p["delete_after"] > 0:
+                headers["X-Delete-After"] = str(p["delete_after"])
 
             response = cloud.object_store.put(
                 "{}/{}?extract-archive=tar.gz".format(
