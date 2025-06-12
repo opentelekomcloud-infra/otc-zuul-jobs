@@ -32,3 +32,9 @@ Upload artifact archive to swift
 .. zuul:rolevar:: upload_artifact_swift_prefix
 
    Optional prefix for the container path
+
+.. zuul:rolevar:: upload_artifact_delete_after
+
+   Optional parameter to set a delete-after header on the object.
+   If not set it will be left out of the request.
+   Value should be in seconds.
