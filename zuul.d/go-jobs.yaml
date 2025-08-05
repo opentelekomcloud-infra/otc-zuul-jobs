@@ -31,7 +31,7 @@
     name: goreleaser-build
     description: |
       Build Golang binaries with goreleaser.
-    nodeset: ubuntu-jammy
+#    nodeset: ubuntu-jammy
     pre-run: playbooks/golang/goreleaser-pre.yaml
     run: playbooks/golang/goreleaser-build.yaml
     vars:
