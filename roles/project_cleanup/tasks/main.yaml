@@ -4,3 +4,14 @@
   project_cleanup:
     cloud: "{{ project_cleanup_cloud }}"
     filters: "{{ project_cleanup_filters | default(omit) }}"
+  register: cleanup_result
+
+- name: Show cleaned resources
+  ansible.builtin.debug:
+    msg: "Cleaned {{ cleanup_result.resources | length }} resources: {{ cleanup_result.resources | map(attribute='type') | list | unique }}"
+  when: cleanup_result.resources | length > 0
+
+- name: Show cleanup errors
+  ansible.builtin.debug:
+    msg: "{{ cleanup_result.errors }}"
+  when: cleanup_result.errors | default([]) | length > 0
