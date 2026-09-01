@@ -3,6 +3,14 @@
     path: "{{ (gitcontrol_root_dir + '/' + organization + '/data.yaml') }}"
   register: org_data
 
+# include_vars sets a fact that outlives the iteration, and the organizations
+# are looped over with include_role inside a single play. Without this reset an
+# organization that has no data.yaml would inherit the previous organization's
+# members and teams and apply them with exclusive=true.
+- name: Reset organization data from the previous iteration
+  ansible.builtin.set_fact:
+    org: {}
+
 - name: Read {{ organization }} organization target data
   include_vars:
     file: "{{ org_data.stat.path }}"
@@ -40,6 +48,10 @@
     paths: "{{ gitcontrol_root_dir + '/' + organization + '/repositories' }}"
     patterns: "*.yaml,*.yml"
     file_type: "file"
+    # Repositories whose name starts with a dot, such as the organization
+    # .github repository, are described in a dotfile and find ignores those
+    # unless hidden files are requested.
+    hidden: true
   register: repository_data
 
 - include_tasks: "process_repository_file.yaml"
