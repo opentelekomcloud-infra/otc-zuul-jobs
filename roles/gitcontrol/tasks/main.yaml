@@ -48,6 +48,10 @@
     paths: "{{ gitcontrol_root_dir + '/' + organization + '/repositories' }}"
     patterns: "*.yaml,*.yml"
     file_type: "file"
+    # Repositories whose name starts with a dot, such as the organization
+    # .github repository, are described in a dotfile and find ignores those
+    # unless hidden files are requested.
+    hidden: true
   register: repository_data
 
 - include_tasks: "process_repository_file.yaml"
